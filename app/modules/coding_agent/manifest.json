@@ -1,0 +1,14 @@
+{
+  "id": "coding_agent",
+  "name": "Coding Agent",
+  "version": "0.1.0",
+  "routes": [],
+  "apis": [
+    "/api/v2/agent/*"
+  ],
+  "permissions": [
+    "protected"
+  ]
+}
+
+
