@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.python-version
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+
+# Testing/coverage
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Node/Next.js
+node_modules/
+.next/
+next-env.d.ts
+
+# Environment
+.env
+.env.*
+
+# Editors/OS
+.DS_Store
+.idea/
+.vscode/
+
+# Logs
+*.log
+logs/
+
+

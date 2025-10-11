@@ -1,0 +1,12 @@
+{
+  "id": "quantum_shield",
+  "name": "Quantum Shield Layer",
+  "version": "0.1.0",
+  "routes": [],
+  "apis": [
+    "/api/v1/quantum_shield/*"
+  ],
+  "permissions": [
+    "protected"
+  ]
+}

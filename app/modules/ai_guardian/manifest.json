@@ -1,0 +1,12 @@
+{
+  "id": "ai_guardian",
+  "name": "AI Guardian",
+  "version": "0.1.0",
+  "routes": [],
+  "apis": [
+    "/api/v1/ai_guardian/*"
+  ],
+  "permissions": [
+    "protected"
+  ]
+}
