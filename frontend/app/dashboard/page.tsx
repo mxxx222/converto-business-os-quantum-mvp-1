@@ -1,6 +1,7 @@
 import dynamic from "next/dynamic";
 
 const OcrResults = dynamic(() => import("@/components/OcrResults"), { ssr: false });
+const GamifyCard = dynamic(() => import("@/components/GamifyCard"), { ssr: false });
 
 export default function Dashboard() {
   return (
@@ -8,7 +9,10 @@ export default function Dashboard() {
       <header className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold">Converto — OCR & AI Insights</h1>
       </header>
-      <OcrResults tenant="demo" />
+      <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
+        <OcrResults tenant="demo" />
+        <GamifyCard tenant="demo" />
+      </div>
     </main>
   );
 }

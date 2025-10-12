@@ -12,6 +12,7 @@ from ...utils.storage import sha256
 from ...utils.db import get_session
 from .store import save_result, list_results, get_result
 from .models import OcrResult
+from ..gamify.service import record_event
 
 
 router = APIRouter(prefix="/api/v1/ocr", tags=["ocr"])
@@ -38,7 +39,11 @@ async def ocr_power(
     wh = int(max(hours, 0.1) * data["rated_watts"])
     bundle = recommend_bundle(wh)
     resp = {"input_hours": hours, "wh": wh, "analysis": {**data, "ocr_raw": ocr_text}, "recommended_bundle": bundle}
-    rec = save_result(db, tenant_id, sha256(raw), resp)
+        rec = save_result(db, tenant_id, sha256(raw), resp)
+        try:
+            record_event(db, tenant_id=tenant_id, kind="ocr.upload", points=None, meta={"result_id": str(rec.id)})
+        except Exception:
+            pass
     return {"id": str(rec.id), **resp}
 
 
