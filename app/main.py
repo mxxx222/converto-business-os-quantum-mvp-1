@@ -23,6 +23,7 @@ from app.api import gamify as gamify_api
 from app.api import rewards as rewards_api
 from app.api import p2e as p2e_api
 from app.api import economy_admin as economy_admin_api
+from app.api import ocr_ai as ocr_ai_api
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -60,6 +61,7 @@ app.include_router(gamify_api.router)
 app.include_router(rewards_api.router)
 app.include_router(p2e_api.router)
 app.include_router(economy_admin_api.router)
+app.include_router(ocr_ai_api.router)
 
 registry.load_all(app)
 
