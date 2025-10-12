@@ -1,0 +1,44 @@
+services:
+  - name: converto-backend
+    type: web
+    env: python
+    plan: starter_plus
+    region: frankfurt
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
+    runtime: python3.11
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        fromDatabase:
+          name: converto-db
+          property: connectionString
+      - key: CONVERTO_BACKEND_LOG
+        value: /tmp/converto_backend.log
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: STRIPE_SECRET_KEY
+        sync: false
+      - key: STRIPE_WEBHOOK_SECRET
+        sync: false
+      - key: P2E_ENABLED
+        value: "true"
+
+  - name: converto-frontend
+    type: static_site
+    buildCommand: cd frontend && npm ci && npm run build
+    publishDir: frontend/.next
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE
+        value: https://converto-backend.onrender.com
+
+databases:
+  - name: converto-db
+    plan: starter
+    region: frankfurt
+
