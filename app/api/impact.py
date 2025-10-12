@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Query
 from datetime import datetime
+from typing import Optional
 
 
 router = APIRouter()
