@@ -36,7 +36,7 @@ class ApplyIn(BaseModel):
 
 class ApplyOut(BaseModel):
     written: int
-    backup: str | None
+    backup: Optional[str]
 
 
 @router.post("/apply", response_model=ApplyOut)

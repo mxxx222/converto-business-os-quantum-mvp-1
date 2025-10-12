@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.get("/impact/summary")
-async def get_impact_summary(tenant_id: str | None = Query(default=None)):
+async def get_impact_summary(tenant_id: Optional[str] = Query(default=None)):
     """
     Minimal impact summary for the MVP dashboard.
     Returns a few KPI cards so the frontend's ImpactCard can render.
