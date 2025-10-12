@@ -37,7 +37,7 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URL=postgresql://converto:converto123@db:5432/converto
+      - DATABASE_URL=postgresql+psycopg://converto:converto123@db:5432/converto
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - JWT_SECRET=docker-dev-secret
       - ADMIN_TOKEN=admin123

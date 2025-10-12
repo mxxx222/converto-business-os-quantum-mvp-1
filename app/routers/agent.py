@@ -1,5 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
+from typing import Optional
 import difflib
 from pathlib import Path
 from app.telemetry.gamify import track_event

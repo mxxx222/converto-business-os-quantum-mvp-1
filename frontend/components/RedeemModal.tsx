@@ -1,29 +1,37 @@
 "use client";
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Gift, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 
-type RedeemModalProps = {
-  reward: {
-    id: string;
-    name: string;
-    desc?: string;
-    points_cost: number;
-  };
+type Reward = {
+  id: string;
+  name: string;
+  desc?: string;
+  sponsor?: string;
+  points_cost: number;
+  stock: number;
+  terms_url?: string;
+};
+
+type Props = {
+  reward: Reward;
   tenant: string;
   user: string;
   onClose: () => void;
-  onSuccess?: () => void;
+  onSuccess: () => void;
 };
 
-export default function RedeemModal({ reward, tenant, user, onClose, onSuccess }: RedeemModalProps) {
+export default function RedeemModal({ reward, tenant, user, onClose, onSuccess }: Props) {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleRedeem() {
     setLoading(true);
-    setError(null);
+    setError("");
+
     try {
-      const base = process.env.NEXT_PUBLIC_API_BASE!;
+      const base = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
       const res = await fetch(`${base}/api/v1/rewards/redeem`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -33,58 +41,163 @@ export default function RedeemModal({ reward, tenant, user, onClose, onSuccess }
           reward_id: reward.id,
         }),
       });
-      const data = await res.json();
+
       if (!res.ok) {
+        const data = await res.json();
         throw new Error(data.detail || "Lunastus epäonnistui");
       }
-      alert(data.message || `Palkinto lunastettu! Uusi saldo: ${data.new_balance} CT`);
-      onSuccess?.();
-      onClose();
+
+      setSuccess(true);
+      setTimeout(() => {
+        onSuccess();
+        onClose();
+      }, 2000);
     } catch (e: any) {
-      setError(e.message);
+      setError(e.message || "Verkkovirhe");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <AnimatePresence>
       <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        onClick={onClose}
       >
-        <h3 className="text-xl font-bold mb-2 text-gray-800">Lunasta palkinto</h3>
-        <p className="text-sm mb-1 text-gray-700 font-medium">{reward.name}</p>
-        {reward.desc && <p className="text-xs text-gray-500 mb-4">{reward.desc}</p>}
-        <div className="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg p-3 mb-4">
-          <p className="text-sm text-gray-700">
-            Tämä maksaa <span className="font-bold text-indigo-700">{reward.points_cost} CT</span>
-          </p>
-          <p className="text-xs text-gray-500 mt-1">Saldosi vähenee lunastuksen jälkeen.</p>
-        </div>
-        {error && (
-          <div className="bg-red-50 border border-red-200 rounded-lg p-3 mb-4">
-            <p className="text-sm text-red-700">{error}</p>
-          </div>
-        )}
-        <div className="flex gap-3">
-          <button
-            onClick={handleRedeem}
-            disabled={loading}
-            className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white py-3 px-4 rounded-lg font-medium transition"
-          >
-            {loading ? "Lunastetaan..." : `Lunasta (${reward.points_cost} CT)`}
-          </button>
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.9, opacity: 0 }}
+          onClick={(e) => e.stopPropagation()}
+          className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+        >
+          {/* Close Button */}
           <button
             onClick={onClose}
-            className="px-4 py-3 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition"
+            className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
           >
-            Peruuta
+            <X className="w-5 h-5 text-gray-500" />
           </button>
-        </div>
+
+          {/* Header */}
+          <div className="bg-gradient-to-br from-indigo-600 to-purple-600 p-6 text-white">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-3 rounded-xl bg-white/20 backdrop-blur-sm">
+                <Gift className="w-6 h-6" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold">{reward.name}</h2>
+                {reward.sponsor && (
+                  <p className="text-sm text-white/80">Sponsori: {reward.sponsor}</p>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="p-6">
+            {success ? (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="text-center py-8"
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1, rotate: 360 }}
+                  transition={{ type: "spring", duration: 0.6 }}
+                >
+                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                </motion.div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Onneksi olkoon!</h3>
+                <p className="text-gray-600">Palkinto lunastettu onnistuneesti</p>
+              </motion.div>
+            ) : (
+              <>
+                {/* Description */}
+                {reward.desc && (
+                  <p className="text-gray-700 mb-4">{reward.desc}</p>
+                )}
+
+                {/* Details */}
+                <div className="space-y-3 mb-6">
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+                    <span className="text-sm font-medium text-gray-600">Hinta</span>
+                    <span className="text-lg font-bold text-indigo-600">{reward.points_cost} CT</span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+                    <span className="text-sm font-medium text-gray-600">Varastossa</span>
+                    <span className="text-sm font-semibold text-gray-900">{reward.stock} kpl</span>
+                  </div>
+
+                  {reward.terms_url && (
+                    <a
+                      href={reward.terms_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-indigo-600 hover:underline block"
+                    >
+                      Lue käyttöehdot →
+                    </a>
+                  )}
+                </div>
+
+                {/* Error Message */}
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 mb-4"
+                  >
+                    <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+                    <p className="text-sm text-red-800">{error}</p>
+                  </motion.div>
+                )}
+
+                {/* Actions */}
+                <div className="flex gap-3">
+                  <button
+                    onClick={onClose}
+                    disabled={loading}
+                    className="flex-1 px-4 py-3 rounded-xl bg-gray-100 hover:bg-gray-200 font-medium text-gray-700 transition-colors disabled:opacity-50"
+                  >
+                    Peruuta
+                  </button>
+
+                  <button
+                    onClick={handleRedeem}
+                    disabled={loading || reward.stock === 0}
+                    className="flex-1 px-4 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 font-bold text-white shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                        Lunastetaan...
+                      </>
+                    ) : (
+                      <>
+                        <Gift className="w-5 h-5" />
+                        Lunasta nyt
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {reward.stock < 5 && reward.stock > 0 && (
+                  <p className="text-xs text-orange-600 text-center mt-3">
+                    ⚠️ Vain {reward.stock} kpl jäljellä!
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        </motion.div>
       </motion.div>
-    </div>
+    </AnimatePresence>
   );
 }
-

@@ -2,7 +2,7 @@ from typing import Optional, Dict, List
 from datetime import datetime, timedelta, date
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from ..utils.db import engine, SessionLocal, Base
+from ...utils.db import engine, SessionLocal, Base
 from .models import GamifyEvent
 import yaml
 import os

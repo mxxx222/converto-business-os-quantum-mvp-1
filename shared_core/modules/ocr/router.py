@@ -40,23 +40,23 @@ async def ocr_power(
     wh = int(max(hours, 0.1) * data["rated_watts"])
     bundle = recommend_bundle(wh)
     resp = {"input_hours": hours, "wh": wh, "analysis": {**data, "ocr_raw": ocr_text}, "recommended_bundle": bundle}
-        rec = save_result(db, tenant_id, sha256(raw), resp)
-        try:
-            # Gamify points
-            record_event(
-                db,
-                tenant_id=tenant_id,
-                kind="ocr.success",
-                points=None,
-                user_id=None,
-                meta={"result_id": str(rec.id)},
-                event_id=f"ocr_{rec.id}",
-            )
-            # P2E tokens
-            p2e_mint(db, tenant_id or "default", "user_demo", 5, "ocr_success", ref_id=str(rec.id))
-        except Exception:
-            pass
-        return {"id": str(rec.id), **resp}
+    rec = save_result(db, tenant_id, sha256(raw), resp)
+    try:
+        # Gamify points
+        record_event(
+            db,
+            tenant_id=tenant_id,
+            kind="ocr.success",
+            points=None,
+            user_id=None,
+            meta={"result_id": str(rec.id)},
+            event_id=f"ocr_{rec.id}",
+        )
+        # P2E tokens
+        p2e_mint(db, tenant_id or "default", "user_demo", 5, "ocr_success", ref_id=str(rec.id))
+    except Exception:
+        pass
+    return {"id": str(rec.id), **resp}
 
 
 @router.get("/results")
