@@ -1,67 +1,71 @@
 """
 AI-powered classification for expenses: VAT class, budget line, GL account.
 """
-from typing import Dict, Optional
+import re
+from typing import Dict, List
 
-# Simple rule-based classifier (can be replaced with ML model)
-CATEGORY_TO_VAT = {
-    "ruoka": 14,  # Elintarvikkeet
-    "energia": 24,  # Sähkö, lämpö
-    "matka": 24,  # Matkakulut
-    "toimisto": 24,  # Toimistotarvikkeet
-    "viihde": 24,  # Viihde, ravintola
-    "terveys": 10,  # Terveydenhuolto
-    "kirjat": 10,  # Kirjat, lehdet
-    "muu": 24,
-}
-
-CATEGORY_TO_BUDGET = {
-    "ruoka": "5100-RUOKA",
-    "energia": "6200-ENERGIA",
-    "matka": "7300-MATKAKULUT",
-    "toimisto": "4100-TOIMISTO",
-    "viihde": "8500-EDUSTUS",
-    "terveys": "6500-TERVEYS",
-    "kirjat": "4300-KIRJAT",
-    "muu": "9999-MUU",
-}
+VAT_MAP = {24: "standard", 14: "food", 10: "reduced", 0: "zero"}
 
 
-def classify_expense(data: Dict) -> Dict:
+def guess_vat_rates(items: List[Dict], total_vat=None) -> List[Dict]:
+    """Ensure all items have vat_rate."""
+    for it in items:
+        if "vat_rate" not in it:
+            it["vat_rate"] = 24  # Default Finnish VAT
+    return items
+
+
+def classify_category(merchant: str, items: List[Dict]) -> str:
+    """Classify based on merchant name and item names."""
+    m = (merchant or "").lower()
+    
+    # Grocery stores
+    if any(x in m for x in ["abc", "alepa", "k-market", "s-market", "lidl", "prisma"]):
+        return "Groceries"
+    
+    # Fuel stations
+    if any(x in m for x in ["shell", "st1", "neste", "abc"]):
+        return "Fuel"
+    
+    # Item-based classification
+    names = " ".join([(i.get("name") or "").lower() for i in items])
+    if re.search(r"(tool|battery|charger|adapter|saw|drill)", names):
+        return "Tools"
+    if re.search(r"(coffee|lunch|dinner|restaurant)", names):
+        return "Meals"
+    
+    return "General"
+
+
+def map_budget_line(category: str) -> str:
+    """Map category to budget line."""
+    table = {
+        "Groceries": "OPEX:Office:Snacks",
+        "Fuel": "OPEX:Transport:Fuel",
+        "Tools": "CAPEX:Equipment:Tools",
+        "Meals": "OPEX:Meals:Staff",
+        "General": "OPEX:General",
+    }
+    return table.get(category, "OPEX:General")
+
+
+def enrich(data: Dict) -> Dict:
     """
-    Classify extracted receipt data into accounting categories.
+    Enrich extracted data with classification.
     
     Args:
-        data: Extracted receipt data (merchant, total, category, etc.)
+        data: Raw extracted data from Vision API
     
     Returns:
-        Dict with vat_class, budget_line, gl_account, suggestions
+        Enriched data with category, budget_line, vat_rates
     """
-    category = data.get("category", "muu").lower()
+    items = guess_vat_rates(data.get("items", []), data.get("vat"))
+    cat = classify_category(data.get("merchant", ""), items)
+    budget = map_budget_line(cat)
     
-    vat_class = CATEGORY_TO_VAT.get(category, 24)
-    budget_line = CATEGORY_TO_BUDGET.get(category, "9999-MUU")
+    data["category"] = cat
+    data["budget_line"] = budget
+    data["items"] = items
     
-    # GL account suggestion (simple mapping)
-    gl_account = f"{budget_line.split('-')[0]}"
-    
-    # AI suggestions (can be enhanced with LLM)
-    suggestions = []
-    
-    if data.get("total", 0) > 1000:
-        suggestions.append("⚠️ Suuri summa - varmista hyväksyntä")
-    
-    if data.get("confidence", 0) < 0.7:
-        suggestions.append("⚠️ Matala luotettavuus - tarkista manuaalisesti")
-    
-    if category == "muu":
-        suggestions.append("💡 Kategorisoi tarkemmin parempaa raportointia varten")
-    
-    return {
-        "vat_class": vat_class,
-        "budget_line": budget_line,
-        "gl_account": gl_account,
-        "category": category,
-        "suggestions": suggestions,
-    }
+    return data
 

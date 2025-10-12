@@ -2,87 +2,84 @@
 Enhanced OpenAI Vision-based receipt data extraction.
 Structured output with merchant, date, total, VAT, items, category.
 """
+import os
 import base64
 import json
-import os
 from typing import Dict, Any
-from openai import OpenAI
+from fastapi import UploadFile
+import httpx
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-VISION_MODEL = os.getenv("VISION_MODEL", "gpt-4o-mini")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+VISION_MODEL = os.getenv("OPENAI_VISION_MODEL", "gpt-4o-mini")
 
-EXTRACTION_PROMPT = """
-Tehtävä: Lue kaikki tiedot tästä kuitista/laskusta.
-
-Palauta JSON:
-{
-  "merchant": "Kaupan/palvelun nimi",
-  "date": "YYYY-MM-DD",
-  "total": 123.45,
-  "vat_amount": 24.00,
-  "vat_rate": 24,
-  "currency": "EUR",
-  "category": "ruoka|energia|matka|toimisto|viihde|muu",
-  "items": [
-    {"name": "Tuote 1", "quantity": 2, "unit_price": 10.50, "total": 21.00}
-  ],
-  "payment_method": "käteinen|kortti|lasku|muu",
-  "confidence": 0.95
-}
-
-Jos jokin tieto puuttuu, käytä null. Confidence = luotettavuus (0-1).
-Ei selityksiä, vain JSON.
-"""
+PROMPT = (
+    "Extract structured receipt JSON with keys: "
+    "merchant (string), date (YYYY-MM-DD), total (number), "
+    "vat (number|object if multiple, use {rate:%, amount}), "
+    "currency (string, default 'EUR'), items (array of {name, qty, unit_price, vat_rate?}), "
+    "payment_method (string|optional). "
+    "Default locale FI, infer when missing. Respond ONLY valid JSON."
+)
 
 
-async def extract_receipt_data(file_bytes: bytes) -> Dict[str, Any]:
+async def extract_receipt_data(file: UploadFile) -> Dict[str, Any]:
     """
     Extract structured data from receipt image using OpenAI Vision.
     
     Args:
-        file_bytes: Image file content as bytes
+        file: Uploaded image file
     
     Returns:
         Dict with merchant, date, total, vat, items, category, confidence
     """
-    b64 = base64.b64encode(file_bytes).decode()
+    content = await file.read()
+    img_b64 = base64.b64encode(content).decode()
+    
+    payload = {
+        "model": VISION_MODEL,
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are an expert Finnish receipt parser. Output strict JSON.",
+            },
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": PROMPT},
+                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}},
+                ],
+            },
+        ],
+        "temperature": 0,
+    }
+    
+    headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
     
     try:
-        response = client.chat.completions.create(
-            model=VISION_MODEL,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "Olet suomalainen kuittien ja laskujen analytiikka-asiantuntija. Palauta aina vain JSON, ei selityksiä.",
-                },
-                {
-                    "role": "user",
-                    "content": [
-                        {"type": "text", "text": EXTRACTION_PROMPT},
-                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{b64}"}},
-                    ],
-                },
-            ],
-            response_format={"type": "json_object"},
-            temperature=0.1,
-            max_tokens=1000,
-        )
+        async with httpx.AsyncClient(timeout=120) as client:
+            r = await client.post("https://api.openai.com/v1/chat/completions", json=payload, headers=headers)
+            r.raise_for_status()
+            text = r.json()["choices"][0]["message"]["content"]
         
-        content = response.choices[0].message.content
-        data = json.loads(content)
+        # Try parse JSON
+        try:
+            data = json.loads(text)
+        except Exception:
+            # Fallback: strip code fence
+            text = text.strip("` \n").replace("json\n", "")
+            data = json.loads(text)
         
-        # Ensure required fields
+        # Minimal normalization
+        data.setdefault("currency", "EUR")
+        data.setdefault("items", [])
         data.setdefault("merchant", "Tuntematon")
         data.setdefault("total", 0.0)
-        data.setdefault("category", "muu")
-        data.setdefault("confidence", 0.5)
         
         return data
     
     except Exception as e:
-        # Fallback: return minimal structure
         return {
-            "merchant": "Virhe: " + str(e)[:50],
+            "merchant": "Virhe",
             "total": 0.0,
             "category": "muu",
             "confidence": 0.0,
