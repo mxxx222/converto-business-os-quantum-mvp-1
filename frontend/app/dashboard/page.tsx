@@ -1,6 +1,5 @@
 "use client";
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import { 
   Shield, 
   Zap, 
@@ -13,11 +12,9 @@ import {
   Wallet
 } from "lucide-react";
 import Link from "next/link";
-
-// Dynamic imports to avoid SSR issues
-const GamifyCard = dynamic(() => import("@/components/GamifyCard"), { ssr: false });
-const WalletWidget = dynamic(() => import("@/components/WalletWidget"), { ssr: false });
-const RewardsList = dynamic(() => import("@/components/RewardsList"), { ssr: false });
+import GamifyCard from "@/components/GamifyCard";
+import WalletWidget from "@/components/WalletWidget";
+import RewardsList from "@/components/RewardsList";
 
 const container = {
   hidden: { opacity: 0 },

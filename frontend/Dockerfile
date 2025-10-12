@@ -7,6 +7,8 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
 RUN npm install --legacy-peer-deps
 
 # Copy application code
