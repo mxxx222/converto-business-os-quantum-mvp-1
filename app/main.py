@@ -33,6 +33,7 @@ from app.api.integrations.notion_customs import router as notion_customs_router
 from app.modules.gamify_v2.api import router as gamify_v2_router
 from app.modules.reminders.api import router as reminders_router
 from app.api.auth_magic import router as auth_magic_router
+from app.api.pricing import router as pricing_router
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -80,6 +81,7 @@ app.include_router(notion_customs_router)
 app.include_router(gamify_v2_router)
 app.include_router(reminders_router)
 app.include_router(auth_magic_router)
+app.include_router(pricing_router)
 
 registry.load_all(app)
 
