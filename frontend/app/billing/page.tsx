@@ -1,51 +1,68 @@
-'use client'
-import { useEffect, useState } from 'react'
+"use client";
+import { useBilling } from "./hooks/useBilling";
+import BillingCard from "./components/BillingCard";
+import BillingHistory from "./components/BillingHistory";
+import BillingStatus from "./components/BillingStatus";
+import GamifyWidget from "./components/GamifyWidget";
 
-const api = (path: string) => `${process.env.NEXT_PUBLIC_API_BASE}${path}`
-const TENANT = process.env.NEXT_PUBLIC_TENANT_ID || 'tenant_demo'
+const plans = [
+  { id: "lite", name: "Lite", price: 29, features: ["Kuittiskannaus", "Perusraportit"] },
+  { id: "pro", name: "Pro", price: 99, features: ["Myynnin seuranta", "AI-ehdotukset", "Viikkoraportit"] },
+  { id: "insights", name: "Insights", price: 199, features: ["Ennusteet", "Kustannusvahti", "PDF-raportit johdolle"] },
+];
 
-export default function BillingPage(){
-  const [plans, setPlans] = useState<any[]>([])
-  const [ents, setEnts] = useState<any>({})
-  const [busy, setBusy] = useState(false)
-  useEffect(()=>{
-    fetch(api(`/api/v1/billing/plans`)).then(r=>r.json()).then(setPlans).catch(()=>{})
-    fetch(api(`/api/v1/billing/${TENANT}/entitlements`)).then(r=>r.json()).then(setEnts).catch(()=>{})
-  },[])
+export default function BillingPage() {
+  const customerId = "cus_demo123"; // TODO: hae käyttäjän customer_id
+  const { invoices, subscription, loading } = useBilling(customerId);
 
-  const checkout = async (price_id: string) => {
-    setBusy(true)
-    const r = await fetch(api(`/api/v1/stripe/checkout/session`),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tenant_id:TENANT, price_id})})
-    const j = await r.json(); setBusy(false)
-    if(j.url) window.location.href = j.url
+  async function startCheckout(planId: string) {
+    const base = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
+    try {
+      const res = await fetch(`${base}/api/v1/billing/checkout`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan: planId, email: "demo@converto.fi" }),
+      });
+      if (!res.ok) throw new Error("Checkout failed");
+      const data = await res.json();
+      window.location.href = data.url;
+    } catch (e) {
+      alert("Virhe kassan avaamisessa. Tarkista backend.");
+    }
   }
-  const portal = async () => {
-    setBusy(true)
-    const r = await fetch(api(`/api/v1/stripe/portal/session`),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tenant_id:TENANT})})
-    const j = await r.json(); setBusy(false)
-    if(j.url) window.location.href = j.url
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto p-6">
+        <p className="text-gray-500">Ladataan laskutustietoja...</p>
+      </div>
+    );
   }
+
+  const currentPlan = subscription?.plan?.toLowerCase();
 
   return (
-    <main style={{padding:24, display:'grid', gap:16}}>
-      <h1>Billing</h1>
-      <div style={{display:'grid', gap:12, gridTemplateColumns:'repeat(3, minmax(0,1fr))'}}>
-        {plans.map(p=> (
-          <div key={p.id} style={{border:'1px solid #eee', borderRadius:12, padding:16}}>
-            <div style={{fontWeight:700}}>{p.name}</div>
-            <div style={{opacity:.7}}>{(p.price_cents/100).toFixed(2)} € / {p.interval||'mo'}</div>
-            <button disabled={busy} onClick={()=>checkout(p.default_price_id)} style={{marginTop:8}}>Proceed to Checkout</button>
-          </div>
+    <div className="max-w-5xl mx-auto p-6 space-y-6">
+      <h1 className="text-3xl font-semibold mb-4">Laskutus & Palkinnot</h1>
+
+      <BillingStatus subscription={subscription} />
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {plans.map((p) => (
+          <BillingCard
+            key={p.id}
+            plan={p.name}
+            price={p.price}
+            features={p.features}
+            current={currentPlan === p.id}
+            onSelect={() => startCheckout(p.id)}
+          />
         ))}
       </div>
-      <div>
-        <h2>Customer Portal</h2>
-        <button disabled={busy} onClick={portal}>Open Portal</button>
-      </div>
-      <pre>{JSON.stringify(ents, null, 2)}</pre>
-    </main>
-  )
+
+      <BillingHistory invoices={invoices} />
+
+      <GamifyWidget tenant="demo" />
+    </div>
+  );
 }
-
-
-
