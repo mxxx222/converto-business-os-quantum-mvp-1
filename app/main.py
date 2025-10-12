@@ -1,5 +1,9 @@
 
 from fastapi import FastAPI
+import os
+import sentry_sdk
+from sentry_sdk.integrations.fastapi import FastApiIntegration
+from sentry_sdk.integrations.starlette import StarletteIntegration
 from fastapi.middleware.cors import CORSMiddleware
 from app.api import health as health_api
 from app.api import v2 as v2_api
@@ -14,6 +18,18 @@ from app.routers import search as search_router
 from shared_core.modules.ocr.router import router as ocr_router
 from shared_core.modules.ai_common.insights import kpis_example
 from fastapi import APIRouter
+from app.api.debug import router as debug_router
+
+sentry_dsn = os.getenv("SENTRY_DSN")
+if sentry_dsn:
+    sentry_sdk.init(
+        dsn=sentry_dsn,
+        integrations=[FastApiIntegration(), StarletteIntegration()],
+        environment=os.getenv("SENTRY_ENV", "local"),
+        traces_sample_rate=float(os.getenv("SENTRY_SAMPLE_RATE", "0.0")),
+        profiles_sample_rate=0.0,
+        send_default_pii=False,
+    )
 
 app = FastAPI(title="Converto Business OS – Quantum Edition (MVP+)")
 
@@ -35,6 +51,7 @@ app.include_router(guardian_router, prefix="/api/v1")
 app.include_router(sentinel_router, prefix="/api/v1")
 app.include_router(predictive_router, prefix="/api/v1")
 app.include_router(ocr_router)
+app.include_router(debug_router)
 
 registry.load_all(app)
 
