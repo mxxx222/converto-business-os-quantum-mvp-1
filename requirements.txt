@@ -16,3 +16,4 @@ stripe>=10.0.0
 pyyaml>=6.0.0
 pyjwt
 python-multipart>=0.0.9
+feedparser>=6.0.11
