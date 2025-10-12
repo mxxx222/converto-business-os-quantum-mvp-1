@@ -61,7 +61,7 @@ export default function AIPage() {
               {loading ? "Ajattelee..." : "Kysy AI:lta"}
             </Button>
             <a href="/billing" className="block">
-              <Button variant="outline" className="border-purple-300 text-purple-600 hover:bg-purple-50">
+              <Button className="bg-white border-2 border-purple-300 text-purple-600 hover:bg-purple-50">
                 <Lock className="w-4 h-4 mr-2" />
                 Avaa Pro
               </Button>

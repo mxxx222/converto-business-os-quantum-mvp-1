@@ -133,11 +133,16 @@ export default function OCRDropzone({ onScanComplete }: { onScanComplete?: (resu
             )}
           </div>
           <div className="space-y-2 text-sm">
-            <p><strong>Kauppa:</strong> {result.data?.merchant || result.entry?.merchant}</p>
-            <p><strong>Summa:</strong> {result.data?.total || result.entry?.total} {result.data?.currency || "EUR"}</p>
-            <p><strong>Kategoria:</strong> {result.classification?.category || result.data?.category}</p>
-            <p><strong>ALV:</strong> {result.classification?.vat_class || result.data?.vat_rate}%</p>
-            <p><strong>Budjettirivi:</strong> {result.classification?.budget_line}</p>
+            {/* @ts-ignore */}
+            <p><strong>Kauppa:</strong> {result.data?.merchant || result.merchant || "—"}</p>
+            {/* @ts-ignore */}
+            <p><strong>Summa:</strong> {result.data?.total || result.total || "—"} {result.data?.currency || "EUR"}</p>
+            {/* @ts-ignore */}
+            <p><strong>Kategoria:</strong> {result.classification?.category || result.data?.category || result.category || "—"}</p>
+            {/* @ts-ignore */}
+            <p><strong>ALV:</strong> {result.classification?.vat_class || result.data?.vat_rate || result.vat_rate || "24"}%</p>
+            {/* @ts-ignore */}
+            <p><strong>Budjettirivi:</strong> {result.classification?.budget_line || result.budget_line || "—"}</p>
           </div>
           {result.classification?.suggestions && result.classification.suggestions.length > 0 && (
             <div className="mt-3 space-y-1">

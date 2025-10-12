@@ -13,6 +13,7 @@ export default function VATPage() {
     sales_10: 800,
     purchases_24: 2000,
     purchases_14: 500,
+    purchases_10: 300,
     vat_payable: 1234,
   };
 
