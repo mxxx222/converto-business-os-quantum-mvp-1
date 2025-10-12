@@ -364,3 +364,84 @@ def shipment_create(shipment: Dict) -> Dict:
     
     return _create_page(SHIPMENTS_DB, properties)
 
+
+# ========================================
+# CALENDAR INTEGRATION
+# ========================================
+
+def notion_calendar_enabled() -> bool:
+    """Check if Notion calendar is configured"""
+    calendar_db = os.getenv("NOTION_CALENDAR_DB_ID", "")
+    return bool(NOTION_KEY and calendar_db)
+
+
+def upsert_calendar_event(
+    title: str,
+    start: str,
+    end: Optional[str] = None,
+    status: str = "Open",
+    notes: Optional[str] = None,
+    page_id: Optional[str] = None
+) -> Dict:
+    """
+    Create or update calendar event in Notion
+    
+    Args:
+        title: Event title
+        start: Start datetime (ISO format)
+        end: Optional end datetime (ISO format)
+        status: Event status (Open, Done, Cancelled)
+        notes: Optional notes
+        page_id: Optional page ID for updates
+        
+    Returns:
+        Created/updated Notion page object
+    """
+    calendar_db = os.getenv("NOTION_CALENDAR_DB_ID", "")
+    
+    if not NOTION_KEY or not calendar_db:
+        raise ValueError("Notion calendar not configured (NOTION_API_KEY, NOTION_CALENDAR_DB_ID)")
+    
+    properties = {
+        "Name": {
+            "title": [{"text": {"content": title[:200]}}]
+        },
+        "Date": {
+            "date": {
+                "start": start,
+                "end": end
+            }
+        },
+        "Status": {
+            "select": {"name": status}
+        }
+    }
+    
+    if notes:
+        properties["Notes"] = {
+            "rich_text": [{"text": {"content": notes}}]
+        }
+    
+    if page_id:
+        # Update existing page
+        response = requests.patch(
+            f"{API_BASE}/pages/{page_id}",
+            headers=HEADERS,
+            json={"properties": properties},
+            timeout=10
+        )
+    else:
+        # Create new page
+        response = requests.post(
+            f"{API_BASE}/pages",
+            headers=HEADERS,
+            json={
+                "parent": {"database_id": calendar_db},
+                "properties": properties
+            },
+            timeout=10
+        )
+    
+    response.raise_for_status()
+    return response.json()
+

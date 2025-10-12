@@ -133,3 +133,73 @@ async def get_jobs():
     
     return sorted(jobs, key=lambda j: j["next_due"])
 
+
+@router.post("/integrations/notion")
+async def set_notion_calendar(database_id: str):
+    """
+    Configure Notion calendar database
+    
+    Args:
+        database_id: Notion database ID for calendar
+        
+    Returns:
+        Success status
+    """
+    import os
+    os.environ["NOTION_CALENDAR_DB_ID"] = database_id
+    return {"status": "ok", "database_id": database_id}
+
+
+@router.post("/test/whatsapp")
+async def test_whatsapp():
+    """
+    Send test WhatsApp message
+    
+    Returns:
+        Success status
+    """
+    from app.core.notify.service import send_message
+    
+    try:
+        success = send_message("whatsapp", "test", "🔔 Hei! Tämä on testimuistutus Convertosta. ✅")
+        
+        if success:
+            return {"status": "ok", "message": "WhatsApp test message sent"}
+        else:
+            raise HTTPException(status_code=500, detail="Failed to send WhatsApp message")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"WhatsApp test failed: {str(e)}")
+
+
+@router.post("/test/notion")
+async def test_notion():
+    """
+    Create test Notion calendar event
+    
+    Returns:
+        Success status
+    """
+    from datetime import datetime, timedelta
+    from app.integrations.notion_service import upsert_calendar_event, notion_calendar_enabled
+    
+    if not notion_calendar_enabled():
+        raise HTTPException(status_code=400, detail="Notion calendar not configured")
+    
+    try:
+        start = (datetime.now() + timedelta(minutes=5)).isoformat()
+        result = upsert_calendar_event(
+            title="Testi – Converto Reminder",
+            start=start,
+            status="Open",
+            notes="This is a test reminder from Converto Business OS"
+        )
+        
+        return {
+            "status": "ok",
+            "message": "Notion calendar test event created",
+            "page_id": result.get("id"),
+            "url": result.get("url")
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Notion test failed: {str(e)}")
+

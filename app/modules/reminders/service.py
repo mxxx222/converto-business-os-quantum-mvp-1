@@ -116,15 +116,34 @@ def _execute_rule(rule: ReminderRule) -> bool:
     Returns True if message was sent
     """
     message = None
+    calendar_title = None
+    calendar_start = None
     
     try:
         # Generate message based on rule type
         if rule.type == "missing_receipts":
-            message = _check_missing_receipts(rule)
+            result = _check_missing_receipts(rule)
+            if result:
+                message = result
+                calendar_title = "Puuttuvat kuitit"
+                calendar_start = datetime.now().isoformat()
+                
         elif rule.type == "vat_filing":
-            message = _check_vat_deadline(rule)
+            result = _check_vat_deadline(rule)
+            if result:
+                message = result
+                calendar_title = "ALV-ilmoitus (FI)"
+                # Set calendar event for deadline (mock: 5 days from now)
+                deadline = datetime.now() + timedelta(days=5)
+                calendar_start = deadline.isoformat()
+                
         elif rule.type == "invoice_due":
-            message = _check_due_invoices(rule)
+            result = _check_due_invoices(rule)
+            if result:
+                message = result
+                calendar_title = "Erääntyvät laskut"
+                calendar_start = datetime.now().isoformat()
+                
         elif rule.type == "custom":
             message = rule.params.get("message", "Custom reminder")
         
@@ -135,6 +154,20 @@ def _execute_rule(rule: ReminderRule) -> bool:
         
         # Send message via appropriate channel
         success = _send_message(rule.channel, rule.tenant_id, message, rule.ai_hint)
+        
+        # Add to Notion calendar if configured
+        if success and calendar_title and calendar_start:
+            try:
+                from app.integrations.notion_service import upsert_calendar_event, notion_calendar_enabled
+                if notion_calendar_enabled():
+                    upsert_calendar_event(
+                        title=calendar_title,
+                        start=calendar_start,
+                        status="Open",
+                        notes=message
+                    )
+            except Exception as e:
+                print(f"[Reminders] Failed to add to Notion calendar: {e}")
         
         if success:
             _log_reminder(rule, "ok", message)
@@ -193,14 +226,8 @@ def _send_message(channel: Channel, tenant_id: str, message: str, ai_hint: Optio
     Send message via specified channel
     Returns True if successful
     """
-    # TODO: Implement actual channel integrations
-    print(f"[{channel.upper()}] To: {tenant_id}")
-    print(f"Message: {message}")
-    if ai_hint:
-        print(f"AI Hint: {ai_hint}")
-    
-    # Mock: Always successful
-    return True
+    from app.core.notify.service import send_message
+    return send_message(channel, tenant_id, message, ai_hint)
 
 
 def _log_reminder(rule: ReminderRule, result: str, message: str, error: Optional[str] = None):
