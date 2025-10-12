@@ -1,5 +1,6 @@
 import json
 import time
+from typing import Optional
 
 
 def track_event(event: str, meta: Optional[dict] = None):
