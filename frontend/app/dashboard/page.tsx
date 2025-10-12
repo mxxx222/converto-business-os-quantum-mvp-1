@@ -11,7 +11,7 @@ export default function Dashboard() {
       </header>
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <OcrResults tenant="demo" />
-        <GamifyCard tenant="demo" />
+        <GamifyCard tenant="demo" user="user_demo" />
       </div>
     </main>
   );

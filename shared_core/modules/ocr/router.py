@@ -41,10 +41,18 @@ async def ocr_power(
     resp = {"input_hours": hours, "wh": wh, "analysis": {**data, "ocr_raw": ocr_text}, "recommended_bundle": bundle}
         rec = save_result(db, tenant_id, sha256(raw), resp)
         try:
-            record_event(db, tenant_id=tenant_id, kind="ocr.upload", points=None, meta={"result_id": str(rec.id)})
+            record_event(
+                db,
+                tenant_id=tenant_id,
+                kind="ocr.success",
+                points=None,
+                user_id=None,
+                meta={"result_id": str(rec.id)},
+                event_id=f"ocr_{rec.id}",
+            )
         except Exception:
             pass
-    return {"id": str(rec.id), **resp}
+        return {"id": str(rec.id), **resp}
 
 
 @router.get("/results")

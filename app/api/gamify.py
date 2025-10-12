@@ -13,20 +13,28 @@ def api_record_event(
     kind: str = Query(...),
     points: Optional[int] = Query(None),
     user_id: Optional[str] = Query(None),
+    event_id: Optional[str] = Query(None),
     meta: Optional[Dict] = Body(None),
     db=Depends(get_session),
 ):
     try:
-        ev = record_event(db, tenant_id=tenant_id, kind=kind, points=points, user_id=user_id, meta=meta)
+        ev = record_event(db, tenant_id=tenant_id, kind=kind, points=points, user_id=user_id, meta=meta, event_id=event_id)
+        if not ev:
+            return {"ok": False, "message": "duplicate event (idempotent skip)"}
         return {"ok": True, "id": str(ev.id), "points": ev.points}
     except Exception as e:
         raise HTTPException(500, str(e))
 
 
 @router.get("/summary")
-def api_summary(tenant_id: Optional[str] = Query(None), days: int = Query(7, ge=1, le=60), db=Depends(get_session)):
+def api_summary(
+    tenant_id: Optional[str] = Query(None),
+    user_id: Optional[str] = Query(None),
+    days: int = Query(7, ge=1, le=60),
+    db=Depends(get_session),
+):
     try:
-        return summary_since(db, tenant_id=tenant_id, days=days)
+        return summary_since(db, tenant_id=tenant_id, user_id=user_id, days=days)
     except Exception as e:
         raise HTTPException(500, str(e))
 

@@ -20,6 +20,7 @@ from shared_core.modules.ai_common.insights import kpis_example
 from fastapi import APIRouter
 from app.api.debug import router as debug_router
 from app.api import gamify as gamify_api
+from app.api import rewards as rewards_api
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -54,6 +55,7 @@ app.include_router(predictive_router, prefix="/api/v1")
 app.include_router(ocr_router)
 app.include_router(debug_router)
 app.include_router(gamify_api.router)
+app.include_router(rewards_api.router)
 
 registry.load_all(app)
 
