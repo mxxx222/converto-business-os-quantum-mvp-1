@@ -13,6 +13,7 @@ from ...utils.db import get_session
 from .store import save_result, list_results, get_result
 from .models import OcrResult
 from ..gamify.service import record_event
+from ..p2e.service import mint as p2e_mint
 
 
 router = APIRouter(prefix="/api/v1/ocr", tags=["ocr"])
@@ -41,6 +42,7 @@ async def ocr_power(
     resp = {"input_hours": hours, "wh": wh, "analysis": {**data, "ocr_raw": ocr_text}, "recommended_bundle": bundle}
         rec = save_result(db, tenant_id, sha256(raw), resp)
         try:
+            # Gamify points
             record_event(
                 db,
                 tenant_id=tenant_id,
@@ -50,6 +52,8 @@ async def ocr_power(
                 meta={"result_id": str(rec.id)},
                 event_id=f"ocr_{rec.id}",
             )
+            # P2E tokens
+            p2e_mint(db, tenant_id or "default", "user_demo", 5, "ocr_success", ref_id=str(rec.id))
         except Exception:
             pass
         return {"id": str(rec.id), **resp}

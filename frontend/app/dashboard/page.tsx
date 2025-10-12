@@ -2,6 +2,8 @@ import dynamic from "next/dynamic";
 
 const OcrResults = dynamic(() => import("@/components/OcrResults"), { ssr: false });
 const GamifyCard = dynamic(() => import("@/components/GamifyCard"), { ssr: false });
+const WalletWidget = dynamic(() => import("@/components/WalletWidget"), { ssr: false });
+const QuestList = dynamic(() => import("@/components/QuestList"), { ssr: false });
 
 export default function Dashboard() {
   return (
@@ -11,7 +13,11 @@ export default function Dashboard() {
       </header>
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <OcrResults tenant="demo" />
-        <GamifyCard tenant="demo" user="user_demo" />
+        <div className="space-y-6">
+          <GamifyCard tenant="demo" user="user_demo" />
+          <WalletWidget tenant="demo" user="user_demo" />
+          <QuestList tenant="demo" />
+        </div>
       </div>
     </main>
   );
