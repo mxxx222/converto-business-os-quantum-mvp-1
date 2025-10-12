@@ -1,18 +1,14 @@
 import "./globals.css";
 
 export const metadata = {
-  title: 'Converto Business OS',
-  description: 'AI-powered business management with receipt OCR, gamification, and automation',
-}
+  title: "Converto Business OS",
+  description: "AI-powered business management"
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fi">
-      <body className="antialiased">{children}</body>
+      <body className="antialiased bg-slate-50">{children}</body>
     </html>
-  )
+  );
 }
