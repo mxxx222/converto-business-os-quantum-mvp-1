@@ -1,5 +1,6 @@
 import os
 from fastapi import Header, HTTPException
+from typing import Optional
 
 
 ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")
