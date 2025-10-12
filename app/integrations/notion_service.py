@@ -215,3 +215,152 @@ def test_connection() -> bool:
     except Exception:
         return False
 
+
+# ========================================
+# INVENTORY (VARASTO) INTEGRATION
+# ========================================
+
+INVENTORY_DB = os.getenv("NOTION_INVENTORY_DB", "")
+
+
+def inventory_create(item: Dict) -> Dict:
+    """
+    Create inventory item in Notion
+    
+    Args:
+        item: Inventory data dict with keys:
+            - sku: Stock keeping unit (unique ID)
+            - nimi: Product name
+            - kategoria: Category (e.g., "Laitteet", "Komponentit")
+            - varastosaldo: Current stock level
+            - yksikkokustannus: Unit cost in EUR
+            - halytysraja: Alert threshold
+            - toimittaja: Supplier name
+            
+    Returns:
+        Created Notion page object
+    """
+    properties = {
+        "SKU": {
+            "title": [{"text": {"content": item["sku"][:200]}}]
+        },
+        "Nimi": {
+            "rich_text": [{"text": {"content": item.get("nimi", "")}}]
+        },
+        "Kategoria": {
+            "select": {"name": item.get("kategoria", "Muu")}
+        },
+        "Varastosaldo": {
+            "number": float(item.get("varastosaldo", 0))
+        },
+        "Yksikkökustannus": {
+            "number": float(item.get("yksikkokustannus", 0))
+        },
+        "Hälytysraja": {
+            "number": float(item.get("halytysraja", 0))
+        },
+        "Toimittaja": {
+            "rich_text": [{"text": {"content": item.get("toimittaja", "")}}]
+        }
+    }
+    
+    return _create_page(INVENTORY_DB, properties)
+
+
+def inventory_adjust(sku: str, delta: int, notes: str = "") -> Dict:
+    """
+    Adjust inventory stock level
+    
+    Creates an audit entry in Notion showing the stock change
+    
+    Args:
+        sku: Stock keeping unit
+        delta: Change amount (positive = increase, negative = decrease)
+        notes: Optional notes about the adjustment
+        
+    Returns:
+        Created Notion page object
+    """
+    properties = {
+        "SKU": {
+            "title": [{"text": {"content": f"{sku} – muutos {delta:+d}"}}]
+        },
+        "Nimi": {
+            "rich_text": [{"text": {"content": notes or "Varastomuutos"}}]
+        },
+        "Varastosaldo": {
+            "number": float(delta)
+        }
+    }
+    
+    return _create_page(INVENTORY_DB, properties)
+
+
+# ========================================
+# CUSTOMS/SHIPMENTS INTEGRATION
+# ========================================
+
+SHIPMENTS_DB = os.getenv("NOTION_SHIPMENTS_DB", "")
+
+
+def shipment_create(shipment: Dict) -> Dict:
+    """
+    Create customs/shipment entry in Notion
+    
+    Args:
+        shipment: Shipment data dict with keys:
+            - id: Shipment ID (e.g., "IMP-2025-0001")
+            - hs: HS code (harmonized system code)
+            - arvo_eur: Value in EUR
+            - alv: VAT percentage
+            - tulli: Customs duty percentage
+            - lahtomaa: Country of origin (ISO code)
+            - saapumapaiva: Arrival date (YYYY-MM-DD)
+            - status: Status (Draft, Filed, Released, Delivered)
+            - liite_url: Optional attachment URL
+            
+    Returns:
+        Created Notion page object
+    """
+    properties = {
+        "Shipment ID": {
+            "title": [{"text": {"content": shipment["id"][:200]}}]
+        },
+        "Status": {
+            "select": {"name": shipment.get("status", "Draft")}
+        },
+        "HS-koodi": {
+            "rich_text": [{"text": {"content": shipment.get("hs", "")}}]
+        },
+        "Arvo (EUR)": {
+            "number": float(shipment.get("arvo_eur", 0))
+        },
+        "ALV %": {
+            "number": float(shipment.get("alv", 0))
+        },
+        "Tulli %": {
+            "number": float(shipment.get("tulli", 0))
+        },
+        "Lähtömaa": {
+            "rich_text": [{"text": {"content": shipment.get("lahtomaa", "")}}]
+        }
+    }
+    
+    # Add arrival date if provided
+    if shipment.get("saapumapaiva"):
+        properties["Saapumispäivä"] = {
+            "date": {"start": shipment["saapumapaiva"]}
+        }
+    
+    # Add attachment if provided
+    if shipment.get("liite_url"):
+        properties["Liitteet"] = {
+            "files": [{
+                "type": "external",
+                "name": "document",
+                "external": {"url": shipment["liite_url"]}
+            }]
+        }
+    
+    return _create_page(SHIPMENTS_DB, properties)
+

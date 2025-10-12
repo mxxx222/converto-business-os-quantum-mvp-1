@@ -27,6 +27,9 @@ from app.api import ocr_ai as ocr_ai_api
 from app.api.ocr import routes as ocr_routes_v2
 from app.modules.legal.api import router as legal_router
 from app.api.vat_rates import router as vat_rates_router
+from app.api.integrations.notion_api import router as notion_router
+from app.api.integrations.notion_inventory import router as notion_inventory_router
+from app.api.integrations.notion_customs import router as notion_customs_router
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -68,6 +71,9 @@ app.include_router(ocr_ai_api.router)
 app.include_router(ocr_routes_v2.router)
 app.include_router(legal_router)
 app.include_router(vat_rates_router)
+app.include_router(notion_router)
+app.include_router(notion_inventory_router)
+app.include_router(notion_customs_router)
 
 registry.load_all(app)
 
