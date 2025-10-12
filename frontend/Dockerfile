@@ -3,23 +3,19 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy package file
+COPY package.json ./
 
 # Install dependencies
 ENV CHOKIDAR_USEPOLLING=true
 ENV WATCHPACK_POLLING=true
 RUN npm install --legacy-peer-deps
 
-# Copy application code
+# Copy all app code
 COPY . .
-
-# Build (optional - can run dev mode too)
-# RUN npm run build
 
 # Expose port
 EXPOSE 3000
 
-# Run development server
+# Run
 CMD ["npm", "run", "dev"]
-
