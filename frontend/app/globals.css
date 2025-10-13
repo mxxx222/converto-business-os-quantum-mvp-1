@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Converto Premium Theme */
+:root {
+  --brand-from: #1f3bff;
+  --brand-mid: #16b1ff;
+  --brand-to: #8b5cf6;
+}
+
+/* Hero gradient background */
+.bg-hero {
+  background: 
+    radial-gradient(1200px 600px at 20% -10%, var(--brand-from), transparent),
+    radial-gradient(1000px 500px at 80% -20%, var(--brand-mid), transparent),
+    linear-gradient(180deg, #0b1120 0%, #0b1228 60%, #0e132e 100%);
+}
+
+/* Glass morphism effect */
+.glass {
+  @apply backdrop-blur-xl bg-white/10 border border-white/15 shadow-xl;
+}
+
+/* Premium card hover effect */
+.premium-card {
+  @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl;
+}
+
+/* Gradient text */
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
