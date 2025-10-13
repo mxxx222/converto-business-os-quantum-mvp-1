@@ -1,0 +1,36 @@
+<h1 style="margin:0 0 8px;font-size:20px;color:#111827;">Laskutus & tilaus</h1>
+
+<p style="margin:0 0 16px;color:#374151;line-height:1.6;">
+  Autamme mielellämme laskuun tai tilaukseen liittyvissä kysymyksissä.
+</p>
+
+<div style="background:#fef3c7;border-radius:12px;padding:16px;margin-bottom:16px;border:2px solid #f59e0b;">
+  <h3 style="margin:0 0 8px;font-size:16px;color:#92400e;">📋 Tilauksen tiedot</h3>
+  <table style="width:100%;color:#78350f;font-size:14px;line-height:1.8;">
+    <tr>
+      <td style="font-weight:600;">Asiakas/yritys:</td>
+      <td>{{CUSTOMER_NAME}}</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600;">Tilaus-ID:</td>
+      <td>{{SUBSCRIPTION_ID}}</td>
+    </tr>
+    <tr>
+      <td style="font-weight:600;">Paketti:</td>
+      <td>{{CURRENT_TIER}}</td>
+    </tr>
+  </table>
+</div>
+
+<p style="margin:0 0 16px;color:#374151;">
+  🔗 Voit hallita tilaustasi: 
+  <a href="{{BILLING_PORTAL_URL}}" style="color:#2563eb;text-decoration:underline;font-weight:600;">
+    Billing Portal (Stripe)
+  </a>
+</p>
+
+<p style="margin:0;color:#374151;">
+  Jos tarvitset laskukopion, muutoksen tai peruutuksen, vastaa tähän viestiin 
+  tai ota yhteyttä: <a href="mailto:support@converto.fi" style="color:#2563eb;">support@converto.fi</a>
+</p>
+
