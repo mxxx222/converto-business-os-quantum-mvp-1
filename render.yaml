@@ -1,44 +1,119 @@
+# Render Blueprint - Converto™ Business OS 2.0
+# Deploy: Push to GitHub → Render Dashboard → New Blueprint → Select repo
+
+databases:
+  - name: converto-db
+    databaseName: converto
+    user: converto
+    region: frankfurt  # EU region for GDPR
+    plan: free  # Upgrade to starter ($7/mo) for production
+
 services:
-  - name: converto-backend
-    type: web
+  # Backend API
+  - type: web
+    name: converto-api
     env: python
-    plan: starter_plus
     region: frankfurt
+    plan: free  # Upgrade to starter ($7/mo) for no cold starts
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port 10000
-    runtime: python3.11
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
-    autoDeploy: true
     envVars:
-      - key: OPENAI_API_KEY
-        sync: false
       - key: DATABASE_URL
         fromDatabase:
           name: converto-db
           property: connectionString
-      - key: CONVERTO_BACKEND_LOG
-        value: /tmp/converto_backend.log
-      - key: JWT_SECRET
+      
+      - key: SECRET_KEY
         generateValue: true
-      - key: ADMIN_TOKEN
-        generateValue: true
+      
+      - key: PYTHON_VERSION
+        value: "3.11"
+      
+      - key: ALLOWED_HOSTS
+        value: converto-api.onrender.com,app.converto.fi
+      
+      # AI Configuration
+      - key: AI_PROVIDER
+        value: openai  # or ollama for local
+      
+      - key: VISION_PROVIDER
+        value: openai  # or ollama for local
+      
+      # Secrets (add manually in Render dashboard)
+      - key: OPENAI_API_KEY
+        sync: false
+      
+      - key: SENTRY_DSN
+        sync: false
+      
       - key: STRIPE_SECRET_KEY
         sync: false
+      
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
-      - key: P2E_ENABLED
-        value: "true"
+      
+      - key: RESEND_API_KEY
+        sync: false
+      
+      - key: NOTION_API_KEY
+        sync: false
+      
+      # Optional integrations
+      - key: WA_META_TOKEN
+        sync: false
+      
+      - key: SLACK_WEBHOOK_URL
+        sync: false
 
-  - name: converto-frontend
-    type: static_site
-    buildCommand: cd frontend && npm ci && npm run build
-    publishDir: frontend/.next
+  # Frontend
+  - type: web
+    name: converto-frontend
+    env: node
+    region: frankfurt
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    startCommand: cd frontend && npm start
     envVars:
       - key: NEXT_PUBLIC_API_BASE
-        value: https://converto-backend.onrender.com
+        value: https://converto-api.onrender.com
+      
+      - key: NODE_VERSION
+        value: "20"
+      
+      - key: NEXT_PUBLIC_SENTRY_DSN
+        sync: false
 
-databases:
-  - name: converto-db
-    plan: starter
+  # Nightly Backup Job
+  - type: cron
+    name: converto-backup
+    env: python
     region: frankfurt
+    schedule: "10 2 * * *"  # 02:10 daily (Europe/Helsinki)
+    buildCommand: pip install -r requirements.txt
+    startCommand: bash scripts/cron_backup.sh
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: converto-db
+          property: connectionString
+      
+      - key: BACKUP_DIR
+        value: /var/data/backups
+      
+      - key: BACKUP_RETENTION_DAYS
+        value: "30"
 
+  # ML Retraining Job
+  - type: cron
+    name: converto-ml-retrain
+    env: python
+    region: frankfurt
+    schedule: "0 3 * * *"  # 03:00 daily
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.ml.retrain
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: converto-db
+          property: connectionString
