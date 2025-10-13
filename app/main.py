@@ -40,6 +40,7 @@ from app.api.standalone_backup import router as standalone_backup_router
 from app.api.ai_adapter_api import router as ai_adapter_api_router
 from app.api.vision import router as vision_router
 from app.api.auto_heal import router as auto_heal_router
+from app.api.ml_feedback import router as ml_feedback_router
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -94,8 +95,13 @@ app.include_router(standalone_backup_router)
 app.include_router(ai_adapter_api_router)
 app.include_router(vision_router)
 app.include_router(auto_heal_router)
+app.include_router(ml_feedback_router)
 
 registry.load_all(app)
+
+# Start ML retraining scheduler (every 24h)
+from app.ml.retrain import schedule_retraining
+schedule_retraining(interval_hours=24)
 
 # Start reminder scheduler (background thread)
 from app.modules.reminders.scheduler import start_scheduler
