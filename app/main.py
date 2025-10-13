@@ -35,6 +35,7 @@ from app.modules.reminders.api import router as reminders_router
 from app.api.auth_magic import router as auth_magic_router
 from app.api.pricing import router as pricing_router
 from app.api.entitlements import router as entitlements_router
+from app.api.standalone import router as standalone_router
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -84,6 +85,7 @@ app.include_router(reminders_router)
 app.include_router(auth_magic_router)
 app.include_router(pricing_router)
 app.include_router(entitlements_router)
+app.include_router(standalone_router)
 
 registry.load_all(app)
 
