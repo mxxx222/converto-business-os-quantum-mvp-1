@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { UnifiedHeader } from "@/components/UnifiedHeader";
 import { motion } from "framer-motion";
 import { Calculator, TrendingDown, TrendingUp } from "lucide-react";
 
