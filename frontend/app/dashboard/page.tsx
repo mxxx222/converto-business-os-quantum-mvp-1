@@ -15,6 +15,8 @@ import Link from "next/link";
 import GamifyCard from "@/components/GamifyCard";
 import WalletWidget from "@/components/WalletWidget";
 import RewardsList from "@/components/RewardsList";
+import { ProviderChip, PrivacyChip, LatencyChip, ConfidenceChip } from "@/components/StatusChips";
+import { QuickReplies } from "@/components/CommandPalette";
 
 const container = {
   hidden: { opacity: 0 },
@@ -87,6 +89,24 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Status Chips - Desktop */}
+      <div className="hidden md:block bg-white/80 backdrop-blur-sm border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <ProviderChip showLatency={true} />
+              <PrivacyChip />
+            </div>
+            <ConfidenceChip confidence={0.92} />
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Actions - Mobile */}
+      <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3">
+        <QuickReplies />
+      </div>
+
       {/* Hero Section */}
       <motion.section
         initial={{ opacity: 0 }}
