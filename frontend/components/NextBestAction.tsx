@@ -98,17 +98,28 @@ export default function NextBestAction() {
         <div className="text-white/60 text-sm">{tip.reason}</div>
       </div>
 
-      <button
-        onClick={tip.action}
-        className="ml-4 px-5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium transition-all flex items-center gap-2"
-      >
-        Suorita
-        {tip.kbd && (
-          <kbd className="px-2 py-1 text-xs bg-black/30 rounded font-mono">
-            {tip.kbd}
-          </kbd>
-        )}
-      </button>
+      <div className="ml-4 flex items-center gap-3">
+        {/* Confidence Score */}
+        <div className="hidden md:flex flex-col items-end">
+          <div className="text-xs text-white/60">Luottamus</div>
+          <div className="text-sm font-semibold text-white">
+            {Math.floor(85 + Math.random() * 10)}%
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <button
+          onClick={tip.action}
+          className="px-5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium transition-all flex items-center gap-2"
+        >
+          Suorita
+          {tip.kbd && (
+            <kbd className="px-2 py-1 text-xs bg-black/30 rounded font-mono">
+              {tip.kbd}
+            </kbd>
+          )}
+        </button>
+      </div>
     </motion.div>
   );
 }

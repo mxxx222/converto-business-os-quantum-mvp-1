@@ -6,12 +6,13 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type SfxKey = "click" | "success" | "levelup";
+type SfxKey = "click" | "success" | "levelup" | "achievement";
 
 const SFX_MAP: Record<SfxKey, string> = {
   click: "/sfx/click.mp3",
   success: "/sfx/success.mp3",
   levelup: "/sfx/levelup.mp3",
+  achievement: "/sfx/levelup.mp3", // Reuse levelup for achievements
 };
 
 interface SfxSettings {

@@ -9,12 +9,17 @@
   --brand-to: #8b5cf6;
 }
 
-/* Hero gradient background */
+/* Hero gradient background - Dark premium gradient */
 .bg-hero {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+}
+
+/* Alternative hero with radial accents */
+.bg-hero-radial {
   background: 
     radial-gradient(1200px 600px at 20% -10%, var(--brand-from), transparent),
     radial-gradient(1000px 500px at 80% -20%, var(--brand-mid), transparent),
-    linear-gradient(180deg, #0b1120 0%, #0b1228 60%, #0e132e 100%);
+    linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
 }
 
 /* Glass morphism effect */
