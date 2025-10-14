@@ -2,6 +2,9 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { CommandPalette } from "@/components/CommandPalette";
+import GlobalNavbar from "@/components/GlobalNavbar";
+import Providers from "./providers";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,13 +19,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="fi">
+    <html lang="fi" suppressHydrationWarning>
       <body className={inter.className}>
-        {/* Command Palette (⌘K) */}
-        <CommandPalette />
-        
-        {/* Main Content */}
-        {children}
+        <Providers>
+          {/* Global Navigation */}
+          <GlobalNavbar />
+          
+          {/* Command Palette (⌘K) */}
+          <CommandPalette />
+          
+          {/* Toast Notifications */}
+          <Toaster richColors position="top-right" />
+          
+          {/* Main Content */}
+          {children}
+        </Providers>
       </body>
     </html>
   );

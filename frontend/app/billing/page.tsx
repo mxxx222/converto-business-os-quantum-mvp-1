@@ -2,6 +2,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { UnifiedHeader } from "@/components/UnifiedHeader";
+import ROICalculator from "@/components/pricing/ROICalculator";
+import TrustBadges from "@/components/marketing/TrustBadges";
+import { toast } from "sonner";
 
 type Plan = {
   id: string;
@@ -22,12 +25,14 @@ export default function BillingPage() {
 
   async function handleCheckout(planId: string) {
     setLoading(true);
+    toast.loading("Avataan maksusivu...");
     try {
       const r = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || ""}/api/v1/stripe/checkout?plan=${planId}`);
       const { url } = await r.json();
+      toast.success("Ohjataan Stripeen...");
       window.location.href = url;
     } catch (e) {
-      alert("Virhe kassan avaamisessa");
+      toast.error("❌ Virhe kassan avaamisessa");
     } finally {
       setLoading(false);
     }
@@ -45,6 +50,11 @@ export default function BillingPage() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Laskutus ja tilaukset</h1>
           <p className="text-lg text-gray-600">Valitse sinulle sopiva paketti</p>
+        </div>
+
+        {/* ROI Calculator */}
+        <div className="mb-12">
+          <ROICalculator />
         </div>
 
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 mb-12">
@@ -119,6 +129,11 @@ export default function BillingPage() {
             </tbody>
           </table>
         </section>
+
+        {/* Trust Badges */}
+        <div className="mt-12">
+          <TrustBadges />
+        </div>
       </div>
     </div>
   );

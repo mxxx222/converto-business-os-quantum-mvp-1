@@ -1,0 +1,16 @@
+{
+  "nav": {
+    "home": "Etusivu",
+    "features": "Ominaisuudet",
+    "pricing": "Hinnoittelu",
+    "docs": "Dokumentaatio",
+    "about": "Yrityksestä",
+    "contact": "Yhteystiedot",
+    "caseStudies": "Asiakastarinat",
+    "start": "Aloita"
+  },
+  "common": {
+    "backHome": "← Takaisin etusivulle"
+  }
+}
+

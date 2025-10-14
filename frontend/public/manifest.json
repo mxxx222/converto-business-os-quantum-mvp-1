@@ -4,8 +4,8 @@
   "description": "AI-powered business management platform for Finnish entrepreneurs",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#6366f1",
+  "background_color": "#0D1117",
+  "theme_color": "#0047FF",
   "orientation": "portrait-primary",
   "scope": "/",
   "icons": [

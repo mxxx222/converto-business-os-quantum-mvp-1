@@ -28,6 +28,11 @@ const PUBLIC_ROUTES = [
 ];
 
 export function middleware(request: NextRequest) {
+  // 🔓 DEV MODE: Auth disabled for MVP testing
+  // TODO: Re-enable for production
+  return NextResponse.next();
+  
+  /* ORIGINAL AUTH CODE (commented out for MVP testing):
   const { pathname } = request.nextUrl;
   
   // Check if route needs authentication
@@ -51,6 +56,7 @@ export function middleware(request: NextRequest) {
   
   // Authenticated - allow request
   return NextResponse.next();
+  */
 }
 
 export const config = {

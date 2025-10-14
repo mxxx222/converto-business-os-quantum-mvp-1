@@ -1,10 +1,17 @@
 "use client";
-import { motion } from "framer-motion";
-import { Receipt, Calculator, FileText, TrendingUp, Camera } from "lucide-react";
-import Link from "next/link";
+import PremiumLanding from "./components/PremiumLanding";
 
-export default function Dashboard() {
-  // Mock data - wire to API later
+export default function HomePage() {
+  // Show Premium Multilingual Landing Page
+  return <PremiumLanding />;
+}
+
+// Legacy home (Selko style) - backup
+function LegacyHome() {
+  const { motion } = require("framer-motion");
+  const { Receipt, Calculator, FileText, Camera } = require("lucide-react");
+  const Link = require("next/link").default;
+
   const stats = [
     { label: "Menot tässä kk", value: "2 450 €", change: "+12%", color: "red" },
     { label: "Tulot tässä kk", value: "8 900 €", change: "+8%", color: "green" },

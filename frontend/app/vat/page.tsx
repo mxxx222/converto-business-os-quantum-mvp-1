@@ -3,6 +3,8 @@ import { useState } from "react";
 import { UnifiedHeader } from "@/components/UnifiedHeader";
 import { motion } from "framer-motion";
 import { Calculator, TrendingDown, TrendingUp } from "lucide-react";
+import { ProviderChip, PrivacyChip, LatencyChip, ConfidenceChip } from "@/components/StatusChips";
+import { QuickReplies } from "@/components/QuickReplies";
 
 export default function VATPage() {
   const [month, setMonth] = useState(new Date().toISOString().slice(0, 7));
@@ -36,6 +38,15 @@ export default function VATPage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 mt-6">
+        {/* Status Chips */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <ProviderChip />
+            <PrivacyChip />
+            <LatencyChip />
+          </div>
+          <ConfidenceChip value={97} />
+        </div>
         {/* Month Selector */}
         <div className="bg-white rounded-xl shadow-lg p-4 mb-6 border border-gray-100">
           <label className="text-sm font-medium text-gray-700 mb-2 block">Valitse kuukausi</label>
@@ -89,6 +100,18 @@ export default function VATPage() {
           <button className="px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
             Lähetä kirjanpitäjälle
           </button>
+        </div>
+
+        {/* Quick Replies (mobile) */}
+        <div className="mt-3 md:hidden">
+          <QuickReplies
+            items={[
+              { label: "📸 Kuitti", href: "/selko/ocr" },
+              { label: "🧾 ALV", href: "/vat" },
+              { label: "📤 CSV", href: "/reports" },
+              { label: "⚙️ Asetukset", href: "/settings/notifications" },
+            ]}
+          />
         </div>
       </div>
     </div>

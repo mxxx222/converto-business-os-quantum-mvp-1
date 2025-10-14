@@ -2,24 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Converto Premium Theme */
+/* CONVERTO BLUE THEME - LIGHT MODE (default) */
 :root {
-  --brand-from: #1f3bff;
-  --brand-mid: #16b1ff;
-  --brand-to: #8b5cf6;
+  --bg: #FFFFFF;
+  --surface: #F5F6FA;
+  --text-primary: #0F1115;
+  --text-secondary: #444B5A;
+  --accent: #0047FF;
+  --accent-hover: #0032B8;
+  --border: #E0E3EB;
+  --cta-bg: #0047FF;
+  --cta-text: #FFFFFF;
 }
 
-/* Hero gradient background - Dark premium gradient */
-.bg-hero {
-  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+/* DARK THEME */
+.dark {
+  --bg: #0D1117;
+  --surface: #161B22;
+  --text-primary: #F5F6FA;
+  --text-secondary: #A0A7B4;
+  --accent: #69B3FF;
+  --accent-hover: #89C8FF;
+  --border: #2B3038;
+  --cta-bg: #0047FF;
+  --cta-text: #FFFFFF;
 }
 
-/* Alternative hero with radial accents */
-.bg-hero-radial {
-  background: 
-    radial-gradient(1200px 600px at 20% -10%, var(--brand-from), transparent),
-    radial-gradient(1000px 500px at 80% -20%, var(--brand-mid), transparent),
-    linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+/* Automaattinen dark mode systeemipreferenssin mukaan */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light):not(.dark) {
+    --bg: #0D1117;
+    --surface: #161B22;
+    --text-primary: #F5F6FA;
+    --text-secondary: #A0A7B4;
+    --accent: #69B3FF;
+    --accent-hover: #89C8FF;
+    --border: #2B3038;
+    --cta-bg: #0047FF;
+    --cta-text: #FFFFFF;
+  }
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text-primary);
 }
 
 /* Glass morphism effect */
@@ -34,9 +60,32 @@
 
 /* Gradient text */
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-sky-400;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+}
+
+/* Focus ring for accessibility */
+*:focus-visible {
+  outline: none;
+  ring: 2px solid #69B3FF;
+  ring-offset: 2px;
+}
+
+.dark *:focus-visible {
+  ring-offset-color: #0D1117;
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
