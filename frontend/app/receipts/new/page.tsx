@@ -1,200 +1,216 @@
 "use client";
-import { useState } from "react";
-import { motion } from "framer-motion";
-import { Camera, Upload, X, Check } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useState, useRef } from "react";
+import { Camera, Upload, FileText, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
+import Link from "next/link";
 
 export default function NewReceiptPage() {
-  const router = useRouter();
-  const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  async function handleFile(f: File) {
-    setFile(f);
-    const reader = new FileReader();
-    reader.onload = (e) => setPreview(e.target?.result as string);
-    reader.readAsDataURL(f);
+  const handleFileUpload = async (file: File) => {
+    setUploading(true);
+    setError(null);
+    setResult(null);
 
-    // Auto-scan
-    setLoading(true);
     try {
       const formData = new FormData();
-      formData.append("file", f);
-      formData.append("tenant_id", "demo");
-      formData.append("user_id", "user_demo");
+      formData.append('file', file);
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/v1/ocr/receipt`, {
-        method: "POST",
+      setProcessing(true);
+      const response = await fetch('/api/v1/ocr/process', {
+        method: 'POST',
         body: formData,
       });
 
-      if (!res.ok) throw new Error("OCR failed");
-      const data = await res.json();
-      setResult(data.result || data);
-    } catch (e: any) {
-      alert("Virhe: " + e.message);
-    } finally {
-      setLoading(false);
-    }
-  }
+      if (!response.ok) {
+        throw new Error('Käsittely epäonnistui');
+      }
 
-  function handleSave() {
-    // TODO: Save to backend
-    alert("Kuitti tallennettu! (stub)");
-    router.push("/");
-  }
+      const data = await response.json();
+      setResult(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Tuntematon virhe');
+    } finally {
+      setUploading(false);
+      setProcessing(false);
+    }
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      handleFileUpload(file);
+    }
+  };
+
+  const handleCameraCapture = () => {
+    // Simulate camera capture
+    fileInputRef.current?.click();
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 pb-20">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6">
-        <button onClick={() => router.back()} className="mb-4 text-white/80 hover:text-white">
-          ← Takaisin
-        </button>
-        <h1 className="text-2xl font-bold mb-2">Lataa kuitti</h1>
-        <p className="text-white/90">Ota kuva tai valitse tiedosto</p>
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-md mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Link href="/qr" className="p-2 hover:bg-gray-100 rounded-lg">
+              <ArrowLeft className="w-5 h-5 text-gray-600" />
+            </Link>
+            <div>
+              <h1 className="text-lg font-semibold text-gray-900">Kuittiskannaus</h1>
+              <p className="text-sm text-gray-500">Lataa kuitti käsiteltäväksi</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 mt-6">
-        {/* Upload Zone */}
-        {!file && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="border-2 border-dashed border-indigo-300 rounded-2xl p-12 text-center bg-white/70 backdrop-blur"
-            onDrop={(e) => {
-              e.preventDefault();
-              if (e.dataTransfer.files[0]) handleFile(e.dataTransfer.files[0]);
-            }}
-            onDragOver={(e) => e.preventDefault()}
-          >
-            <div className="flex flex-col items-center gap-4">
-              <div className="p-4 rounded-full bg-indigo-100">
-                <Upload className="w-12 h-12 text-indigo-600" />
-              </div>
-              <div>
-                <p className="text-lg font-semibold text-gray-900 mb-2">
-                  Raahaa kuitti tähän tai klikkaa valitaksesi
+      <div className="max-w-md mx-auto px-4 py-6">
+        {!result && !error && (
+          <>
+            {/* Upload Options */}
+            <div className="space-y-4 mb-8">
+              <div className="text-center">
+                <h2 className="text-xl font-bold text-gray-900 mb-2">
+                  Valitse lataustapa
+                </h2>
+                <p className="text-gray-600 text-sm">
+                  Voit ladata kuitin kameralla tai valitsemalla tiedoston
                 </p>
-                <p className="text-sm text-gray-600">Tuetut: JPG, PNG, PDF</p>
               </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={handleCameraCapture}
+                  disabled={uploading || processing}
+                  className="bg-gradient-to-r from-blue-500 to-cyan-500 text-white p-6 rounded-2xl text-center hover:from-blue-600 hover:to-cyan-600 transition-all disabled:opacity-50"
+                >
+                  <Camera className="w-8 h-8 mx-auto mb-2" />
+                  <div className="font-semibold">Kamera</div>
+                </button>
+
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploading || processing}
+                  className="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-2xl text-center hover:from-purple-600 hover:to-pink-600 transition-all disabled:opacity-50"
+                >
+                  <Upload className="w-8 h-8 mx-auto mb-2" />
+                  <div className="font-semibold">Tiedosto</div>
+                </button>
+              </div>
+
               <input
+                ref={fileInputRef}
                 type="file"
-                accept="image/*,.pdf"
-                onChange={(e) => {
-                  if (e.target.files?.[0]) handleFile(e.target.files[0]);
-                }}
+                accept="image/*"
+                onChange={handleFileSelect}
                 className="hidden"
-                id="file-input"
               />
-              <label
-                htmlFor="file-input"
-                className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold cursor-pointer hover:bg-indigo-700 transition-colors"
-              >
-                Valitse tiedosto
-              </label>
             </div>
-          </motion.div>
+
+            {/* Processing State */}
+            {(uploading || processing) && (
+              <div className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
+                <div className="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                </div>
+                <h3 className="font-semibold text-gray-900 mb-2">
+                  {uploading ? 'Ladataan...' : 'Käsitellään...'}
+                </h3>
+                <p className="text-sm text-gray-600">
+                  {uploading ? 'Kuittia ladataan palvelimelle' : 'AI lukee kuittitiedot...'}
+                </p>
+              </div>
+            )}
+          </>
         )}
 
-        {/* Preview & Results */}
-        {file && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="space-y-4"
-          >
-            {/* Image Preview */}
-            {preview && (
-              <div className="bg-white rounded-2xl shadow-lg p-4 border border-gray-100">
-                <img src={preview} alt="Preview" className="w-full h-64 object-contain rounded-lg" />
-              </div>
-            )}
+        {/* Error State */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center mb-6">
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h3 className="font-semibold text-red-900 mb-2">Virhe käsittelyssä</h3>
+            <p className="text-sm text-red-700 mb-4">{error}</p>
+            <button
+              onClick={() => {
+                setError(null);
+                setResult(null);
+              }}
+              className="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700"
+            >
+              Yritä uudelleen
+            </button>
+          </div>
+        )}
 
-            {/* Loading */}
-            {loading && (
-              <div className="bg-white rounded-2xl shadow-lg p-8 text-center border border-gray-100">
-                <div className="animate-spin w-12 h-12 border-4 border-indigo-600 border-t-transparent rounded-full mx-auto mb-4" />
-                <p className="text-gray-600">Analysoidaan kuittia...</p>
-              </div>
-            )}
+        {/* Success State */}
+        {result && (
+          <div className="space-y-6">
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
+              <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+              <h3 className="font-semibold text-green-900 mb-2">Kuitti käsitelty!</h3>
+              <p className="text-sm text-green-700">
+                OCR on lukenut kuittitiedot onnistuneesti
+              </p>
+            </div>
 
             {/* Results */}
-            {result && !loading && (
-              <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">Kuitin tiedot</h3>
-                  <div className="flex items-center gap-1 text-green-600">
-                    <Check className="w-5 h-5" />
-                    <span className="text-sm font-medium">Valmis</span>
-                  </div>
+            <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              <h3 className="font-semibold text-gray-900 mb-4">Kuitin tiedot</h3>
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Summa:</span>
+                  <span className="font-semibold">{result.total_amount || 'N/A'} €</span>
                 </div>
-
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Kauppias</label>
-                    <input
-                      type="text"
-                      value={result.merchant || result.text || "Tuntematon"}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                      readOnly
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Päivämäärä</label>
-                    <input
-                      type="text"
-                      value={result.date || new Date().toISOString().split("T")[0]}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                      readOnly
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">Summa</label>
-                    <input
-                      type="text"
-                      value={`${result.total || "0.00"} €`}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg font-bold"
-                      readOnly
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs text-gray-500 mb-1 block">ALV %</label>
-                    <input
-                      type="text"
-                      value={result.vat || "24"}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                      readOnly
-                    />
-                  </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">ALV:</span>
+                  <span className="font-semibold">{result.vat_amount || 'N/A'} €</span>
                 </div>
-
-                <div className="flex gap-3">
-                  <button
-                    onClick={() => {
-                      setFile(null);
-                      setPreview(null);
-                      setResult(null);
-                    }}
-                    className="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 rounded-xl font-medium text-gray-700 transition-colors"
-                  >
-                    Peruuta
-                  </button>
-                  <button
-                    onClick={handleSave}
-                    className="flex-1 px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold shadow-lg transition-all"
-                  >
-                    Tallenna
-                  </button>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Päivämäärä:</span>
+                  <span className="font-semibold">{result.date || 'N/A'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Myyjä:</span>
+                  <span className="font-semibold">{result.vendor || 'N/A'}</span>
                 </div>
               </div>
-            )}
-          </motion.div>
+            </div>
+
+            {/* Actions */}
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                onClick={() => {
+                  setResult(null);
+                  setError(null);
+                }}
+                className="bg-gray-100 text-gray-700 px-4 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+              >
+                Uusi kuitti
+              </button>
+              <Link href="/receipts">
+                <button className="bg-blue-600 text-white px-4 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors w-full">
+                  Tarkastele
+                </button>
+              </Link>
+            </div>
+          </div>
         )}
+
+        {/* Tips */}
+        <div className="mt-8 bg-blue-50 rounded-2xl p-4">
+          <h4 className="font-semibold text-blue-900 mb-2">💡 Vinkkejä parhaaseen tulokseen</h4>
+          <ul className="text-sm text-blue-800 space-y-1">
+            <li>• Varmista että kuitti on selkeä ja hyvin valaistu</li>
+            <li>• Kuvassa ei saa olla varjoja tai heijastuksia</li>
+            <li>• Teksti tulee olla lukukelpoista</li>
+            <li>• Tuki: JPG, PNG, PDF-muodoille</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
 }
-

@@ -6,11 +6,10 @@
     "docs": "Docs",
     "about": "About",
     "contact": "Contact",
-    "caseStudies": "Case Studies",
     "start": "Start"
   },
-  "common": {
-    "backHome": "← Back to home"
+  "pricing": {
+    "title": "Transparent pricing — built for teams of any size",
+    "cta": "Start for free"
   }
 }
-

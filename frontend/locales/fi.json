@@ -6,11 +6,10 @@
     "docs": "Dokumentaatio",
     "about": "Yrityksestä",
     "contact": "Yhteystiedot",
-    "caseStudies": "Asiakastarinat",
     "start": "Aloita"
   },
-  "common": {
-    "backHome": "← Takaisin etusivulle"
+  "pricing": {
+    "title": "Hinnoittelu ilman yllätyksiä",
+    "cta": "Aloita ilmaiseksi"
   }
 }
-
