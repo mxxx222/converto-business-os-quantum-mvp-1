@@ -13,10 +13,14 @@ type Quest = {
 };
 
 export default function QuestList({ tenant }: { tenant?: string }) {
-  const base = process.env.NEXT_PUBLIC_API_BASE!;
+  const base = process.env.NEXT_PUBLIC_API_BASE;
   const t = tenant || "demo";
-  const { data } = useSWR(`${base}/api/v1/p2e/quests?tenant_id=${t}`, fetcher, { refreshInterval: 30000 });
-  const quests: Quest[] = data || [];
+  const { data } = useSWR(
+    base ? `${base}/api/v1/p2e/quests?tenant_id=${t}` : null,
+    fetcher,
+    { refreshInterval: 30000, fallbackData: [] }
+  );
+  const quests: Quest[] = Array.isArray(data) ? data : [];
 
   return (
     <div className="rounded-2xl border p-4 bg-white/70 backdrop-blur shadow">

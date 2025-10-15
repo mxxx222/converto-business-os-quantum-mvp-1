@@ -6,10 +6,14 @@ import { Wallet, Coins, TrendingUp, Sparkles } from "lucide-react";
 const fetcher = (url: string) => fetch(url, { cache: "no-store" }).then(r => r.json());
 
 export default function WalletWidget({ tenant, user }: { tenant?: string; user?: string }) {
-  const base = process.env.NEXT_PUBLIC_API_BASE!;
+  const base = process.env.NEXT_PUBLIC_API_BASE;
   const t = tenant || "demo";
   const u = user || "user_demo";
-  const { data } = useSWR(`${base}/api/v1/p2e/wallet?t=${t}&u=${u}`, fetcher, { refreshInterval: 15000 });
+  const { data } = useSWR(
+    base ? `${base}/api/v1/p2e/wallet?t=${t}&u=${u}` : null,
+    fetcher,
+    { refreshInterval: 15000, fallbackData: { balance: 0 } }
+  );
   const balance = data?.balance || 0;
 
   // Simulate recent change for demo

@@ -6,15 +6,19 @@ import { Flame, Trophy, Zap, TrendingUp, Star } from "lucide-react";
 const fetcher = (url: string) => fetch(url, { cache: "no-store" }).then(r => r.json());
 
 export default function GamifyCard({ tenant, user }: { tenant?: string; user?: string }) {
-  const base = process.env.NEXT_PUBLIC_API_BASE!;
+  const base = process.env.NEXT_PUBLIC_API_BASE;
   const params = new URLSearchParams();
   if (tenant) params.set("tenant_id", tenant);
   if (user) params.set("user_id", user);
   params.set("days", "7");
-  const { data } = useSWR(`${base}/api/v1/gamify/summary?${params}`, fetcher, { refreshInterval: 20000 });
+  const { data } = useSWR(
+    base ? `${base}/api/v1/gamify/summary?${params}` : null,
+    fetcher,
+    { refreshInterval: 20000, fallbackData: { total: 0, series: [], streak_days: 0, streak_bonus: 0 } }
+  );
   
   const total = data?.total || 0;
-  const series = (data?.series || []).slice(-7);
+  const series = Array.isArray(data?.series) ? data.series.slice(-7) : [];
   const streak = data?.streak_days || 0;
   const streakBonus = data?.streak_bonus || 0;
   const nextLevel = 200;

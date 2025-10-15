@@ -16,10 +16,14 @@ type Reward = {
 };
 
 export default function RewardsList({ tenant }: { tenant?: string }) {
-  const base = process.env.NEXT_PUBLIC_API_BASE!;
+  const base = process.env.NEXT_PUBLIC_API_BASE;
   const t = tenant || "demo";
-  const { data, mutate } = useSWR(`${base}/api/v1/rewards/catalog?tenant_id=${t}`, fetcher, { refreshInterval: 30000 });
-  const rewards: Reward[] = data || [];
+  const { data, error, mutate } = useSWR(
+    base ? `${base}/api/v1/rewards/catalog?tenant_id=${t}` : null,
+    fetcher,
+    { refreshInterval: 30000, fallbackData: [] }
+  );
+  const rewards: Reward[] = Array.isArray(data) ? data : [];
   const [selected, setSelected] = useState<Reward | null>(null);
 
   const handleRedeemSuccess = () => {
