@@ -23,46 +23,46 @@ services:
         fromDatabase:
           name: converto-db
           property: connectionString
-      
+
       - key: SECRET_KEY
         generateValue: true
-      
+
       - key: PYTHON_VERSION
         value: "3.11"
-      
+
       - key: ALLOWED_HOSTS
         value: converto-api.onrender.com,app.converto.fi
-      
+
       # AI Configuration
       - key: AI_PROVIDER
         value: openai  # or ollama for local
-      
+
       - key: VISION_PROVIDER
         value: openai  # or ollama for local
-      
+
       # Secrets (add manually in Render dashboard)
       - key: OPENAI_API_KEY
         sync: false
-      
+
       - key: SENTRY_DSN
         sync: false
-      
+
       - key: STRIPE_SECRET_KEY
         sync: false
-      
+
       - key: STRIPE_WEBHOOK_SECRET
         sync: false
-      
+
       - key: RESEND_API_KEY
         sync: false
-      
+
       - key: NOTION_API_KEY
         sync: false
-      
+
       # Optional integrations
       - key: WA_META_TOKEN
         sync: false
-      
+
       - key: SLACK_WEBHOOK_URL
         sync: false
 
@@ -77,10 +77,10 @@ services:
     envVars:
       - key: NEXT_PUBLIC_API_BASE
         value: https://converto-api.onrender.com
-      
+
       - key: NODE_VERSION
         value: "20"
-      
+
       - key: NEXT_PUBLIC_SENTRY_DSN
         sync: false
 
@@ -97,10 +97,10 @@ services:
         fromDatabase:
           name: converto-db
           property: connectionString
-      
+
       - key: BACKUP_DIR
         value: /var/data/backups
-      
+
       - key: BACKUP_RETENTION_DAYS
         value: "30"
 

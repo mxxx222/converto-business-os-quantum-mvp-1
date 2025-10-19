@@ -50,7 +50,7 @@ export default function WalletWidget({ tenant, user }: { tenant?: string; user?:
               <div className="text-xs opacity-90">Converto Tokens</div>
             </div>
           </div>
-          
+
           <motion.div
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 20, ease: "linear" }}
@@ -72,7 +72,7 @@ export default function WalletWidget({ tenant, user }: { tenant?: string; user?:
             </div>
             <div className="text-xl text-white/90 font-medium">CT</div>
           </motion.div>
-          
+
           {/* Recent Change Indicator */}
           {recentChange !== 0 && (
             <motion.div
@@ -97,7 +97,7 @@ export default function WalletWidget({ tenant, user }: { tenant?: string; user?:
             </div>
             <div className="text-lg font-bold text-white">{(balance + 50).toLocaleString()}</div>
           </div>
-          
+
           <div className="p-3 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20">
             <div className="flex items-center gap-2 mb-1">
               <TrendingUp className="w-4 h-4 text-green-300" />

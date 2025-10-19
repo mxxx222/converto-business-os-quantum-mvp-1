@@ -200,5 +200,3 @@ Päivitys	159 €	65 €	projekti
 Seuraavaksi lähetän viimeisen paketin:
 3️⃣ MVP_WORKFLOW.md — Cursor Pro + Dev Setup + Deployment
 Valmis jatkamaan siihen?
-
-

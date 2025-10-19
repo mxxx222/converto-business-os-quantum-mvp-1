@@ -43,4 +43,3 @@ export default function LangSwitcher({ currentLang = "fi", onLangChange }: LangS
     </div>
   );
 }
-

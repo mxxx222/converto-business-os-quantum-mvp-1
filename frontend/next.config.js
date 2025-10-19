@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const path = require('path');
+const { withSentryConfig } = require('@sentry/nextjs');
 
-module.exports = {
+const nextConfig = {
   reactStrictMode: true,
   webpack: (config) => {
     config.resolve.alias = {
@@ -11,3 +12,9 @@ module.exports = {
     return config;
   },
 };
+
+module.exports = withSentryConfig(nextConfig, {
+  silent: true,
+  org: 'viking-labs',
+  project: 'javascript-nextjs',
+});

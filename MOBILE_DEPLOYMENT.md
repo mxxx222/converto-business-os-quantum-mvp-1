@@ -364,4 +364,3 @@ cd mobile/android
 ---
 
 **🎉 Ready to ship! Questions? Check APP_STORE_GUIDE.md or open an issue.**
-

@@ -2,9 +2,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { 
-  Zap, Shield, BarChart3, Plug, Eye, 
-  Check, ArrowRight, Globe 
+import {
+  Zap, Shield, BarChart3, Plug, Eye,
+  Check, ArrowRight, Globe
 } from "lucide-react";
 import landingData from "@/lib/i18n/landing.json";
 import LogosBar from "@/components/marketing/LogosBar";
@@ -255,4 +255,3 @@ export default function PremiumLanding() {
     </div>
   );
 }
-

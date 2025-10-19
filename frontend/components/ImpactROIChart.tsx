@@ -101,4 +101,3 @@ export default function ImpactROIChart({ data }: ImpactROIChartProps) {
     </div>
   );
 }
-

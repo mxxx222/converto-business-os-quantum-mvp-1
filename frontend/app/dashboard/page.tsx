@@ -1,11 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
-import { 
-  Shield, 
-  Zap, 
-  TrendingUp, 
-  FileText, 
-  Award, 
+import {
+  Shield,
+  Zap,
+  TrendingUp,
+  FileText,
+  Award,
   Sparkles,
   ArrowRight,
   BarChart3,

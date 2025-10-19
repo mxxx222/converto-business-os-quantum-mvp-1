@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 class ShipmentLineIn(BaseModel):
     """Shipment line item"""
+
     sku: str = Field(..., description="Stock keeping unit")
     qty: int = Field(..., description="Quantity")
     unit_cost: float = Field(..., description="Unit cost in EUR")
@@ -16,6 +17,7 @@ class ShipmentLineIn(BaseModel):
 
 class ShipmentIn(BaseModel):
     """Input model for creating shipment"""
+
     shipment_id: str = Field(..., description="Unique shipment ID")
     supplier: Optional[str] = Field(None, description="Supplier name")
     eta: Optional[date] = Field(None, description="Estimated time of arrival")
@@ -28,7 +30,7 @@ class ShipmentIn(BaseModel):
 
 class ShipmentReceiveIn(BaseModel):
     """Input model for receiving shipment"""
+
     shipment_id: str = Field(..., description="Shipment ID to receive")
     received_date: Optional[date] = Field(None, description="Date received")
     send_to_notion: bool = Field(False, description="Update Notion database")
-

@@ -20,7 +20,7 @@ export default function NewReceiptPage() {
       formData.append('file', file);
 
       setProcessing(true);
-      const response = await fetch('/api/v1/ocr/process', {
+      const response = await fetch('/api/ocr/process', {
         method: 'POST',
         body: formData,
       });

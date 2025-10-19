@@ -1,6 +1,6 @@
-
 import importlib, json, os, logging
 from fastapi import FastAPI
+
 
 class ModuleRegistry:
     def __init__(self):
@@ -29,5 +29,6 @@ class ModuleRegistry:
                 logging.info("Loaded module: %s", module_id)
             except Exception as e:
                 logging.exception("Module %s skipped: %s", mod, e)
+
 
 registry = ModuleRegistry()

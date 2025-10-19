@@ -71,4 +71,3 @@ npm run dev
 - Tarkista että OpenAI API key on oikein
 - Katso virheet terminaalissa
 - Lue `ALOITA_TÄSTÄ.md` tarkemmat ohjeet
-

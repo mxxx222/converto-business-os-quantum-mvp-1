@@ -14,14 +14,14 @@ export default function NotificationsSettings() {
   async function saveNotion() {
     setLoading(true);
     setMessage("");
-    
+
     try {
       const response = await fetch("/api/v1/reminders/integrations/notion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ database_id: notionDb })
       });
-      
+
       if (response.ok) {
         setMessage("✅ Notion-kalenteri tallennettu!");
       } else {
@@ -37,12 +37,12 @@ export default function NotificationsSettings() {
   async function testWhatsApp() {
     setLoading(true);
     setMessage("");
-    
+
     try {
       const response = await fetch("/api/v1/reminders/test/whatsapp", {
         method: "POST"
       });
-      
+
       if (response.ok) {
         setMessage("✅ WhatsApp-testiviesti lähetetty!");
       } else {
@@ -59,12 +59,12 @@ export default function NotificationsSettings() {
   async function testNotion() {
     setLoading(true);
     setMessage("");
-    
+
     try {
       const response = await fetch("/api/v1/reminders/test/notion", {
         method: "POST"
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         setMessage(`✅ Notion-tapahtuma luotu! ${data.url || ""}`);
@@ -170,7 +170,7 @@ export default function NotificationsSettings() {
       {/* Setup Guide */}
       <div className="bg-blue-50 rounded-xl border border-blue-200 p-6 space-y-3">
         <h3 className="font-semibold text-blue-900">📖 Pika-asennusohje</h3>
-        
+
         <div className="space-y-2 text-sm text-blue-800">
           <p><strong>1. Notion Calendar:</strong></p>
           <ol className="list-decimal list-inside space-y-1 ml-2">
@@ -200,4 +200,3 @@ export default function NotificationsSettings() {
     </div>
   );
 }
-

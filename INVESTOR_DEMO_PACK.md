@@ -2,7 +2,7 @@
 
 ## Live Demo Links
 
-**Status:** 🎯 Production Ready (v0.9.0)  
+**Status:** 🎯 Production Ready (v0.9.0)
 **Deploy Date:** 2025-10-13
 
 ---
@@ -367,4 +367,3 @@ in month 12. That's €18k MRR at €30 ARPU."
 ---
 
 **🇫🇮 Join us in building Finland's first self-learning Business OS!**
-

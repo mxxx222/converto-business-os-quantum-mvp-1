@@ -98,10 +98,8 @@ curl -X POST https://YOUR-BACKEND.onrender.com/api/v1/auth/magic/request \
 
 ## 🎯 **MVP MINIMAALISET VAATIMUKSET:**
 
-✅ **Backend:** ENV, AI_PROVIDER, OPENAI_API_KEY, JWT_SECRET, DATABASE_URL  
-✅ **Frontend:** NEXT_PUBLIC_API_BASE, NEXT_PUBLIC_APP_ENV, FEATURE_PREMIUM_HOME  
+✅ **Backend:** ENV, AI_PROVIDER, OPENAI_API_KEY, JWT_SECRET, DATABASE_URL
+✅ **Frontend:** NEXT_PUBLIC_API_BASE, NEXT_PUBLIC_APP_ENV, FEATURE_PREMIUM_HOME
 ✅ **Database:** PostgreSQL (Render luo automaattisesti)
 
 **VALMIS! 🚀**
-
-

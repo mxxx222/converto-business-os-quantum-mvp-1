@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 class InventoryItemIn(BaseModel):
     """Input model for creating inventory item"""
+
     sku: str = Field(..., description="Stock keeping unit (unique ID)")
     name: str = Field(..., description="Product name")
     category: Optional[str] = Field("Muu", description="Product category")
@@ -22,6 +23,7 @@ class InventoryItemIn(BaseModel):
 
 class InventoryItem(InventoryItemIn):
     """Full inventory item with metadata"""
+
     id: str
     created_at: datetime
     updated_at: datetime
@@ -29,8 +31,8 @@ class InventoryItem(InventoryItemIn):
 
 class StockAdjustIn(BaseModel):
     """Input model for stock adjustment"""
+
     sku: str = Field(..., description="Stock keeping unit")
     delta: int = Field(..., description="Change amount (+ or -)")
     reason: Optional[str] = Field(None, description="Reason for adjustment")
     send_to_notion: bool = Field(False, description="Push to Notion database")
-

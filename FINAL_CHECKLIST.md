@@ -289,11 +289,11 @@ Tenant: tenant_demo_001
 
 ## 📞 EMERGENCY CONTACTS
 
-**Render Support:** https://render.com/support  
-**Stripe Support:** https://support.stripe.com/  
-**Apple Developer:** https://developer.apple.com/contact/  
-**Google Play:** https://support.google.com/googleplay/android-developer/  
-**Sentry:** https://sentry.io/support/  
+**Render Support:** https://render.com/support
+**Stripe Support:** https://support.stripe.com/
+**Apple Developer:** https://developer.apple.com/contact/
+**Google Play:** https://support.google.com/googleplay/android-developer/
+**Sentry:** https://sentry.io/support/
 
 ---
 
@@ -312,4 +312,3 @@ Tenant: tenant_demo_001
 **✅ When all checkboxes are complete, you're ready to submit!**
 
 **🚀 Good luck with your launch!**
-

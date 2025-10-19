@@ -230,5 +230,3 @@ Sisältää koko MVP-kehityksen ja deployment-prosessin.
 ⸻
 
 Haluatko, että paketoin nämä kolme tiedostoa (README_CORE.md, NOTION_PROMPTS.md, MVP_WORKFLOW.md) nyt yhdeksi ZIPiksi, jonka voit avata suoraan Cursor Prohon?
-
-

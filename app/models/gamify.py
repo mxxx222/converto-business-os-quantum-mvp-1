@@ -9,12 +9,17 @@ from pydantic import BaseModel, Field
 
 class GamifyEventIn(BaseModel):
     """Input model for gamification event"""
+
     user_id: str = Field(..., description="User ID")
-    category: str = Field(..., description="Event category (finance, learning, health, productivity)")
+    category: str = Field(
+        ..., description="Event category (finance, learning, health, productivity)"
+    )
     action: str = Field(..., description="Action performed (e.g., paid_invoice, completed_task)")
     value: float = Field(1.0, description="Base value/weight of action")
-    metadata: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Additional metadata")
-    
+    metadata: Optional[Dict[str, Any]] = Field(
+        default_factory=dict, description="Additional metadata"
+    )
+
     class Config:
         schema_extra = {
             "example": {
@@ -22,13 +27,14 @@ class GamifyEventIn(BaseModel):
                 "category": "finance",
                 "action": "paid_invoice",
                 "value": 2.0,
-                "metadata": {"invoice_amount": 150.00}
+                "metadata": {"invoice_amount": 150.00},
             }
         }
 
 
 class GamifyEvent(BaseModel):
     """Full gamification event with calculated points"""
+
     id: str
     user_id: str
     category: str
@@ -40,6 +46,7 @@ class GamifyEvent(BaseModel):
 
 class GamifyBalance(BaseModel):
     """User gamification balance"""
+
     user_id: str
     total_points: float
     lifetime_points: float
@@ -47,7 +54,7 @@ class GamifyBalance(BaseModel):
     last_event: Optional[datetime]
     level: int = 1
     next_level_points: float = 100.0
-    
+
     class Config:
         schema_extra = {
             "example": {
@@ -56,13 +63,14 @@ class GamifyBalance(BaseModel):
                 "lifetime_points": 1250.0,
                 "streak_days": 7,
                 "level": 3,
-                "next_level_points": 500.0
+                "next_level_points": 500.0,
             }
         }
 
 
 class GamifyStats(BaseModel):
     """User gamification statistics"""
+
     user_id: str
     total_events: int
     events_by_category: Dict[str, int]
@@ -70,4 +78,3 @@ class GamifyStats(BaseModel):
     best_streak: int
     current_streak: int
     achievements: list[str] = []
-

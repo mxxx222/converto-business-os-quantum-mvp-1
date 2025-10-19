@@ -14,6 +14,7 @@ RuleType = Literal["missing_receipts", "vat_filing", "invoice_due", "custom"]
 
 class ReminderRule(BaseModel):
     """Reminder rule configuration"""
+
     id: str = Field(..., description="Unique rule ID")
     tenant_id: str = Field(..., description="Tenant ID")
     type: RuleType = Field(..., description="Rule type")
@@ -22,7 +23,7 @@ class ReminderRule(BaseModel):
     schedule: str = Field("daily@08:00", description="Schedule (human-readable cron)")
     active: bool = Field(True, description="Rule active status")
     ai_hint: Optional[str] = Field(None, description="AI context hint for optimization")
-    
+
     class Config:
         schema_extra = {
             "example": {
@@ -33,13 +34,14 @@ class ReminderRule(BaseModel):
                 "channel": "whatsapp",
                 "schedule": "daily@08:00",
                 "active": True,
-                "ai_hint": "User responds best between 8-10 AM"
+                "ai_hint": "User responds best between 8-10 AM",
             }
         }
 
 
 class ReminderJob(BaseModel):
     """Scheduled reminder job"""
+
     rule_id: str
     next_due: datetime
     last_run: Optional[datetime] = None
@@ -48,6 +50,7 @@ class ReminderJob(BaseModel):
 
 class ReminderLog(BaseModel):
     """Reminder execution log (audit trail)"""
+
     id: str
     rule_id: str
     tenant_id: str
@@ -57,4 +60,3 @@ class ReminderLog(BaseModel):
     result: Literal["ok", "failed", "skipped"]
     error: Optional[str] = None
     correlation_id: Optional[str] = None
-

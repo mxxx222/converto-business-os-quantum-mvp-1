@@ -8,7 +8,7 @@
 ## Ratkaisu (TOIMIVA):
 
 1. **Käytä Tailwind v3.4.1** (vakaa Next.js 15 kanssa)
-2. **PostCSS v8.4.x** 
+2. **PostCSS v8.4.x**
 3. **Varmista globals.css ladataan** layout.tsx:ssä
 
 ## Quick Fix:
@@ -26,7 +26,7 @@ docker-compose up -d frontend
 
 Jos Tailwind ei toimi, vaihda komponentit inline-styles:ään:
 ```tsx
-<div style={{ 
+<div style={{
   background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
   padding: '24px',
   borderRadius: '16px'
@@ -34,4 +34,3 @@ Jos Tailwind ei toimi, vaihda komponentit inline-styles:ään:
 ```
 
 Tämä on 100% luotettava fallback.
-

@@ -123,4 +123,3 @@ export default function NextBestAction() {
     </motion.div>
   );
 }
-

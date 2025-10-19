@@ -20,5 +20,3 @@ async def anomaly(score: float = Query(default=0.07)):
         "timestamp": datetime.now().isoformat(),
         "status": "ok",
     }
-
-

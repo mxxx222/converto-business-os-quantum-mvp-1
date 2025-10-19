@@ -4,10 +4,10 @@
 
 **Verdict:** Replace WordPress + Elementor with **Next.js + Tailwind + Render**
 
-**Savings:** €1,860-3,060/year per site  
-**Performance:** 10x faster (Lighthouse 95+ vs. 60)  
-**Security:** 100x fewer vulnerabilities  
-**Maintenance:** 90% less time  
+**Savings:** €1,860-3,060/year per site
+**Performance:** 10x faster (Lighthouse 95+ vs. 60)
+**Security:** 100x fewer vulnerabilities
+**Maintenance:** 90% less time
 
 ---
 
@@ -78,7 +78,7 @@ git push origin main
 # Auto-deploys to Vercel/Render!
 ```
 
-**Time:** 1-2 days  
+**Time:** 1-2 days
 **Cost:** €0-7/mo
 
 ---
@@ -108,7 +108,7 @@ my-saas/
 └── .github/workflows/ci.yml
 ```
 
-**Time:** 2-4 days  
+**Time:** 2-4 days
 **Cost:** €14-21/mo (Render web + DB)
 
 ---
@@ -135,7 +135,7 @@ Hosting:    Vercel (€0) or Render (€7/mo)
 - Lower transaction fees (Stripe direct)
 - No plugin conflicts
 
-**Time:** 3-5 days  
+**Time:** 3-5 days
 **Cost:** €0-7/mo (hosting only, Stripe has % fees)
 
 ---
@@ -161,7 +161,7 @@ CMS:        Decap CMS (free, Git-based)
 - Git-based (version control)
 - Free hosting
 
-**Time:** 1-2 days  
+**Time:** 1-2 days
 **Cost:** **€0/mo**
 
 ---
@@ -224,7 +224,7 @@ export default function BlogPost({ params }) {
 }
 ```
 
-**Time:** 1-2 days  
+**Time:** 1-2 days
 **Result:** Faster, cleaner blog
 
 ### **Phase 4: Deploy**
@@ -239,7 +239,7 @@ git push origin main
 vercel --prod
 ```
 
-**Time:** 30min  
+**Time:** 30min
 **Result:** Live on modern stack!
 
 ---
@@ -408,7 +408,7 @@ module.exports = {
 ```tsx
 import Image from 'next/image';
 
-<Image 
+<Image
   src="/images/photo.jpg"
   width={800}
   height={600}
@@ -429,14 +429,14 @@ import { useForm } from 'react-hook-form';
 
 export default function ContactForm() {
   const { register, handleSubmit } = useForm();
-  
+
   const onSubmit = async (data) => {
     await fetch('/api/contact', {
       method: 'POST',
       body: JSON.stringify(data)
     });
   };
-  
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input {...register("email")} />
@@ -488,4 +488,3 @@ export default function ContactForm() {
 ---
 
 **🚀 Modern Stack = Future-Proof Business!**
-

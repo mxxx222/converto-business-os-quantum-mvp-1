@@ -3,6 +3,7 @@ from typing import Any, Dict, List
 
 router = APIRouter(prefix="/api/v2/agent", tags=["coding-agent"])
 
+
 def _plan_from_goal(goal: str) -> List[str]:
     steps: List[str] = []
     if goal:
@@ -10,6 +11,7 @@ def _plan_from_goal(goal: str) -> List[str]:
         steps.append("Propose diff (dry-run) for smallest valuable change")
         steps.append("List tests to add or update")
     return steps
+
 
 @router.post("/execute")
 def execute(task: Dict[str, Any] = Body(...)):
@@ -23,7 +25,5 @@ def execute(task: Dict[str, Any] = Body(...)):
         "mode": mode,
         "plan": plan,
         "diff": "",
-        "notes": ["This is a minimal stub. Hook tools and diff generator next."]
+        "notes": ["This is a minimal stub. Hook tools and diff generator next."],
     }
-
-

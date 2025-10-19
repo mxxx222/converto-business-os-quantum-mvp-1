@@ -33,4 +33,3 @@ export default function LegalSyncButton({ onSync }: { onSync?: () => void }) {
     </Button>
   );
 }
-

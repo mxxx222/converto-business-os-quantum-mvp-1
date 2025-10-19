@@ -2,6 +2,7 @@
 AI-powered hotkey command interpreter.
 User can type natural language commands and AI executes them.
 """
+
 import os
 from openai import OpenAI
 import json
@@ -35,10 +36,10 @@ Vain JSON, ei selityksiä.
 async def interpret_command(command: str) -> dict:
     """
     Interpret natural language command using AI.
-    
+
     Args:
         command: User's command in natural language (Finnish or English)
-    
+
     Returns:
         Dict with action, params, confidence
     """
@@ -53,11 +54,11 @@ async def interpret_command(command: str) -> dict:
             temperature=0.2,
             max_tokens=200,
         )
-        
+
         content = response.choices[0].message.content
         result = json.loads(content)
         return result
-    
+
     except Exception as e:
         return {
             "action": "other",
@@ -81,4 +82,3 @@ HOTKEY_ACTIONS = {
 def get_hotkey_map() -> dict:
     """Return available hotkeys and their actions."""
     return HOTKEY_ACTIONS
-

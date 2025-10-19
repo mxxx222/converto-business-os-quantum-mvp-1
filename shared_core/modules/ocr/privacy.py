@@ -4,12 +4,8 @@ import numpy as np
 from PIL import Image
 
 
-FACE = cv2.CascadeClassifier(
-    cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-)
-PLATE = cv2.CascadeClassifier(
-    cv2.data.haarcascades + "haarcascade_russian_plate_number.xml"
-)
+FACE = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+PLATE = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_russian_plate_number.xml")
 
 
 def _nd(b: bytes) -> np.ndarray:
@@ -28,10 +24,8 @@ def blur_faces_and_plates(b: bytes) -> bytes:
     boxes = list(FACE.detectMultiScale(gray, 1.2, 5, minSize=(30, 30))) + list(
         PLATE.detectMultiScale(gray, 1.1, 5, minSize=(40, 20))
     )
-    for (x, y, w, h) in boxes:
+    for x, y, w, h in boxes:
         roi = img[y : y + h, x : x + w]
         roi = cv2.GaussianBlur(roi, (51, 51), 30)
         img[y : y + h, x : x + w] = roi
     return _to_bytes(img)
-
-

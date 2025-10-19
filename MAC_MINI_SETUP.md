@@ -156,12 +156,12 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-  
+
   redis:
     image: redis:7-alpine
     ports:
       - "6379:6379"
-  
+
   backend:
     build: .
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -175,7 +175,7 @@ services:
     depends_on:
       - postgres
       - redis
-  
+
   frontend:
     build: ./frontend
     command: npm run start
@@ -238,11 +238,11 @@ ingress:
   # Frontend
   - hostname: converto-demo.yourdomain.com
     service: http://localhost:3000
-  
+
   # Backend API
   - hostname: api.converto-demo.yourdomain.com
     service: http://localhost:8000
-  
+
   # Catch-all
   - service: http_status:404
 ```
@@ -424,10 +424,10 @@ psql -d converto -c "SELECT count(*) FROM pg_stat_activity;"
 
 ### Hybridimalli (suositus):
 
-**Mac mini** = Dev + staging  
-**Railway** = Production backend + DB  
-**Vercel** = Production frontend (edge-optimized)  
-**S3/R2** = Kuitit ja backupit  
+**Mac mini** = Dev + staging
+**Railway** = Production backend + DB
+**Vercel** = Production frontend (edge-optimized)
+**S3/R2** = Kuitit ja backupit
 
 Näin saat parhaan molemmista maailmoista:
 - Nopea kehitys lokaalisti
@@ -720,4 +720,3 @@ kill -9 <PID>
 **🎉 Onnea Mac mini -serverisi kanssa!**
 
 Sinulla on nyt täysi kontrolli kehitysympäristöstäsi ilman pilvikuluja. Skaalaa pilveen vain kun oikeasti tarvitset! 🚀
-

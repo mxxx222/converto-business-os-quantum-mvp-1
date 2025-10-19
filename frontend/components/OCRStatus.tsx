@@ -79,4 +79,3 @@ export default function OCRStatus({ tenant }: { tenant?: string }) {
     </div>
   );
 }
-

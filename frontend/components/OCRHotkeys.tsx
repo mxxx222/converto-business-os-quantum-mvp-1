@@ -56,4 +56,3 @@ export default function OCRHotkeys({ onAction }: { onAction: (action: HotkeyActi
     </div>
   );
 }
-

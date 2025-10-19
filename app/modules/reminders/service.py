@@ -29,10 +29,10 @@ def _next_scheduled_time(schedule: str = "daily@08:00") -> datetime:
     # MVP: Simple daily at 08:00 local time
     now = datetime.now()
     next_run = now.replace(hour=8, minute=0, second=0, microsecond=0)
-    
+
     if next_run <= now:
         next_run += timedelta(days=1)
-    
+
     return next_run
 
 
@@ -40,10 +40,7 @@ def register_rule(rule: ReminderRule) -> ReminderRule:
     """Register a new reminder rule"""
     RULES[rule.id] = rule
     JOBS[rule.id] = ReminderJob(
-        rule_id=rule.id,
-        next_due=_next_scheduled_time(rule.schedule),
-        last_run=None,
-        run_count=0
+        rule_id=rule.id, next_due=_next_scheduled_time(rule.schedule), last_run=None, run_count=0
     )
     return rule
 
@@ -60,12 +57,12 @@ def update_rule(rule_id: str, updates: Dict) -> Optional[ReminderRule]:
     """Update existing rule"""
     if rule_id not in RULES:
         return None
-    
+
     rule = RULES[rule_id]
     for key, value in updates.items():
         if hasattr(rule, key):
             setattr(rule, key, value)
-    
+
     return rule
 
 
@@ -86,27 +83,27 @@ def run_due_jobs() -> List[str]:
     """
     now = datetime.now()
     executed = []
-    
+
     for job in JOBS.values():
         if job.next_due <= now:
             rule = RULES.get(job.rule_id)
-            
+
             if not rule or not rule.active:
                 # Skip inactive rules but reschedule
                 job.next_due = _next_scheduled_time(rule.schedule if rule else "daily@08:00")
                 continue
-            
+
             # Execute rule
             success = _execute_rule(rule)
-            
+
             # Update job
             job.last_run = now
             job.run_count += 1
             job.next_due = _next_scheduled_time(rule.schedule)
-            
+
             if success:
                 executed.append(job.rule_id)
-    
+
     return executed
 
 
@@ -118,7 +115,7 @@ def _execute_rule(rule: ReminderRule) -> bool:
     message = None
     calendar_title = None
     calendar_start = None
-    
+
     try:
         # Generate message based on rule type
         if rule.type == "missing_receipts":
@@ -127,7 +124,7 @@ def _execute_rule(rule: ReminderRule) -> bool:
                 message = result
                 calendar_title = "Puuttuvat kuitit"
                 calendar_start = datetime.now().isoformat()
-                
+
         elif rule.type == "vat_filing":
             result = _check_vat_deadline(rule)
             if result:
@@ -136,46 +133,47 @@ def _execute_rule(rule: ReminderRule) -> bool:
                 # Set calendar event for deadline (mock: 5 days from now)
                 deadline = datetime.now() + timedelta(days=5)
                 calendar_start = deadline.isoformat()
-                
+
         elif rule.type == "invoice_due":
             result = _check_due_invoices(rule)
             if result:
                 message = result
                 calendar_title = "Erääntyvät laskut"
                 calendar_start = datetime.now().isoformat()
-                
+
         elif rule.type == "custom":
             message = rule.params.get("message", "Custom reminder")
-        
+
         if not message:
             # Nothing to remind about
             _log_reminder(rule, "skipped", "No action needed")
             return False
-        
+
         # Send message via appropriate channel
         success = _send_message(rule.channel, rule.tenant_id, message, rule.ai_hint)
-        
+
         # Add to Notion calendar if configured
         if success and calendar_title and calendar_start:
             try:
-                from app.integrations.notion_service import upsert_calendar_event, notion_calendar_enabled
+                from app.integrations.notion_service import (
+                    upsert_calendar_event,
+                    notion_calendar_enabled,
+                )
+
                 if notion_calendar_enabled():
                     upsert_calendar_event(
-                        title=calendar_title,
-                        start=calendar_start,
-                        status="Open",
-                        notes=message
+                        title=calendar_title, start=calendar_start, status="Open", notes=message
                     )
             except Exception as e:
                 print(f"[Reminders] Failed to add to Notion calendar: {e}")
-        
+
         if success:
             _log_reminder(rule, "ok", message)
             return True
         else:
             _log_reminder(rule, "failed", message, error="Failed to send message")
             return False
-            
+
     except Exception as e:
         _log_reminder(rule, "failed", message or "Error", error=str(e))
         return False
@@ -185,13 +183,13 @@ def _check_missing_receipts(rule: ReminderRule) -> Optional[str]:
     """Check for missing receipts"""
     # TODO: Implement actual check against OCR database
     threshold = rule.params.get("threshold", 3)
-    
+
     # Mock: Assume 5 receipts missing
     missing_count = 5
-    
+
     if missing_count >= threshold:
         return f"📸 {missing_count} kuittia puuttuu tältä viikolta. Lataa ne nyt → /selko/ocr"
-    
+
     return None
 
 
@@ -199,10 +197,10 @@ def _check_vat_deadline(rule: ReminderRule) -> Optional[str]:
     """Check VAT filing deadline"""
     # TODO: Implement actual VAT deadline check
     country = rule.params.get("country", "FI")
-    
+
     # Mock: Next deadline is in 5 days
     deadline = (datetime.now() + timedelta(days=5)).strftime("%d.%m.%Y")
-    
+
     return f"🧾 ALV-ilmoitus lähestyy ({country}): määräpäivä {deadline}. Tarkista ALV-yhteenveto → /vat"
 
 
@@ -210,23 +208,26 @@ def _check_due_invoices(rule: ReminderRule) -> Optional[str]:
     """Check for due invoices"""
     # TODO: Implement actual invoice check
     days_ahead = rule.params.get("days_ahead", 7)
-    
+
     # Mock: 3 invoices due
     due_count = 3
     total_amount = 1250.00
-    
+
     if due_count > 0:
         return f"💳 {due_count} laskua erääntyy {days_ahead} päivän sisällä, yhteensä {total_amount:.2f} €. Hoidetaan → /billing"
-    
+
     return None
 
 
-def _send_message(channel: Channel, tenant_id: str, message: str, ai_hint: Optional[str] = None) -> bool:
+def _send_message(
+    channel: Channel, tenant_id: str, message: str, ai_hint: Optional[str] = None
+) -> bool:
     """
     Send message via specified channel
     Returns True if successful
     """
     from app.core.notify.service import send_message
+
     return send_message(channel, tenant_id, message, ai_hint)
 
 
@@ -241,7 +242,7 @@ def _log_reminder(rule: ReminderRule, result: str, message: str, error: Optional
         sent_at=datetime.now(),
         result=result,  # type: ignore
         error=error,
-        correlation_id=f"corr_{uuid.uuid4().hex[:8]}"
+        correlation_id=f"corr_{uuid.uuid4().hex[:8]}",
     )
     LOGS.append(log)
 
@@ -251,6 +252,5 @@ def get_logs(tenant_id: Optional[str] = None, limit: int = 50) -> List[ReminderL
     logs = LOGS
     if tenant_id:
         logs = [log for log in logs if log.tenant_id == tenant_id]
-    
-    return sorted(logs, key=lambda log: log.sent_at, reverse=True)[:limit]
 
+    return sorted(logs, key=lambda log: log.sent_at, reverse=True)[:limit]

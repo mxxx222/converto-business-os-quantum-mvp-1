@@ -9,13 +9,13 @@ export default function StickyCTA() {
           🔥 <span className="font-medium">{t("ctaBannerText") || "Valmis sulkemaan kaupan?"}</span>
         </div>
         <div className="flex gap-3">
-          <button 
+          <button
             onClick={() => window.location.href = "/leads"}
             className="rounded-lg bg-black text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 active:scale-95 transition-all"
           >
             {t("cta.openLead") || "Avaa mahdollisuus"}
           </button>
-          <button 
+          <button
             onClick={() => window.location.href = "/hotleads"}
             className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium hover:bg-gray-50 active:scale-95 transition-all"
           >
@@ -26,4 +26,3 @@ export default function StickyCTA() {
     </div>
   );
 }
-

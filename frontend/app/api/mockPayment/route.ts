@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
 
     // Tarkista onko Stripe aktiivinen
     const stripeActive = process.env.STRIPE_ACTIVE === 'true';
-    
+
     if (stripeActive) {
       // Oikea Stripe-integraatio (tulevaisuudessa)
       return NextResponse.json({
@@ -17,10 +17,10 @@ export async function POST(request: NextRequest) {
     } else {
       // Mock-maksu
       console.log('Mock payment processed:', { planId, amount, email });
-      
+
       // Simuloi viivettä
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       return NextResponse.json({
         success: true,
         message: 'Mock payment confirmed',

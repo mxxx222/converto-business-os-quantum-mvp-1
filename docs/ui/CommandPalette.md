@@ -115,4 +115,3 @@ export function CommandPalette() {
 - ✅ Escape to close
 - ✅ Arrow key navigation
 - ✅ Screen reader announcements
-

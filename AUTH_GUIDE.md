@@ -243,4 +243,3 @@ curl -H "Authorization: Bearer $TOKEN" http://localhost:8000/api/v1/gamify/summa
 ---
 
 **Questions?** Check `app/core/auth.py` for implementation details!
-

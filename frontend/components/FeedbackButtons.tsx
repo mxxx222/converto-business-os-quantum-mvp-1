@@ -43,10 +43,10 @@ export function FeedbackButtons({
       );
 
       const data = await response.json();
-      
+
       if (data.status === "ok") {
         onFeedback?.(correct);
-        
+
         // Show subtle success indicator
         if (!correct) {
           // AI was wrong - will retrain
@@ -76,7 +76,7 @@ export function FeedbackButtons({
   return (
     <div className="flex items-center gap-2">
       <span className="text-xs text-gray-500 mr-2">Oikea tulos?</span>
-      
+
       <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -121,7 +121,7 @@ export function FeedbackInline({
           <span className="text-gray-500 ml-2">({Math.round(confidence * 100)}%)</span>
         </div>
       </div>
-      
+
       <FeedbackButtons
         action={action}
         featureVector={features}
@@ -131,4 +131,3 @@ export function FeedbackInline({
     </div>
   );
 }
-

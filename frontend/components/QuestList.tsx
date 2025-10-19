@@ -48,4 +48,3 @@ export default function QuestList({ tenant }: { tenant?: string }) {
     </div>
   );
 }
-

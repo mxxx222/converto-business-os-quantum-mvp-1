@@ -2,9 +2,9 @@
 
 ## Tilanne NOJT:
 
-✅ **Kaikki koodi on GitHubissa** (21 committia tänään!)  
-✅ **135 tied ostoa, 4,617 riviä koodia**  
-✅ **Täysi järjestelmä valmis**: OCR AI, Gamify, P2E, Rewards, Billing, Admin  
+✅ **Kaikki koodi on GitHubissa** (21 committia tänään!)
+✅ **135 tied ostoa, 4,617 riviä koodia**
+✅ **Täysi järjestelmä valmis**: OCR AI, Gamify, P2E, Rewards, Billing, Admin
 
 ---
 
@@ -48,7 +48,7 @@ npm run dev
 **HUOM: Frontend on portissa 3001!**
 
 - 📸 **OCR**: http://localhost:3001/selko/ocr
-- 📊 **Dashboard**: http://localhost:3001/dashboard  
+- 📊 **Dashboard**: http://localhost:3001/dashboard
 - 💳 **Billing**: http://localhost:3001/billing
 - ⚙️ **Admin**: http://localhost:3001/admin/economy
 
@@ -121,7 +121,7 @@ Luo .env (katso kohta 1 yllä)
 
 1. Mene: https://railway.app
 2. Sign up (GitHub)
-3. "New Project" → Deploy from GitHub  
+3. "New Project" → Deploy from GitHub
 4. Valitse: `converto-business-os-quantum-mvp-1`
 5. Lisää env: `OPENAI_API_KEY`
 6. **VALMIS!**
@@ -156,4 +156,3 @@ curl http://localhost:8000/api/v1/gamify/summary?tenant_id=demo&user_id=user_dem
 ---
 
 **🎉 ONNEA! Sinulla on MAAILMAN ÄLYKKÄIN kuitintunnistusjärjestelmä valmiina!** 🚀
-

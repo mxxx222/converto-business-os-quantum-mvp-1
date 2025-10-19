@@ -20,7 +20,7 @@ export default function SoundSettings() {
         />
         <span>🔊 Äänet</span>
       </label>
-      
+
       {sfxOn && (
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-400">🔉</span>
@@ -44,4 +44,3 @@ export default function SoundSettings() {
     </div>
   );
 }
-

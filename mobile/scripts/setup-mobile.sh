@@ -50,4 +50,3 @@ echo "Fastlane (optional):"
 echo "  iOS:     cd ios && fastlane beta"
 echo "  Android: cd android && fastlane beta"
 echo ""
-

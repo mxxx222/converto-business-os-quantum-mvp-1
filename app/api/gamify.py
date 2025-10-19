@@ -18,7 +18,15 @@ def api_record_event(
     db=Depends(get_session),
 ):
     try:
-        ev = record_event(db, tenant_id=tenant_id, kind=kind, points=points, user_id=user_id, meta=meta, event_id=event_id)
+        ev = record_event(
+            db,
+            tenant_id=tenant_id,
+            kind=kind,
+            points=points,
+            user_id=user_id,
+            meta=meta,
+            event_id=event_id,
+        )
         if not ev:
             return {"ok": False, "message": "duplicate event (idempotent skip)"}
         return {"ok": True, "id": str(ev.id), "points": ev.points}
@@ -37,5 +45,3 @@ def api_summary(
         return summary_since(db, tenant_id=tenant_id, user_id=user_id, days=days)
     except Exception as e:
         raise HTTPException(500, str(e))
-
-

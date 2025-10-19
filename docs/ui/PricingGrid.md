@@ -72,4 +72,3 @@ Psychologically optimized pricing table with 3-4 tiers and conversion-focused de
 - ✅ WCAG AA contrast on all tiers
 - ✅ Focus rings on CTA buttons
 - ✅ Screen reader friendly pricing
-

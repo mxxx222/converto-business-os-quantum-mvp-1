@@ -7,12 +7,15 @@ from app.telemetry.gamify import track_event
 
 router = APIRouter(prefix="/api/v2/agent", tags=["agent"])
 
+
 class DiffIn(BaseModel):
     file_path: str
     new_content: str
 
+
 class DiffOut(BaseModel):
     diff: str
+
 
 @router.post("/diff", response_model=DiffOut)
 def create_diff(body: DiffIn):
@@ -63,4 +66,6 @@ def apply_change(body: ApplyIn):
             pass
         raise HTTPException(status_code=500, detail=str(e)) from e
     track_event("agent.apply", {"file": body.file_path, "backup": backup_path is not None})
-    return ApplyOut(written=len(body.content.encode("utf-8")), backup=str(backup_path) if backup_path else None)
+    return ApplyOut(
+        written=len(body.content.encode("utf-8")), backup=str(backup_path) if backup_path else None
+    )

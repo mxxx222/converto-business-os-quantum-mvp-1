@@ -114,4 +114,3 @@ Settings → General → VPN & Device Management → Trust certificate
 - [Capacitor Docs](https://capacitorjs.com/docs)
 - [iOS Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - [Android Guidelines](https://play.google.com/console/about/guides/)
-

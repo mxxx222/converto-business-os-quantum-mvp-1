@@ -8,13 +8,13 @@
  */
 export function pressable(variant: "primary" | "secondary" | "tertiary" = "primary") {
   const base = "transition-all duration-150 active:scale-98 font-medium rounded-xl";
-  
+
   const variants = {
     primary: "bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md hover:shadow-lg hover:from-indigo-700 hover:to-blue-700",
     secondary: "bg-white text-gray-900 border-2 border-gray-300 hover:border-indigo-400 hover:bg-indigo-50",
     tertiary: "text-indigo-600 hover:text-indigo-700 hover:underline"
   };
-  
+
   return `${base} ${variants[variant]}`;
 }
 
@@ -24,7 +24,7 @@ export function pressable(variant: "primary" | "secondary" | "tertiary" = "prima
 export function card(interactive: boolean = false) {
   const base = "rounded-2xl bg-white border border-gray-200 shadow-sm";
   const hover = interactive ? "hover:shadow-md hover:border-indigo-200 transition-all cursor-pointer" : "";
-  
+
   return `${base} ${hover}`;
 }
 
@@ -152,4 +152,3 @@ export const gradients = {
 export function motion() {
   return "motion-safe:animate-fadeIn motion-reduce:animate-none";
 }
-

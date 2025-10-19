@@ -472,4 +472,3 @@ Tech: Next.js static page
 
 **Questions?**
 Contact: info@converto.fi
-

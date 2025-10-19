@@ -396,4 +396,3 @@ Contact: design@converto.fi
 **License & Usage:**
 All Converto™ brand assets are proprietary.
 Usage requires written permission.
-

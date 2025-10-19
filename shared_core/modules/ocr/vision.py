@@ -34,5 +34,3 @@ def vision_enrich(img_bytes: bytes) -> dict:
         return r.choices[0].message.parsed or {}
     except Exception:
         return json.loads(r.choices[0].message.content)
-
-

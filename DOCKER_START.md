@@ -48,10 +48,10 @@ Sitten avaa:
 
 ## 🎯 Mitä Docker tekee:
 
-✅ **PostgreSQL** - Tietokanta (port 5432)  
-✅ **Redis** - Cache (port 6379)  
-✅ **Backend** - FastAPI (port 8000)  
-✅ **Frontend** - Next.js (port 3000)  
+✅ **PostgreSQL** - Tietokanta (port 5432)
+✅ **Redis** - Cache (port 6379)
+✅ **Backend** - FastAPI (port 8000)
+✅ **Frontend** - Next.js (port 3000)
 
 **Kaikki käynnistyy automaattisesti oikeassa järjestyksessä!**
 
@@ -104,8 +104,8 @@ curl "http://localhost:8000/api/v1/gamify/summary?tenant_id=demo&user_id=user_de
 - ✅ Toimii Macilla, Windowsilla, Linuxilla
 - ✅ Helppo jakaa muille kehittäjille
 
-**Käynnistä uudelleen:** `docker-compose up -d`  
-**Pysäytä:** `docker-compose down`  
+**Käynnistä uudelleen:** `docker-compose up -d`
+**Pysäytä:** `docker-compose down`
 
 ---
 
@@ -116,4 +116,3 @@ curl "http://localhost:8000/api/v1/gamify/summary?tenant_id=demo&user_id=user_de
 3. **Deploy tuotantoon**: Railway/Render (samalla docker-compose.yml!)
 
 **Kaikki valmiina! Nauti! 🎊**
-

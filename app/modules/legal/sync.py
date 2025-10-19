@@ -36,7 +36,7 @@ def sync_finlex(db: Session) -> int:
             count += 1
     except Exception as e:
         print(f"Finlex sync error: {e}")
-    
+
     return count
 
 
@@ -60,7 +60,7 @@ def sync_vero(db: Session) -> int:
             count += 1
     except Exception as e:
         print(f"Vero sync error: {e}")
-    
+
     return count
 
 
@@ -68,11 +68,10 @@ def sync_all(db: Session) -> dict:
     """Sync from all sources."""
     finlex_count = sync_finlex(db)
     vero_count = sync_vero(db)
-    
+
     return {
         "finlex": finlex_count,
         "vero": vero_count,
         "total": finlex_count + vero_count,
         "synced_at": datetime.utcnow().isoformat(),
     }
-

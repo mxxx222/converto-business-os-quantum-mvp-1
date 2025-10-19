@@ -26,15 +26,19 @@ def main():
     args = ap.parse_args()
 
     if args.search:
-        res = requests.get(f"{args.api}/api/v2/search/code",
-                           params={"q": args.search, "k": args.k, "root": args.root}, timeout=60).json()
+        res = requests.get(
+            f"{args.api}/api/v2/search/code",
+            params={"q": args.search, "k": args.k, "root": args.root},
+            timeout=60,
+        ).json()
         for i, hit in enumerate(res.get("results", []), 1):
             print(f"{i}. {hit['path']}  score={hit['score']:.3f}")
         sys.exit(0)
 
     if args.reindex:
-        res = requests.post(f"{args.api}/api/v2/search/reindex",
-                            params={"root": args.root}, timeout=120).json()
+        res = requests.post(
+            f"{args.api}/api/v2/search/reindex", params={"root": args.root}, timeout=120
+        ).json()
         print(json.dumps(res, indent=2))
         sys.exit(0)
 
@@ -43,8 +47,9 @@ def main():
             print("Anna --file kun käytät --dry-run", file=sys.stderr)
             sys.exit(2)
         new_content = pathlib.Path(args.file).read_text(encoding="utf-8")
-        out = post(f"{args.api}/api/v2/agent/diff",
-                   {"file_path": args.file, "new_content": new_content})
+        out = post(
+            f"{args.api}/api/v2/agent/diff", {"file_path": args.file, "new_content": new_content}
+        )
         print(out.get("diff", ""))
         sys.exit(0)
 
@@ -55,8 +60,7 @@ def main():
         content = sys.stdin.read()
         if not content:
             content = pathlib.Path(args.file).read_text(encoding="utf-8")
-        out = post(f"{args.api}/api/v2/agent/apply",
-                   {"file_path": args.file, "content": content})
+        out = post(f"{args.api}/api/v2/agent/apply", {"file_path": args.file, "content": content})
         print(json.dumps(out, indent=2))
         sys.exit(0)
 
@@ -70,5 +74,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

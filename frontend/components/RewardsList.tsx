@@ -73,4 +73,3 @@ export default function RewardsList({ tenant }: { tenant?: string }) {
     </div>
   );
 }
-

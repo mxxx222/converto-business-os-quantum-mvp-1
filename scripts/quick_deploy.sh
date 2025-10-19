@@ -41,7 +41,7 @@ if git remote | grep -q render; then
     echo ""
     echo "🚀 Deploying to Render..."
     git push render main
-    
+
     echo ""
     echo "✅ Deployment triggered!"
     echo ""
@@ -65,4 +65,3 @@ echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "🎉 DEPLOYMENT COMPLETE!"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-

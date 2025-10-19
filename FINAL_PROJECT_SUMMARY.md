@@ -141,7 +141,7 @@ Complete overview of production-ready SaaS platform.
 └── /settings/notifications Reminder settings 🆕
 ```
 
-**⭐ = Core MVP pages**  
+**⭐ = Core MVP pages**
 **🆕 = New in 2.0**
 
 ---
@@ -173,7 +173,7 @@ Complete overview of production-ready SaaS platform.
 | **Business** | 79€/mo | 59% | SMEs |
 | **Enterprise** | 149€/mo | 66% | Accounting firms |
 
-**Add-on modules:** 9-29€/mo each  
+**Add-on modules:** 9-29€/mo each
 **Bundles:** Save 10-20%
 
 ---
@@ -464,11 +464,10 @@ Proprietary - Converto Oy © 2025
 
 **Built with ❤️ in Finland**
 
-**Version:** 2.0.0  
-**Released:** October 2025  
+**Version:** 2.0.0
+**Released:** October 2025
 **Next Release:** 2.1.0 (Q4 2025)
 
 ---
 
 **🚀 LET'S GO TO MARKET!**
-

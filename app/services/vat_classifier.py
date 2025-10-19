@@ -24,21 +24,17 @@ def classify_rate_key(merchant: str, items_text: str) -> str:
     Returns: 'standard', 'reduced1', 'reduced2', 'zero', or 'exempt'
     """
     text = f"{merchant} {items_text}".lower()
-    
+
     for rate_key, keywords in CLASSIFICATION_RULES.items():
         if any(kw in text for kw in keywords):
             return rate_key
-    
+
     # Default to standard if no match
     return "standard"
 
 
 def get_vat_for_receipt(
-    db: Session,
-    merchant: str,
-    items_text: str,
-    receipt_date: date,
-    country: str = "FI"
+    db: Session, merchant: str, items_text: str, receipt_date: date, country: str = "FI"
 ) -> Dict[str, Any]:
     """
     Get correct VAT rate for a receipt.
@@ -48,11 +44,11 @@ def get_vat_for_receipt(
     """
     rate_key = classify_rate_key(merchant, items_text)
     rate_record = get_rate(db, country, rate_key, receipt_date)
-    
+
     if not rate_record:
         # Fallback to current standard rate
         rate_record = get_rate(db, country, "standard", date.today())
-    
+
     return {
         "rate_key": rate_key,
         "rate_pct": float(rate_record.rate_pct) if rate_record else 25.5,
@@ -60,4 +56,3 @@ def get_vat_for_receipt(
         "source": rate_record.source_url if rate_record else "Vero.fi",
         "is_historical": receipt_date < date(2024, 9, 1) if rate_key == "standard" else False,
     }
-

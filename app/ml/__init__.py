@@ -13,6 +13,5 @@ __all__ = [
     "correct_prediction",
     "apply_learned_corrections",
     "retrain_model",
-    "schedule_retraining"
+    "schedule_retraining",
 ]
-

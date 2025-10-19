@@ -76,4 +76,3 @@ def get_rule(rule_id: str, db: Session = Depends(get_session)):
         source_url=rule.source_url,
         is_active=rule.is_active,
     )
-

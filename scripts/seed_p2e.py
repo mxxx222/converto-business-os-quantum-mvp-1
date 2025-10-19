@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Seed P2E quests for demo tenant."""
+
 from shared_core.modules.p2e.models import P2EQuest
 from shared_core.utils.db import SessionLocal
+
 
 def seed():
     db = SessionLocal()
@@ -11,7 +13,7 @@ def seed():
         if existing:
             print("P2E quests already seeded for 'demo' tenant.")
             return
-        
+
         quests = [
             P2EQuest(
                 tenant_id="demo",
@@ -41,15 +43,15 @@ def seed():
                 active=1,
             ),
         ]
-        
+
         for q in quests:
             db.add(q)
-        
+
         db.commit()
         print(f"✅ Seeded {len(quests)} P2E quests for tenant 'demo'.")
     finally:
         db.close()
 
+
 if __name__ == "__main__":
     seed()
-

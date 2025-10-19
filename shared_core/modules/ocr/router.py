@@ -36,10 +36,18 @@ async def ocr_power(
         vision = vision_enrich(safe)
     data = merge(device_hint, specs, vision)
     if not data.get("rated_watts"):
-        raise HTTPException(422, "Ei löydetty tehoa – lisää laitevihje tai ota uudestaan niin, että tehotarra näkyy.")
+        raise HTTPException(
+            422,
+            "Ei löydetty tehoa – lisää laitevihje tai ota uudestaan niin, että tehotarra näkyy.",
+        )
     wh = int(max(hours, 0.1) * data["rated_watts"])
     bundle = recommend_bundle(wh)
-    resp = {"input_hours": hours, "wh": wh, "analysis": {**data, "ocr_raw": ocr_text}, "recommended_bundle": bundle}
+    resp = {
+        "input_hours": hours,
+        "wh": wh,
+        "analysis": {**data, "ocr_raw": ocr_text},
+        "recommended_bundle": bundle,
+    }
     rec = save_result(db, tenant_id, sha256(raw), resp)
     try:
         # Gamify points
@@ -123,20 +131,22 @@ def ocr_results_csv(
         q = q.filter(OcrResult.created_at < datetime.fromisoformat(date_to))
     buf = io.StringIO()
     w = csv.writer(buf)
-    w.writerow([
-        "id",
-        "tenant_id",
-        "created_at",
-        "device_type",
-        "brand_model",
-        "rated_watts",
-        "peak_watts",
-        "voltage_v",
-        "current_a",
-        "hours_input",
-        "wh",
-        "confidence",
-    ])
+    w.writerow(
+        [
+            "id",
+            "tenant_id",
+            "created_at",
+            "device_type",
+            "brand_model",
+            "rated_watts",
+            "peak_watts",
+            "voltage_v",
+            "current_a",
+            "hours_input",
+            "wh",
+            "confidence",
+        ]
+    )
     for r in q.all():
         w.writerow(
             [
@@ -160,5 +170,3 @@ def ocr_results_csv(
         media_type="text/csv",
         headers={"Content-Disposition": 'attachment; filename="ocr_results.csv"'},
     )
-
-

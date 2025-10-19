@@ -123,9 +123,9 @@ Edit extracted data before confirmation.
 ```tsx
 import { OCRPreview } from '@/modules/ocr';
 
-<OCRPreview 
-  data={extractedData} 
-  onConfirm={(edited) => saveToDB(edited)} 
+<OCRPreview
+  data={extractedData}
+  onConfirm={(edited) => saveToDB(edited)}
 />
 ```
 
@@ -220,4 +220,3 @@ open http://localhost:3000/selko/ocr
 ---
 
 **Questions?** See `app/modules/vision/` for implementation details.
-

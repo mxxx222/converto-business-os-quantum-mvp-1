@@ -18,11 +18,11 @@
 
 ### Converto™ erottuu:
 
-✅ **Älykkäin OCR**: Multi-engine (Vision LLM + Textract + Tesseract)  
-✅ **Hotkeys kaikkeen**: Shift+O, WA/Slack-komennot  
-✅ **ALV-automaatio**: 24/14/10/0% tunnistus + tiliöinti  
-✅ **Gamify**: Pisteet + palkinnot → sitouttaa käyttöön  
-✅ **Integraatiot**: Netvisor, Procountor, Holvi, ReceiptHero  
+✅ **Älykkäin OCR**: Multi-engine (Vision LLM + Textract + Tesseract)
+✅ **Hotkeys kaikkeen**: Shift+O, WA/Slack-komennot
+✅ **ALV-automaatio**: 24/14/10/0% tunnistus + tiliöinti
+✅ **Gamify**: Pisteet + palkinnot → sitouttaa käyttöön
+✅ **Integraatiot**: Netvisor, Procountor, Holvi, ReceiptHero
 
 ---
 
@@ -578,4 +578,3 @@ A feature is DONE when:
 
 _Last updated: 2025-10-12_
 _Owner: Converto™ Development Team_
-

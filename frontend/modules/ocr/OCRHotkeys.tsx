@@ -20,7 +20,6 @@ export default function OCRHotkeys({ onOpen }: { onOpen: () => void }) {
     window.addEventListener("keydown", h);
     return () => window.removeEventListener("keydown", h);
   }, [onOpen]);
-  
+
   return null;
 }
-

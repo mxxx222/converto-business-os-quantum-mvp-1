@@ -19,5 +19,3 @@ CONFIG = {
         "channels": ["whatsapp", "email"],
     },
 }.get(BRAND, {})
-
-

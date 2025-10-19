@@ -59,4 +59,3 @@ services:
         value: staging
       - key: NEXT_PUBLIC_PREMIUM_HOME
         value: "1"
-

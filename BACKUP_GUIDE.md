@@ -311,4 +311,3 @@ If backups fail or data health shows errors:
 ---
 
 **🔒 Your data is safe with Converto™**
-

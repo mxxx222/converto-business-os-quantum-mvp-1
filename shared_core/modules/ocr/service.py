@@ -62,5 +62,3 @@ def merge(device_hint: Optional[str], ocr: Dict, vision: Optional[Dict]) -> Dict
         int(d["rated_watts"] * 1.2) if d.get("rated_watts") else None
     )
     return d
-
-

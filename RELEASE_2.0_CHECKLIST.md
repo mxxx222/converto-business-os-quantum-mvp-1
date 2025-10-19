@@ -225,7 +225,7 @@ def health():
 def metrics():
     total_ocr = METRICS["ocr_success"] + METRICS["ocr_fail"]
     success_rate = (METRICS["ocr_success"] / total_ocr * 100) if total_ocr > 0 else 0
-    
+
     return {
         "ocr_success_rate": round(success_rate, 2),
         "ocr_total": total_ocr,
@@ -279,18 +279,18 @@ async def cleanup_expired_data():
 @router.post("/webhook")
 async def stripe_webhook(request: Request):
     event_id = event["id"]
-    
+
     # Check if already processed
     if db.query(ProcessedEvent).filter_by(event_id=event_id).first():
         return {"status": "already_processed"}
-    
+
     # Process event
     result = process_stripe_event(event)
-    
+
     # Mark as processed
     db.add(ProcessedEvent(event_id=event_id, processed_at=datetime.utcnow()))
     db.commit()
-    
+
     return {"status": "ok"}
 ```
 
@@ -519,7 +519,6 @@ async def stripe_webhook(request: Request):
 
 ---
 
-**Current Status: 🟡 YELLOW (Pre-launch prep needed)**  
-**Target Status: 🟢 GREEN (Production ready)**  
+**Current Status: 🟡 YELLOW (Pre-launch prep needed)**
+**Target Status: 🟢 GREEN (Production ready)**
 **ETA: 1-2 weeks**
-

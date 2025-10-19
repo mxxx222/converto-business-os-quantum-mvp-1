@@ -8,5 +8,3 @@ def recommend_bundle(wh: int) -> str:
 
 def kpis_example() -> dict:
     return {"ocr_success": 0.93, "ai_accept_rate": 0.71, "next_month_cost_forecast": -0.08}
-
-

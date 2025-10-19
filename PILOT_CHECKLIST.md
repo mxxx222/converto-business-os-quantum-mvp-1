@@ -160,4 +160,3 @@ Converto Team
 ---
 
 **🎯 GOAL: First paying customer within 30 days!**
-

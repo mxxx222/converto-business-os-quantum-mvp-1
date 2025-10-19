@@ -114,7 +114,7 @@ curl -X POST http://localhost:8000/api/v1/entitlements/tenant_demo/usage/ai_chat
 ### README Update
 - [ ] Tagline added:
   ```
-  Converto™ – Automaatioteknologia™ joka hoitaa rutiinit, 
+  Converto™ – Automaatioteknologia™ joka hoitaa rutiinit,
   jotta sinä ehdit kasvaa.
   ```
 - [ ] Features section highlights automation (not "AI")
@@ -631,7 +631,6 @@ Announce:
 
 **🎊 CONVERTO™ 2.0 - READY FOR MARKET!**
 
-**Date:** ____________  
-**Launch Confirmed:** [ ] YES [ ] NO  
+**Date:** ____________
+**Launch Confirmed:** [ ] YES [ ] NO
 **Next Review:** ____________
-

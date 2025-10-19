@@ -4,15 +4,16 @@ from sqlalchemy.orm import Session
 from datetime import date
 from app.modules.legal.models import LegalRule
 
+
 def add_rule(db: Session, rule_data: dict) -> LegalRule:
     """Add or update a legal rule."""
     checksum = hashlib.sha256(rule_data.get("summary", "").encode()).hexdigest()
-    
+
     # Check if rule already exists
     existing = db.query(LegalRule).filter_by(checksum=checksum).first()
     if existing:
         return existing
-    
+
     rule = LegalRule(
         id=rule_data.get("id", f"rule_{checksum[:8]}"),
         domain=rule_data["domain"],
@@ -27,14 +28,16 @@ def add_rule(db: Session, rule_data: dict) -> LegalRule:
         is_active=False,  # Pending by default
         notes=rule_data.get("notes"),
     )
-    
+
     db.add(rule)
     db.commit()
     db.refresh(rule)
     return rule
 
 
-def list_rules(db: Session, domain: Optional[str] = None, active_only: bool = True) -> List[LegalRule]:
+def list_rules(
+    db: Session, domain: Optional[str] = None, active_only: bool = True
+) -> List[LegalRule]:
     """List legal rules, optionally filtered by domain."""
     q = db.query(LegalRule)
     if domain:
@@ -57,4 +60,3 @@ def promote_rule(db: Session, rule_id: str) -> Optional[LegalRule]:
 def get_rule(db: Session, rule_id: str) -> Optional[LegalRule]:
     """Get a specific legal rule."""
     return db.query(LegalRule).filter_by(id=rule_id).first()
-

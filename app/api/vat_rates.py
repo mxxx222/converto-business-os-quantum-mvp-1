@@ -23,7 +23,12 @@ class VATRateOut(BaseModel):
 @router.get("/rates/{country}")
 def list_rates(country: str, db: Session = Depends(get_session)) -> List[VATRateOut]:
     """List all VAT rates for a country (historical + current + future)."""
-    rates = db.query(VATRate).filter(VATRate.country == country.upper(), VATRate.is_active == True).order_by(VATRate.valid_from.desc()).all()
+    rates = (
+        db.query(VATRate)
+        .filter(VATRate.country == country.upper(), VATRate.is_active == True)
+        .order_by(VATRate.valid_from.desc())
+        .all()
+    )
     return [
         VATRateOut(
             id=r.id,
@@ -71,4 +76,3 @@ def get_rate_for_date(
         "valid_to": rate.valid_to.isoformat() if rate.valid_to else None,
         "source": rate.source_url,
     }
-

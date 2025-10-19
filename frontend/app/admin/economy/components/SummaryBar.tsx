@@ -37,7 +37,7 @@ export default function SummaryBar() {
           >
             {/* Gradient Accent */}
             <div className={`absolute inset-0 bg-gradient-to-br from-${x.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
-            
+
             <div className="relative p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className={`p-2 rounded-lg bg-${x.color}-50 text-${x.color}-600`}>
@@ -47,7 +47,7 @@ export default function SummaryBar() {
                   {trendIcon(x.trend)}
                 </div>
               </div>
-              
+
               <div className="text-xs uppercase tracking-wider text-gray-500 font-medium mb-1">{x.label}</div>
               <div className="text-2xl font-bold text-gray-900 mb-0.5">{x.value}</div>
               <div className="text-xs text-gray-500">{x.subtext}</div>

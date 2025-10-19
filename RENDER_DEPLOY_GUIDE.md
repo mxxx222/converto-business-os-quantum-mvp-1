@@ -143,7 +143,7 @@ NEXT_PUBLIC_API_BASE=https://api.converto.fi
 # Backend
 SENTRY_DSN=https://...@sentry.io/...
 
-# Frontend  
+# Frontend
 NEXT_PUBLIC_SENTRY_DSN=https://...@sentry.io/...
 ```
 
@@ -222,4 +222,3 @@ When you see:
 5. ✅ Iterate and improve
 
 **Ready for customers!** 💼
-

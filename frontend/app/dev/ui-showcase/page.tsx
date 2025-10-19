@@ -3,9 +3,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { 
+import {
   Zap, DollarSign, Shield, Award, Copy, Check,
-  Sun, Moon, Laptop 
+  Sun, Moon, Laptop
 } from "lucide-react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import LangSwitcher from "@/components/LangSwitcher";
@@ -57,7 +57,7 @@ export default function UIShowcase() {
       </header>
 
       <div className="max-w-7xl mx-auto px-6 py-12 space-y-16">
-        
+
         {/* Color Palette */}
         <section>
           <h2 className="text-3xl font-bold mb-6">Color Palette</h2>
@@ -73,8 +73,8 @@ export default function UIShowcase() {
               { name: "Dark BG", hex: "#0D1117", usage: "Dark theme BG" },
             ].map((color) => (
               <div key={color.hex} className="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
-                <div 
-                  className="h-20 rounded-lg mb-3" 
+                <div
+                  className="h-20 rounded-lg mb-3"
                   style={{ backgroundColor: color.hex }}
                 />
                 <h3 className="font-semibold text-sm mb-1">{color.name}</h3>
@@ -167,7 +167,7 @@ export default function UIShowcase() {
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
                   = 3.35 € hyvitystä seuraavaan laskuun
                 </p>
-                <button 
+                <button
                   className="w-full py-3 rounded-xl font-bold transition-all active:scale-95"
                   style={{ backgroundColor: "#39FF14", color: "#000" }}
                 >
@@ -347,14 +347,14 @@ export default function UIShowcase() {
             Complete UI documentation and component library
           </p>
           <div className="flex gap-4 justify-center">
-            <Link 
-              href="/dev/ui-theme-audit" 
+            <Link
+              href="/dev/ui-theme-audit"
               className="px-6 py-3 bg-white text-indigo-600 rounded-xl font-bold hover:bg-gray-100 transition-all"
             >
               Theme Audit
             </Link>
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="px-6 py-3 bg-white/10 backdrop-blur border-2 border-white/30 text-white rounded-xl font-bold hover:bg-white/20 transition-all"
             >
               Back to App
@@ -366,4 +366,3 @@ export default function UIShowcase() {
     </div>
   );
 }
-

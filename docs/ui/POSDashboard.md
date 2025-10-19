@@ -53,7 +53,7 @@ export function POSDashboard() {
           <LineChart data={salesData}>
             <XAxis dataKey="hour" stroke="var(--text-secondary)" />
             <YAxis stroke="var(--text-secondary)" />
-            <Tooltip 
+            <Tooltip
               contentStyle={{
                 backgroundColor: "var(--surface)",
                 border: "1px solid var(--border)",
@@ -87,4 +87,3 @@ export function POSDashboard() {
 - ✅ Keyboard selection of providers
 - ✅ Chart data table fallback
 - ✅ ARIA labels on all buttons
-

@@ -120,16 +120,16 @@ const translations = {
 export function t(key: string, locale: Locale = "fi"): string {
   const keys = key.split(".");
   let value: any = translations;
-  
+
   for (const k of keys) {
     value = value?.[k];
     if (!value) break;
   }
-  
+
   if (typeof value === "object" && value[locale]) {
     return value[locale];
   }
-  
+
   return key; // Fallback to key if not found
 }
 
@@ -138,12 +138,12 @@ export function t(key: string, locale: Locale = "fi"): string {
  */
 export function getLocale(): Locale {
   if (typeof window === "undefined") return "fi";
-  
+
   const browserLang = navigator.language.toLowerCase();
-  
+
   if (browserLang.startsWith("fi")) return "fi";
   if (browserLang.startsWith("en")) return "en";
-  
+
   return "fi"; // Default
 }
 
@@ -191,12 +191,11 @@ export function formatRelativeTime(date: Date | string, locale: Locale = "fi"): 
   const diffMin = Math.floor(diffSec / 60);
   const diffHour = Math.floor(diffMin / 60);
   const diffDay = Math.floor(diffHour / 24);
-  
+
   const rtf = new Intl.RelativeTimeFormat(locale === "fi" ? "fi-FI" : "en-US", { numeric: "auto" });
-  
+
   if (diffDay > 0) return rtf.format(-diffDay, "day");
   if (diffHour > 0) return rtf.format(-diffHour, "hour");
   if (diffMin > 0) return rtf.format(-diffMin, "minute");
   return rtf.format(-diffSec, "second");
 }
-

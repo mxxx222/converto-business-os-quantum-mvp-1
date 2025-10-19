@@ -43,7 +43,7 @@ export function useSfx() {
   useEffect(() => {
     try {
       localStorage.setItem("sfx", JSON.stringify({ on: enabled, vol: volume }));
-      
+
       // Update volume for all cached audio elements
       cache.current.forEach((audio) => {
         audio.volume = volume;
@@ -58,7 +58,7 @@ export function useSfx() {
       if (!enabled) return;
 
       let audio = cache.current.get(key);
-      
+
       if (!audio) {
         // Create and cache new audio element
         audio = new Audio(SFX_MAP[key]);
@@ -90,4 +90,3 @@ export function useSfx() {
     setVolume,
   };
 }
-

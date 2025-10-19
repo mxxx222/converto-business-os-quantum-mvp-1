@@ -42,7 +42,7 @@ Command: python -m app.ml.train_classifier
 
 ### Self-Debug Agent (Daily 03:00 UTC)
 ```
-Service: converto-backend  
+Service: converto-backend
 Schedule: 0 3 * * *
 Command: CONVERTO_BACKEND_LOG=/tmp/converto_backend.log python -m app.ml.self_debug_agent
 ```
@@ -53,7 +53,7 @@ Command: CONVERTO_BACKEND_LOG=/tmp/converto_backend.log python -m app.ml.self_de
 
 - **Backend** (Starter Plus): ~$7/month
 - **Frontend** (Static): $0/month
-- **Database** (Starter): $0/month  
+- **Database** (Starter): $0/month
 - **OpenAI API**: ~$10-30/month (depends on usage)
 
 **Total: ~$7-37/month**
@@ -77,4 +77,3 @@ Render runs migrations automatically on deploy if you have Alembic setup.
 ---
 
 ✅ **READY FOR PRODUCTION!**
-

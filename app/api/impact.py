@@ -25,5 +25,3 @@ async def get_impact_summary(tenant_id: Optional[str] = Query(default=None)):
         "generatedAt": now,
         "status": "ok",
     }
-
-

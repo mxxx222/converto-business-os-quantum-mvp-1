@@ -37,7 +37,7 @@ export function useEntitlements(tenantId?: string) {
       try {
         // For MVP: Load from /api/v1/entitlements or mock
         // In production: Fetch from backend based on Stripe subscription
-        
+
         // Mock data for demo
         const mockEntitlements: Entitlements = {
           tier: "pro",
@@ -106,4 +106,3 @@ export function useEntitlements(tenantId?: string) {
     limits: entitlements?.limits
   };
 }
-

@@ -50,7 +50,7 @@ fi
 # Check requirements.txt
 if [ -f "requirements.txt" ]; then
     check_pass "requirements.txt exists"
-    
+
     # Check for critical packages
     for pkg in fastapi uvicorn sqlalchemy pydantic; do
         if grep -q "^$pkg" requirements.txt; then
@@ -73,14 +73,14 @@ fi
 # Check main.py
 if [ -f "app/main.py" ]; then
     check_pass "app/main.py exists"
-    
+
     # Check for health endpoint
     if grep -q "/health" app/main.py || find app -name "*.py" -exec grep -l "/health" {} \; | head -1 > /dev/null; then
         check_pass "  → Health endpoint found"
     else
         check_fail "  → Health endpoint missing"
     fi
-    
+
     # Check for CORS
     if grep -q "CORSMiddleware" app/main.py; then
         check_pass "  → CORS configured"
@@ -110,7 +110,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 
 if [ -d "frontend" ]; then
     cd frontend
-    
+
     # Check Node
     if command -v node &> /dev/null; then
         VERSION=$(node --version)
@@ -118,18 +118,18 @@ if [ -d "frontend" ]; then
     else
         check_fail "Node not found"
     fi
-    
+
     # Check package.json
     if [ -f "package.json" ]; then
         check_pass "package.json exists"
-        
+
         # Check for Next.js
         if grep -q "\"next\":" package.json; then
             check_pass "  → Next.js found"
         else
             check_fail "  → Next.js missing"
         fi
-        
+
         # Check for dependencies
         for pkg in react typescript tailwindcss; do
             if grep -q "\"$pkg\":" package.json; then
@@ -141,11 +141,11 @@ if [ -d "frontend" ]; then
     else
         check_fail "package.json not found"
     fi
-    
+
     # Check build
     if [ -d "node_modules" ]; then
         check_pass "node_modules exists"
-        
+
         echo "  → Testing build..."
         if npm run build > /tmp/build.log 2>&1; then
             check_pass "  → Build succeeds"
@@ -156,14 +156,14 @@ if [ -d "frontend" ]; then
     else
         check_warn "node_modules not found (run npm install)"
     fi
-    
+
     # Check .env.local.example
     if [ -f ".env.local.example" ]; then
         check_pass ".env.local.example exists"
     else
         check_warn ".env.local.example missing"
     fi
-    
+
     cd ..
 else
     check_warn "frontend/ directory not found"
@@ -177,14 +177,14 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 # Check render.yaml
 if [ -f "render.yaml" ]; then
     check_pass "render.yaml exists"
-    
+
     # Check for database
     if grep -q "databases:" render.yaml; then
         check_pass "  → Database configured"
     else
         check_warn "  → No database (using SQLite?)"
     fi
-    
+
     # Check for services
     SERVICE_COUNT=$(grep -c "type: web" render.yaml)
     check_pass "  → $SERVICE_COUNT web service(s)"
@@ -209,7 +209,7 @@ fi
 # Check .gitignore
 if [ -f ".gitignore" ]; then
     check_pass ".gitignore exists"
-    
+
     for pattern in ".env" "node_modules" "__pycache__" ".venv"; do
         if grep -q "$pattern" .gitignore; then
             check_pass "  → $pattern ignored"
@@ -305,4 +305,3 @@ else
     echo ""
     exit 1
 fi
-

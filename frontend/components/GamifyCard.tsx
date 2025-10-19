@@ -16,7 +16,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
     fetcher,
     { refreshInterval: 20000, fallbackData: { total: 0, series: [], streak_days: 0, streak_bonus: 0 } }
   );
-  
+
   const total = data?.total || 0;
   const series = Array.isArray(data?.series) ? data.series.slice(-7) : [];
   const streak = data?.streak_days || 0;
@@ -34,7 +34,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
     >
       {/* Animated Background Gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/10 to-pink-500/10 animate-pulse" />
-      
+
       <div className="relative z-10">
         {/* Header */}
         <div className="flex items-center justify-between mb-4">
@@ -47,7 +47,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
               <div className="text-xs text-gray-500">Viikon suoritus</div>
             </div>
           </div>
-          
+
           {/* Streak Badge */}
           {streak > 0 && (
             <motion.div
@@ -76,7 +76,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
             </motion.div>
             <div className="text-lg text-gray-600">pistettä</div>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="relative w-full h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
             <motion.div
@@ -87,7 +87,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
             />
             <div className="absolute inset-0 bg-gradient-to-r from-white/30 to-transparent animate-pulse" />
           </div>
-          
+
           <div className="flex items-center justify-between mt-2 text-xs text-gray-600">
             <span>{total} / {nextLevel} pistettä</span>
             <div className="flex items-center gap-1 font-semibold text-indigo-600">
@@ -123,7 +123,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
                     style={{ height: "100%" }}
                   />
                   <div className="text-[10px] text-gray-500 mt-1">{days[i]}</div>
-                  
+
                   {/* Tooltip */}
                   <div className="absolute -top-10 left-1/2 -translate-x-1/2 px-2 py-1 rounded bg-gray-900 text-white text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
                     {pts}p
@@ -140,7 +140,7 @@ export default function GamifyCard({ tenant, user }: { tenant?: string; user?: s
             <Zap className="w-3.5 h-3.5 text-yellow-500" />
             <span>OCR +10p • ALV +20p • Lasku ajoissa +15p</span>
           </div>
-          
+
           {streakBonus > 0 && (
             <motion.div
               initial={{ x: -10, opacity: 0 }}

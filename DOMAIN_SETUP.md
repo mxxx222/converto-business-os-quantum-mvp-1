@@ -197,4 +197,3 @@ https://dashboard.render.com/web/[service-id]/logs
 ---
 
 **🎉 Domain setup complete! Ready for production traffic.**
-

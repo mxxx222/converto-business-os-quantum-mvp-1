@@ -38,7 +38,7 @@ export default function RegisterPage() {
       });
 
       const data = await response.json();
-      
+
       if (data.success) {
         setSuccess(true);
       } else {
@@ -63,7 +63,7 @@ export default function RegisterPage() {
               Ilmoittautuminen alkaa pian!
             </h1>
             <p className="text-gray-600 mb-6">
-              Converto Business OS tulee pian saataville. 
+              Converto Business OS tulee pian saataville.
               Ilmoittautuminen alkaa 5-6 päivän kuluttua.
             </p>
             <Link href="/qr">
@@ -87,7 +87,7 @@ export default function RegisterPage() {
               Ilmoittautuminen onnistui!
             </h1>
             <p className="text-gray-600 mb-6">
-              Kiitos ilmoittautumisesta! Lähetämme sinulle sähköpostitse 
+              Kiitos ilmoittautumisesta! Lähetämme sinulle sähköpostitse
               lisätiedot kun palvelu käynnistyy.
             </p>
             <div className="bg-white rounded-xl p-4 mb-6 shadow-sm border border-gray-100">
@@ -176,8 +176,8 @@ export default function RegisterPage() {
                     className="sr-only"
                   />
                   <div className={`p-4 rounded-xl border-2 cursor-pointer transition-all ${
-                    formData.plan === plan.id 
-                      ? 'border-blue-500 bg-blue-50' 
+                    formData.plan === plan.id
+                      ? 'border-blue-500 bg-blue-50'
                       : 'border-gray-200 hover:border-gray-300'
                   } ${plan.popular ? 'ring-2 ring-blue-200' : ''}`}>
                     <div className="flex items-center justify-between mb-2">
@@ -215,7 +215,7 @@ export default function RegisterPage() {
               className="mt-1 w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="terms" className="text-sm text-gray-600">
-              Hyväksyn <Link href="/terms" className="text-blue-600 hover:underline">käyttöehdot</Link> ja 
+              Hyväksyn <Link href="/terms" className="text-blue-600 hover:underline">käyttöehdot</Link> ja
               <Link href="/privacy" className="text-blue-600 hover:underline"> tietosuojakäytännön</Link>
             </label>
           </div>

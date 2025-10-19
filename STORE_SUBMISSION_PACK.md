@@ -24,15 +24,15 @@ Complete guide for submitting Converto Business OS to iOS App Store and Google P
 
 ### 1. App Information
 
-**Primary Language:** Finnish  
-**App Name:** Converto Business OS  
-**Subtitle:** Älykäs kuittiskannaus ja yrityksen automaatio  
-**Privacy Policy URL:** https://converto.fi/privacy  
+**Primary Language:** Finnish
+**App Name:** Converto Business OS
+**Subtitle:** Älykäs kuittiskannaus ja yrityksen automaatio
+**Privacy Policy URL:** https://converto.fi/privacy
 
 ### 2. App Description
 
 ```
-Tuo tekoäly yrityksesi arkeen. Converto Business OS helpottaa kirjanpitoa, 
+Tuo tekoäly yrityksesi arkeen. Converto Business OS helpottaa kirjanpitoa,
 laskutusta ja päätöksentekoa automaation voimalla.
 
 ✨ OMINAISUUDET
@@ -50,7 +50,7 @@ laskutusta ja päätöksentekoa automaation voimalla.
 • Pysy ajan tasalla Suomen säädöksistä
 
 🇫🇮 TEHTY SUOMELLE
-Rakennettu erityisesti suomalaisille yrityksille paikallisilla verosäännöillä, 
+Rakennettu erityisesti suomalaisille yrityksille paikallisilla verosäännöillä,
 Finlex-integraatiolla ja suomenkielisellä tuella.
 
 💼 HINNOITTELU
@@ -150,7 +150,7 @@ Note: The app connects to our production API at https://api.converto.fi
 
 ### 1. App Details
 
-**App Name:** Converto Business OS  
+**App Name:** Converto Business OS
 **Short Description (80 chars):**
 ```
 Älykkäin suomalainen kuitti-, ALV- ja yritysautomaatiotyökalu.
@@ -158,32 +158,32 @@ Note: The app connects to our production API at https://api.converto.fi
 
 **Full Description (4000 chars):**
 ```
-Tuo tekoäly yrityksesi arkeen. Converto Business OS helpottaa kirjanpitoa, 
+Tuo tekoäly yrityksesi arkeen. Converto Business OS helpottaa kirjanpitoa,
 laskutusta ja päätöksentekoa automaation voimalla.
 
 ✨ OMINAISUUDET
 
 🧾 Älykäs kuittiskannaus
-Skannaa kuitit kameralla tai lataa kuvia. Tekoäly tunnistaa automaattisesti 
+Skannaa kuitit kameralla tai lataa kuvia. Tekoäly tunnistaa automaattisesti
 kauppiaan, summan, ALV:n ja tuoterivit.
 
 🧮 Automaattinen ALV-laskenta
-Suomen verosäännöt sisäänrakennettuna. Saat oikeat ALV-prosentit ja 
+Suomen verosäännöt sisäänrakennettuna. Saat oikeat ALV-prosentit ja
 yhteenvedot automaattisesti.
 
 📊 Reaaliaikaiset analytiikkat
-Seuraa myyntiä, kuluja, ROI:ta ja kassavirtaa reaaliajassa. Exportoi 
+Seuraa myyntiä, kuluja, ROI:ta ja kassavirtaa reaaliajassa. Exportoi
 raportit PDF/CSV-muodossa.
 
 ⚖️ Lakisääteinen compliance
-Integroitu Finlex-tietokanta pitää sinut ajan tasalla Suomen 
+Integroitu Finlex-tietokanta pitää sinut ajan tasalla Suomen
 liiketoimintasäädöksistä.
 
 💳 Laskutus ja maksut
 Stripe-integraatio mahdollistaa nopeat maksut ja tilausten hallinnan.
 
 🎮 Gamification
-Ansaitse pisteitä ja palkintoja hyvistä liiketoimintatavoista. 
+Ansaitse pisteitä ja palkintoja hyvistä liiketoimintatavoista.
 Streak-bonukset ja tiimikampanjat.
 
 🚀 MIKSI CONVERTO?
@@ -207,12 +207,12 @@ Rakennettu erityisesti suomalaisille yrityksille:
 • Lite: 29€/kk
   - Kuittiskannaus
   - Perusraportit
-  
+
 • Pro: 49€/kk
   - Myynnin seuranta
   - AI-ehdotukset
   - Viikkoraportit
-  
+
 • Insights: 99€/kk
   - Ennusteet
   - Kustannusvahti
@@ -231,13 +231,13 @@ Lue lisää: https://converto.fi/privacy
 
 ---
 
-Converto Business OS on suomalainen innovaatio, joka yhdistää tekoälyn 
+Converto Business OS on suomalainen innovaatio, joka yhdistää tekoälyn
 ja automaation yritysten arkeen. Aloita ilmainen kokeilu tänään!
 ```
 
 ### 2. Categorization
 
-**App Category:** Business  
+**App Category:** Business
 **Tags:** business, productivity, finance, automation, AI
 
 ### 3. Store Listing Assets
@@ -261,9 +261,9 @@ ja automaation yritysten arkeen. Aloita ilmainen kokeilu tänään!
 
 ### 4. Contact Details
 
-**Email:** support@converto.fi  
-**Phone:** +358 XX XXX XXXX (optional)  
-**Website:** https://converto.fi  
+**Email:** support@converto.fi
+**Phone:** +358 XX XXX XXXX (optional)
+**Website:** https://converto.fi
 
 ### 5. Privacy Policy
 
@@ -293,7 +293,7 @@ Test Account:
 Email: demo@converto.fi
 Password: Demo2025!
 
-The app is a SaaS business management tool. All features require 
+The app is a SaaS business management tool. All features require
 an active subscription.
 
 Test flow:
@@ -309,8 +309,8 @@ Note: Stripe is in test mode. Use card 4242 4242 4242 4242 for testing.
 
 ### 8. Target Audience
 
-**Target Age:** 18+  
-**Target Audience:** Business owners, entrepreneurs, accountants  
+**Target Age:** 18+
+**Target Audience:** Business owners, entrepreneurs, accountants
 **Countries:** Finland (primary), EU (secondary)
 
 ---
@@ -406,8 +406,8 @@ Ansaitse palkintoja
 
 ## 1. Johdanto
 
-Converto Business OS ("Palvelu") kunnioittaa käyttäjiensä yksityisyyttä. 
-Tämä tietosuojaseloste kuvaa, miten keräämme, käytämme ja suojaamme 
+Converto Business OS ("Palvelu") kunnioittaa käyttäjiensä yksityisyyttä.
+Tämä tietosuojaseloste kuvaa, miten keräämme, käytämme ja suojaamme
 henkilötietojasi.
 
 ## 2. Kerättävät tiedot
@@ -447,7 +447,7 @@ Käytämme tietojasi seuraaviin tarkoituksiin:
 
 ## 4. Tietojen jakaminen
 
-Emme myy tai vuokraa tietojasi kolmansille osapuolille. 
+Emme myy tai vuokraa tietojasi kolmansille osapuolille.
 Jaamme tietoja vain seuraavissa tapauksissa:
 
 - **Stripe:** Maksutapahtumien käsittely
@@ -457,7 +457,7 @@ Jaamme tietoja vain seuraavissa tapauksissa:
 
 ## 5. Tietojen säilytys
 
-Tietoja säilytetään EU-alueella (Suomi/Saksa). 
+Tietoja säilytetään EU-alueella (Suomi/Saksa).
 Säilytämme tietojasi niin kauan kuin:
 - Tilisi on aktiivinen
 - Lakisääteiset velvoitteet vaativat (esim. kirjanpito 6 vuotta)
@@ -472,12 +472,12 @@ Sinulla on oikeus:
 - Siirtää tietosi toiseen palveluun
 - Vastustaa käsittelyä
 
-Käytä oikeuksiasi lähettämällä pyyntö osoitteeseen: 
+Käytä oikeuksiasi lähettämällä pyyntö osoitteeseen:
 support@converto.fi
 
 ## 7. Evästeet
 
-Käytämme välttämättömiä evästeitä palvelun toiminnan 
+Käytämme välttämättömiä evästeitä palvelun toiminnan
 varmistamiseksi. Analytiikkaevästeet ovat valinnaisia.
 
 ## 8. Tietoturva
@@ -490,26 +490,26 @@ Suojaamme tietosi:
 
 ## 9. Lasten tietosuoja
 
-Palvelu on tarkoitettu 18 vuotta täyttäneille. 
+Palvelu on tarkoitettu 18 vuotta täyttäneille.
 Emme tietoisesti kerää lasten tietoja.
 
 ## 10. Muutokset
 
-Pidätämme oikeuden päivittää tätä tietosuojaselostetta. 
+Pidätämme oikeuden päivittää tätä tietosuojaselostetta.
 Ilmoitamme merkittävistä muutoksista sähköpostitse.
 
 ## 11. Yhteystiedot
 
-**Rekisterinpitäjä:**  
-Converto Oy  
-Y-tunnus: XXXXXXX-X  
-Osoite: Helsinki, Suomi  
+**Rekisterinpitäjä:**
+Converto Oy
+Y-tunnus: XXXXXXX-X
+Osoite: Helsinki, Suomi
 
-**Tietosuojavastaava:**  
-Sähköposti: privacy@converto.fi  
+**Tietosuojavastaava:**
+Sähköposti: privacy@converto.fi
 
-**Valvontaviranomainen:**  
-Tietosuojavaltuutetun toimisto  
+**Valvontaviranomainen:**
+Tietosuojavaltuutetun toimisto
 https://tietosuoja.fi
 ```
 
@@ -526,12 +526,12 @@ https://tietosuoja.fi
 
 ## 1. Palvelun kuvaus
 
-Converto Business OS ("Palvelu") on pilvipalvelu, joka tarjoaa 
+Converto Business OS ("Palvelu") on pilvipalvelu, joka tarjoaa
 kuittiskannauksen, ALV-laskennan, laskutuksen ja liiketoiminta-analytiikan.
 
 ## 2. Käyttöoikeus
 
-Myönnämme sinulle ei-yksinomaisen, peruutettavissa olevan oikeuden 
+Myönnämme sinulle ei-yksinomaisen, peruutettavissa olevan oikeuden
 käyttää Palvelua näiden ehtojen mukaisesti.
 
 ## 3. Käyttäjän velvollisuudet
@@ -565,14 +565,14 @@ Et saa:
 
 ## 7. Tekoäly ja suositukset
 
-Palvelu käyttää tekoälyä analytiikkaan ja suosituksiin. 
-Tekoäly ei korvaa ammattilaista (esim. kirjanpitäjää). 
+Palvelu käyttää tekoälyä analytiikkaan ja suosituksiin.
+Tekoäly ei korvaa ammattilaista (esim. kirjanpitäjää).
 Olet vastuussa päätöksistäsi.
 
 ## 8. Immateriaalioikeudet
 
-Palvelun kaikki sisältö (koodi, design, tekstit) on 
-Converto Oy:n omaisuutta. Sinulla on oikeus käyttää 
+Palvelun kaikki sisältö (koodi, design, tekstit) on
+Converto Oy:n omaisuutta. Sinulla on oikeus käyttää
 Palvelua, mutta et saa kopioida tai jakaa sitä.
 
 ## 9. Vastuunrajoitus
@@ -591,7 +591,7 @@ https://converto.fi/privacy
 
 ## 11. Muutokset
 
-Pidätämme oikeuden muuttaa näitä ehtoja. 
+Pidätämme oikeuden muuttaa näitä ehtoja.
 Ilmoitamme muutoksista 30 päivää etukäteen.
 
 ## 12. Irtisanominen
@@ -600,14 +600,14 @@ Voimme irtisanoa tilisi, jos rikot näitä ehtoja.
 
 ## 13. Sovellettava laki
 
-Näihin ehtoihin sovelletaan Suomen lakia. 
+Näihin ehtoihin sovelletaan Suomen lakia.
 Riidat ratkaistaan Helsingin käräjäoikeudessa.
 
 ## 14. Yhteystiedot
 
-**Converto Oy**  
-Y-tunnus: XXXXXXX-X  
-Sähköposti: support@converto.fi  
+**Converto Oy**
+Y-tunnus: XXXXXXX-X
+Sähköposti: support@converto.fi
 Verkko: https://converto.fi
 ```
 
@@ -667,16 +667,15 @@ Verkko: https://converto.fi
 
 ## 📞 Support Contacts
 
-**Apple Developer Support:**  
+**Apple Developer Support:**
 https://developer.apple.com/contact/
 
-**Google Play Support:**  
+**Google Play Support:**
 https://support.google.com/googleplay/android-developer/
 
-**Stripe Support:**  
+**Stripe Support:**
 https://support.stripe.com/
 
 ---
 
 **✅ Ready to submit! Follow this guide step-by-step for approval on first try.**
-

@@ -13,13 +13,13 @@ export default function LogoutButton() {
 
   async function handleLogout() {
     setLoading(true);
-    
+
     try {
       await fetch("/api/v1/auth/logout", {
         method: "POST",
         credentials: "include"
       });
-      
+
       // Redirect to auth page
       router.push("/auth");
     } catch (error) {
@@ -39,4 +39,3 @@ export default function LogoutButton() {
     </button>
   );
 }
-

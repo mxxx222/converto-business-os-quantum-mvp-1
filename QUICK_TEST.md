@@ -64,7 +64,7 @@ sleep 10
 open http://localhost:3000/dashboard
 ```
 
-**Odotettu tulos**: 
+**Odotettu tulos**:
 - Dashboard näkyy
 - GamifyCard näyttää pisteitä
 - WalletWidget näyttää CT-saldoa
@@ -112,7 +112,7 @@ curl "http://127.0.0.1:8000/api/v1/gamify/summary?tenant_id=demo&user_id=user_de
 curl "http://127.0.0.1:8000/api/v1/p2e/wallet?t=demo&u=user_demo"
 ```
 
-**Odotettu tulos**: 
+**Odotettu tulos**:
 - Pisteet +10
 - CT-saldo +5
 
@@ -215,4 +215,3 @@ python scripts/seed_rewards.py
 **Ongelmia?** Lue `ALOITA_TÄSTÄ.md` tarkemmat ohjeet!
 
 **Kaikki toimii?** Jatka → Deploy Railway → Julkaise! 🚀
-

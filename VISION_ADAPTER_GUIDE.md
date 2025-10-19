@@ -493,4 +493,3 @@ tesseract --list-langs
 ---
 
 **🔍 Converto™ - Vision That Works Everywhere**
-

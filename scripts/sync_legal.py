@@ -13,6 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 from shared_core.utils.db import SessionLocal
 from app.modules.legal.sync import sync_all
 
+
 def main():
     print("🔁 Syncing legal rules from official sources...")
     db = SessionLocal()
@@ -28,6 +29,6 @@ def main():
     finally:
         db.close()
 
+
 if __name__ == "__main__":
     main()
-

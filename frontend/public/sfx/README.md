@@ -57,4 +57,3 @@ Sound effects are:
 - ✅ Saved to localStorage
 - ✅ Accompanied by visual feedback
 - ✅ Never required for functionality
-

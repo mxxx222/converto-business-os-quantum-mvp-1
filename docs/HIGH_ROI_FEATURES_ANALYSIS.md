@@ -1,7 +1,7 @@
 # 💎 CONVERTO 2.0 - KORKEAN ROI:N OMINAISUUDET
 
-**Analysoitu**: October 14, 2025  
-**Lähde**: Smart Invoice Automation Project  
+**Analysoitu**: October 14, 2025
+**Lähde**: Smart Invoice Automation Project
 **Tavoite**: Tunnistaa ja integroida korkean ROI:n ominaisuudet Converto 2.0:aan
 
 ---
@@ -146,7 +146,7 @@ import base64
 from datetime import datetime
 
 class NetvisorAdapter:
-    def __init__(self, customer_id: str = None, partner_id: str = None, 
+    def __init__(self, customer_id: str = None, partner_id: str = None,
                  language: str = "FI", organization_id: str = None,
                  api_key: str = None, api_secret: str = None):
         self.customer_id = customer_id or os.getenv("NETVISOR_CUSTOMER_ID")
@@ -161,10 +161,10 @@ class NetvisorAdapter:
         """Generoi Netvisor API headerit"""
         timestamp = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         transaction_id = hashlib.sha256(f"{timestamp}{self.api_key}".encode()).hexdigest()
-        
+
         mac_string = f"{self.base_url}&{self.api_key}&{self.customer_id}&{timestamp}&{self.language}&{self.organization_id}&{transaction_id}&{self.api_secret}"
         mac = hashlib.sha256(mac_string.encode()).hexdigest()
-        
+
         return {
             "X-Netvisor-Authentication-Sender": self.partner_id,
             "X-Netvisor-Authentication-CustomerId": self.customer_id,
@@ -181,7 +181,7 @@ class NetvisorAdapter:
         """Luo ostolaskun Netvisoriin"""
         url = f"{self.base_url}/purchaseinvoice.nv"
         headers = self._generate_headers()
-        
+
         # XML payload (yksinkertaistettu)
         xml_data = f"""<?xml version="1.0" encoding="UTF-8"?>
         <Root>
@@ -194,7 +194,7 @@ class NetvisorAdapter:
             </PurchaseInvoice>
         </Root>
         """
-        
+
         response = requests.post(url, headers=headers, data=xml_data)
         return {"status": response.status_code, "response": response.text}
 ```
@@ -219,7 +219,7 @@ from typing import List, Dict
 from app.core.vision_adapter import VisionAdapter
 
 class EmailReceiptProcessor:
-    def __init__(self, email_address: str = None, password: str = None, 
+    def __init__(self, email_address: str = None, password: str = None,
                  imap_server: str = "imap.gmail.com"):
         self.email = email_address or os.getenv("RECEIPT_EMAIL")
         self.password = password or os.getenv("RECEIPT_EMAIL_PASSWORD")
@@ -229,58 +229,58 @@ class EmailReceiptProcessor:
     def fetch_unread_receipts(self) -> List[Dict]:
         """Hae lukemattomat kuitit sähköpostista"""
         receipts = []
-        
+
         with imaplib.IMAP4_SSL(self.imap_server) as mail:
             mail.login(self.email, self.password)
             mail.select("inbox")
-            
+
             # Hae lukemattomat viestit
             status, messages = mail.search(None, 'UNSEEN')
-            
+
             for msg_id in messages[0].split():
                 status, msg_data = mail.fetch(msg_id, '(RFC822)')
-                
+
                 for response_part in msg_data:
                     if isinstance(response_part, tuple):
                         msg = email.message_from_bytes(response_part[1])
-                        
+
                         # Käsittele liitetiedostot
                         if msg.is_multipart():
                             for part in msg.walk():
                                 if part.get_content_type() in ["application/pdf", "image/jpeg", "image/png"]:
                                     filename = part.get_filename()
                                     file_data = part.get_payload(decode=True)
-                                    
+
                                     # OCR-käsittely
                                     from PIL import Image
                                     import io
                                     img = Image.open(io.BytesIO(file_data))
                                     receipt_data = self.vision.extract_structured(img)
-                                    
+
                                     receipts.append({
                                         "filename": filename,
                                         "data": receipt_data,
                                         "email_id": msg_id
                                     })
-                
+
                 # Merkitse luetuksi
                 mail.store(msg_id, '+FLAGS', '\\Seen')
-        
+
         return receipts
 
     def auto_process(self) -> Dict:
         """Automaattinen käsittely ja synkronointi"""
         receipts = self.fetch_unread_receipts()
-        
+
         # Synkronoi Notioniin/Netvisoriin
         from app.integrations.notion import NotionAdapter
         notion = NotionAdapter()
-        
+
         synced = []
         for receipt in receipts:
             result = notion.create_receipt_page(receipt["data"])
             synced.append(result)
-        
+
         return {
             "processed": len(receipts),
             "synced": len(synced),
@@ -297,7 +297,7 @@ from app.services.email_processor import EmailReceiptProcessor
 def schedule_email_processing():
     processor = EmailReceiptProcessor()
     scheduler = BackgroundScheduler()
-    
+
     # Tarkista sähköposti joka 15 minuutti
     scheduler.add_job(
         processor.auto_process,
@@ -305,7 +305,7 @@ def schedule_email_processing():
         minutes=15,
         id='email_receipt_processor'
     )
-    
+
     scheduler.start()
 ```
 
@@ -333,7 +333,7 @@ async def delete_user_data(user_id: str, confirmation: bool = False):
     """Poista käyttäjän kaikki tiedot (GDPR right to be forgotten)"""
     if not confirmation:
         raise HTTPException(400, "Confirmation required")
-    
+
     db = SessionLocal()
     try:
         # Poista kuitit
@@ -354,7 +354,7 @@ async def export_user_data(user_id: str):
     db = SessionLocal()
     user = db.query(User).filter(User.id == user_id).first()
     receipts = db.query(Receipt).filter(Receipt.user_id == user_id).all()
-    
+
     return {
         "user": user.to_dict(),
         "receipts": [r.to_dict() for r in receipts],
@@ -428,5 +428,3 @@ async def export_user_data(user_id: str):
 **YHTEENVETO**: Smart Invoice -konseptista tunnistettiin **5 korkean ROI:n ominaisuutta**, joista **3 on jo osittain toteutettu** Converto 2.0:ssa! Lisäämällä loput 2 (Email automation + Netvisor), saavutetaan **markkinoiden kattavin** kirjanpitoautomaatioratkaisu Suomessa.
 
 **Potentiaali**: **10-50x** kasvu nykyiseen MVP:hen verrattuna.
-
-

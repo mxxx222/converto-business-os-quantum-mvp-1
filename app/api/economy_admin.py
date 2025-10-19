@@ -60,4 +60,3 @@ def delete_weight(event: str):
     weights = [w for w in weights if w["event"] != event]
     _save_weights(weights)
     return {"status": "deleted", "event": event}
-

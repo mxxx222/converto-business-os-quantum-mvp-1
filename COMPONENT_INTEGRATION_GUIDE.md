@@ -12,12 +12,12 @@ import { UnifiedHeader } from "@/components/UnifiedHeader";
 export default function MyPage() {
   return (
     <div>
-      <UnifiedHeader 
+      <UnifiedHeader
         title="My Page"
         confidence={0.95}
         showQuickReplies={true}
       />
-      
+
       {/* Your page content */}
     </div>
   );
@@ -33,11 +33,11 @@ If you need more control, add components individually:
 ### Step 1: Import Components
 
 ```tsx
-import { 
-  ProviderChip, 
-  PrivacyChip, 
-  LatencyChip, 
-  ConfidenceChip 
+import {
+  ProviderChip,
+  PrivacyChip,
+  LatencyChip,
+  ConfidenceChip
 } from "@/components/StatusChips";
 import { QuickReplies } from "@/components/CommandPalette";
 ```
@@ -53,7 +53,7 @@ import { QuickReplies } from "@/components/CommandPalette";
         <ProviderChip showLatency={true} />
         <PrivacyChip />
       </div>
-      
+
       {/* Right side */}
       <ConfidenceChip confidence={0.92} />
     </div>
@@ -76,7 +76,7 @@ import { QuickReplies } from "@/components/CommandPalette";
 ### ProviderChip
 
 ```tsx
-<ProviderChip 
+<ProviderChip
   aiProvider="openai"      // optional, auto-detected
   visionProvider="ollama"  // optional, auto-detected
   showLatency={true}       // show latency sparkline
@@ -92,7 +92,7 @@ import { QuickReplies } from "@/components/CommandPalette";
 ### LatencyChip
 
 ```tsx
-<LatencyChip 
+<LatencyChip
   latencies={[120, 150, 130, 145, 125]}  // Array of latencies (ms)
 />
 ```
@@ -100,7 +100,7 @@ import { QuickReplies } from "@/components/CommandPalette";
 ### ConfidenceChip
 
 ```tsx
-<ConfidenceChip 
+<ConfidenceChip
   confidence={0.95}  // 0-1 (displays as percentage)
 />
 ```
@@ -123,11 +123,11 @@ import { UnifiedHeader } from "@/components/UnifiedHeader";
 export default function Dashboard() {
   return (
     <div className="min-h-screen">
-      <UnifiedHeader 
+      <UnifiedHeader
         confidence={0.92}
         showQuickReplies={true}
       />
-      
+
       {/* Hero Section */}
       {/* Stats Cards */}
       {/* Features Grid */}
@@ -144,12 +144,12 @@ import { UnifiedHeader } from "@/components/UnifiedHeader";
 export default function OCRPage() {
   return (
     <div className="min-h-screen">
-      <UnifiedHeader 
+      <UnifiedHeader
         title="Kuittiskannaus"
         confidence={0.94}
         showQuickReplies={true}
       />
-      
+
       {/* Dropzone */}
       {/* Results */}
     </div>
@@ -165,12 +165,12 @@ import { UnifiedHeader } from "@/components/UnifiedHeader";
 export default function VATPage() {
   return (
     <div className="min-h-screen">
-      <UnifiedHeader 
+      <UnifiedHeader
         title="ALV-laskuri"
         confidence={0.98}
         showQuickReplies={true}
       />
-      
+
       {/* VAT Calculator */}
       {/* Reports */}
     </div>
@@ -186,12 +186,12 @@ import { UnifiedHeader } from "@/components/UnifiedHeader";
 export default function LegalPage() {
   return (
     <div className="min-h-screen">
-      <UnifiedHeader 
+      <UnifiedHeader
         title="Legal Compliance"
         confidence={0.96}
         showQuickReplies={true}
       />
-      
+
       {/* Compliance Dashboard */}
       {/* Rules List */}
     </div>
@@ -226,7 +226,7 @@ import { useState, useEffect } from "react";
 
 export default function OCRPage() {
   const [confidence, setConfidence] = useState(0.92);
-  
+
   useEffect(() => {
     // Update confidence after OCR
     async function processReceipt() {
@@ -234,7 +234,7 @@ export default function OCRPage() {
       setConfidence(result.confidence);
     }
   }, []);
-  
+
   return (
     <div>
       <UnifiedHeader confidence={confidence} />
@@ -249,7 +249,7 @@ export default function OCRPage() {
 ```tsx
 import { QuickReplies } from "@/components/CommandPalette";
 
-<QuickReplies 
+<QuickReplies
   items={[
     { label: "📸 Scan", action: () => openCamera() },
     { label: "📁 Import", action: () => openFilePicker() },
@@ -261,7 +261,7 @@ import { QuickReplies } from "@/components/CommandPalette";
 ### Hide Quick Replies on Specific Pages
 
 ```tsx
-<UnifiedHeader 
+<UnifiedHeader
   title="Admin Panel"
   confidence={1.0}
   showQuickReplies={false}  // No quick actions
@@ -395,4 +395,3 @@ Questions? Check:
 - Component code: `frontend/components/`
 - Usage examples: This file
 - UI utilities: `frontend/lib/ui.ts`
-

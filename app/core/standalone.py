@@ -27,6 +27,7 @@ def require_standalone_or_fallback(func):
     Decorator that ensures function works in standalone mode
     Falls back to internal implementation if integration is unavailable
     """
+
     def wrapper(*args, **kwargs):
         if is_standalone():
             # Use internal implementation
@@ -38,44 +39,44 @@ def require_standalone_or_fallback(func):
             except Exception as e:
                 print(f"Integration failed, using standalone: {e}")
                 return func(*args, **kwargs)
-    
+
     return wrapper
 
 
 # Feature availability matrix
 STANDALONE_FEATURES = {
-    "ocr": True,              # Internal OCR (Tesseract + OpenAI)
-    "vat": True,              # Internal VAT calculation
-    "billing": True,          # Internal billing (Stripe optional)
-    "reports": True,          # PDF/CSV generation (internal)
-    "gamify": True,           # Internal points/streaks
-    "reminders": True,        # Email + iCal (no WhatsApp/Slack)
-    "legal": True,            # Internal legal tracking
-    "auth": True,             # Magic link + TOTP
-    "backup": True,           # DB dump + file archive
-    "export": True,           # Full data export (ZIP)
-    "import": True,           # Data import/migration
-    "audit": True,            # Internal audit log
-    "inbox": True,            # In-app notifications
-    "calendar": True,         # iCal file generation
-    "search": True,           # Internal full-text search
-    "offline": True,          # PWA queue
+    "ocr": True,  # Internal OCR (Tesseract + OpenAI)
+    "vat": True,  # Internal VAT calculation
+    "billing": True,  # Internal billing (Stripe optional)
+    "reports": True,  # PDF/CSV generation (internal)
+    "gamify": True,  # Internal points/streaks
+    "reminders": True,  # Email + iCal (no WhatsApp/Slack)
+    "legal": True,  # Internal legal tracking
+    "auth": True,  # Magic link + TOTP
+    "backup": True,  # DB dump + file archive
+    "export": True,  # Full data export (ZIP)
+    "import": True,  # Data import/migration
+    "audit": True,  # Internal audit log
+    "inbox": True,  # In-app notifications
+    "calendar": True,  # iCal file generation
+    "search": True,  # Internal full-text search
+    "offline": True,  # PWA queue
 }
 
 INTEGRATION_FEATURES = {
-    "notion": False,          # Optional (requires API key)
-    "whatsapp": False,        # Optional (requires Twilio/Meta)
-    "slack": False,           # Optional (requires webhook)
-    "google_calendar": False, # Optional (requires OAuth)
-    "bank_sync": False,       # Optional (requires Nordigen)
-    "logistics": False,       # Optional (requires EasyPost)
+    "notion": False,  # Optional (requires API key)
+    "whatsapp": False,  # Optional (requires Twilio/Meta)
+    "slack": False,  # Optional (requires webhook)
+    "google_calendar": False,  # Optional (requires OAuth)
+    "bank_sync": False,  # Optional (requires Nordigen)
+    "logistics": False,  # Optional (requires EasyPost)
 }
 
 
 def get_available_features() -> dict:
     """Get all available features in current mode"""
     features = STANDALONE_FEATURES.copy()
-    
+
     if is_integrated():
         # Check which integrations are configured
         if os.getenv("NOTION_API_KEY"):
@@ -85,6 +86,5 @@ def get_available_features() -> dict:
         if os.getenv("SLACK_WEBHOOK_URL"):
             features["slack"] = True
         # ... etc
-    
-    return features
 
+    return features

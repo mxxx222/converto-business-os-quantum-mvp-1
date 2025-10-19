@@ -186,7 +186,7 @@ export default function ResultCard({ result, confidence, features }) {
           <h3>{result}</h3>
           <p className="text-sm text-gray-500">{confidence}% confidence</p>
         </div>
-        
+
         <FeedbackButtons
           action="ocr_classify"
           featureVector={features}
@@ -212,22 +212,22 @@ import { useEffect, useState } from "react";
 
 export default function MLStatsPage() {
   const [stats, setStats] = useState(null);
-  
+
   useEffect(() => {
     fetch("/api/v1/ml/stats")
       .then(r => r.json())
       .then(setStats);
   }, []);
-  
+
   const retrain = async () => {
     await fetch("/api/v1/ml/retrain-all", { method: "POST" });
     alert("Retraining started!");
   };
-  
+
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">ML Statistics</h1>
-      
+
       {stats && (
         <>
           <div className="grid grid-cols-3 gap-4 mb-8">
@@ -235,14 +235,14 @@ export default function MLStatsPage() {
               <div className="text-sm text-gray-500">Total Samples</div>
               <div className="text-3xl font-bold">{stats.total_samples}</div>
             </div>
-            
+
             <div className="p-4 bg-white rounded-lg border">
               <div className="text-sm text-gray-500">Correct</div>
               <div className="text-3xl font-bold text-green-600">
                 {stats.correct}
               </div>
             </div>
-            
+
             <div className="p-4 bg-white rounded-lg border">
               <div className="text-sm text-gray-500">Accuracy</div>
               <div className="text-3xl font-bold text-indigo-600">
@@ -250,7 +250,7 @@ export default function MLStatsPage() {
               </div>
             </div>
           </div>
-          
+
           <button
             onClick={retrain}
             className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700"
@@ -464,4 +464,3 @@ Share learned knowledge between tenants:
 ---
 
 **🧠 Your AI That Learns and Improves - Automatically!**
-

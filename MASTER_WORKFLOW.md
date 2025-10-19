@@ -4,8 +4,8 @@
 
 Tämä on **todistettu workflow** jolla rakennetaan tuotantokelpoinen SaaS-sovellus 2-4 päivässä.
 
-**Käytetty:** Converto™ Business OS 2.0 (67 commits, 325+ files)  
-**Aika:** 3 päivää (MVP → Production)  
+**Käytetty:** Converto™ Business OS 2.0 (67 commits, 325+ files)
+**Aika:** 3 päivää (MVP → Production)
 **Tulos:** Täysi SaaS Renderissä, mobile apps, marketing valmis
 
 ---
@@ -68,7 +68,7 @@ git add -A
 git commit -m "feat: Initial project structure"
 ```
 
-**Time:** 2-4h  
+**Time:** 2-4h
 **Output:** Working backend + frontend skeleton
 
 ---
@@ -122,7 +122,7 @@ git commit -m "feat: Add user management endpoints"
 git commit -m "feat: Add dashboard UI"
 ```
 
-**Time:** 4-8h  
+**Time:** 4-8h
 **Output:** Basic CRUD + UI working
 
 ---
@@ -137,7 +137,7 @@ import os
 class AIAdapter:
     def __init__(self):
         self.provider = os.getenv("AI_PROVIDER", "openai")
-    
+
     def chat(self, messages):
         if self.provider == "openai":
             return self._openai_chat(messages)
@@ -160,7 +160,7 @@ git commit -m "feat: Add AI adapter (OpenAI/Ollama)"
 git commit -m "feat: Add vision adapter (multi-provider)"
 ```
 
-**Time:** 4-6h  
+**Time:** 4-6h
 **Output:** AI/ML capabilities ready
 
 ---
@@ -190,7 +190,7 @@ def require_auth(token: str):
     return payload["email"]
 ```
 
-**Time:** 2-4h  
+**Time:** 2-4h
 **Output:** Secure authentication
 
 ---
@@ -228,7 +228,7 @@ export function DashboardEmpty() { /* ... */ }
 - Responsive design
 - Accessibility (ARIA, focus rings)
 
-**Time:** 4-8h  
+**Time:** 4-8h
 **Output:** Professional UI/UX
 
 ---
@@ -255,7 +255,7 @@ services:
     env: python
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn app.main:app --host 0.0.0.0
-    
+
   - type: web
     name: my-saas-frontend
     env: node
@@ -278,7 +278,7 @@ jobs:
       - run: pytest
 ```
 
-**Time:** 4-6h  
+**Time:** 4-6h
 **Output:** Deployed to Render, CI running
 
 ---
@@ -312,7 +312,7 @@ export default function Home() {
 - User guide
 - Deployment guide
 
-**Time:** 4-6h  
+**Time:** 4-6h
 **Output:** Ready to market
 
 ---
@@ -429,10 +429,10 @@ import useSWR from "swr";
 
 export default function MyComponent() {
   const { data, error, mutate } = useSWR("/api/v1/items", fetcher);
-  
+
   if (error) return <div>Error</div>;
   if (!data) return <div>Loading...</div>;
-  
+
   return <div>{/* Render data */}</div>;
 }
 ```
@@ -442,7 +442,7 @@ export default function MyComponent() {
 class Adapter:
     def __init__(self):
         self.provider = os.getenv("PROVIDER", "default")
-    
+
     def execute(self, input):
         if self.provider == "provider_a":
             return self._provider_a(input)
@@ -459,4 +459,3 @@ class Adapter:
 Save this as a template for future projects!
 
 See: `MASTER_PROMPT.md` (next file) →
-

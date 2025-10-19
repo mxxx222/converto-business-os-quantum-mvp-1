@@ -86,4 +86,3 @@ echo "📦 File: $ZIP"
 echo "💾 Size: $SIZE"
 echo "📊 Total backups: $COUNT"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-

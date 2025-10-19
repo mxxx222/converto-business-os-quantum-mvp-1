@@ -56,4 +56,3 @@ The Hero component is the primary landing element featuring gradient backgrounds
 
 - Gradient rendered as CSS (no images)
 - Motion respects `prefers-reduced-motion`
-

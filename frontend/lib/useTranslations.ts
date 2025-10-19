@@ -7,4 +7,3 @@ const dict = { fi, en, ru };
 export function useTranslations(lang: string) {
   return dict[lang as keyof typeof dict] || fi;
 }
-

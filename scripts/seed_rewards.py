@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Seed rewards catalog for demo tenant."""
+
 from shared_core.modules.rewards.models import RewardCatalogItem
 from shared_core.utils.db import SessionLocal
 
@@ -63,4 +64,3 @@ def seed():
 
 if __name__ == "__main__":
     seed()
-

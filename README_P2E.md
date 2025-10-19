@@ -135,4 +135,3 @@ if event["type"] == "invoice.paid":
 ---
 
 **Questions?** See `shared_core/modules/p2e/` for implementation details.
-

@@ -5,12 +5,15 @@ from sqlalchemy.orm import Session
 from shared_core.utils.db import Base
 from datetime import datetime
 
+
 class VATRate(Base):
     __tablename__ = "vat_rates"
 
     id = Column(Integer, primary_key=True)
     country = Column(String(2), nullable=False, index=True)  # FI, SE, etc.
-    rate_key = Column(String(50), nullable=False, index=True)  # standard, reduced1, reduced2, zero, exempt
+    rate_key = Column(
+        String(50), nullable=False, index=True
+    )  # standard, reduced1, reduced2, zero, exempt
     rate_pct = Column(Numeric(5, 2), nullable=False)  # 25.50, 14.00, 10.00, etc.
     valid_from = Column(Date, nullable=False, index=True)
     valid_to = Column(Date, nullable=True)  # NULL = currently active
@@ -49,4 +52,3 @@ def get_current_rates(db: Session, country: str = "FI") -> dict:
         if rate:
             rates[key] = float(rate.rate_pct)
     return rates
-

@@ -38,13 +38,13 @@ Official terminology and language for Converto Business OS.
 
 ### Value Propositions (3 Points)
 
-1. **Säästät aikaa**  
+1. **Säästät aikaa**
    "Kuitit → tiedot talteen → ALV oikein. Ei naputtelua."
 
-2. **Näet olennaisen**  
+2. **Näet olennaisen**
    "Selkeä viikkokooste ilman taulukkoviidakkoa."
 
-3. **Toimit varmemmin**  
+3. **Toimit varmemmin**
    "Muistutukset ja ehdotukset oikeaan aikaan."
 
 ---
@@ -138,8 +138,8 @@ className="text-gradient"
 
 ### Official Names
 
-**Full:** Converto™ Business OS  
-**Short:** Converto  
+**Full:** Converto™ Business OS
+**Short:** Converto
 **Tagline:** "Automaatioteknologia suomalaiselle yritykselle"
 
 ### Module Names
@@ -252,4 +252,3 @@ Before any public communication, verify:
 ---
 
 **✅ Follow these guidelines for consistent, trustworthy brand communication!**
-

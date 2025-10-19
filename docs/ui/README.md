@@ -1,8 +1,8 @@
 # 🎨 Converto™ UI Developer Handbook
 
-**Version**: 2.0  
-**Last Updated**: October 2025  
-**Brand**: Converto Business OS  
+**Version**: 2.0
+**Last Updated**: October 2025
+**Brand**: Converto Business OS
 
 ---
 
@@ -54,7 +54,7 @@ Converto UI is built on three principles:
 }
 ```
 
-**Feel**: Bright, calm, corporate trustworthiness  
+**Feel**: Bright, calm, corporate trustworthiness
 **Usage**: Desktop, daylight, offices, B2B presentations
 
 ---
@@ -75,7 +75,7 @@ Converto UI is built on three principles:
 }
 ```
 
-**Feel**: Modern, technical, high-contrast  
+**Feel**: Modern, technical, high-contrast
 **Usage**: Night mode, developers, dark dashboards
 
 ---
@@ -267,11 +267,10 @@ See component-specific `.md` files for detailed examples and code snippets.
 
 ## 📞 **Support**
 
-Questions? Contact the design team:  
-**Email**: design@converto.fi  
+Questions? Contact the design team:
+**Email**: design@converto.fi
 **Slack**: #converto-ui-dev
 
 ---
 
 © 2025 Converto Solutions Oy · Developer Handbook v2.0
-

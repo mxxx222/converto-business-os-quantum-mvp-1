@@ -31,5 +31,3 @@ async def send_whatsapp(text: str) -> bool:
     async with httpx.AsyncClient(timeout=15, auth=(TWILIO_SID, TWILIO_TOKEN)) as c:
         r = await c.post(url, data=data)
         return 200 <= r.status_code < 300
-
-

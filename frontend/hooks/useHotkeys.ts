@@ -11,7 +11,7 @@ export function useHotkeys() {
     function handleKeyDown(event: KeyboardEvent) {
       // Only trigger if Shift is pressed and no input is focused
       if (!event.shiftKey) return;
-      
+
       const target = event.target as HTMLElement;
       if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
         return;
@@ -85,4 +85,3 @@ Converto Hotkeys:
     };
   }, []);
 }
-

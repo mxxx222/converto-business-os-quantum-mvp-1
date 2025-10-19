@@ -115,5 +115,3 @@ echo "  1. Kopioi yllä olevat rivit .env-tiedostoon"
 echo "  2. Lisää STRIPE_SECRET_KEY ja STRIPE_WEBHOOK_SECRET"
 echo "  3. Käynnistä webhook: stripe listen --forward-to localhost:8010/api/v1/stripe/webhook"
 echo ""
-
-

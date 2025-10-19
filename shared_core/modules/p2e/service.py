@@ -57,57 +57,71 @@ def _ensure_wallet(db: Session, tenant_id: str, user_id: str) -> P2EWallet:
 
 
 def mint(
-    db: Session, tenant_id: str, user_id: str, amount: int, reason: str, ref_id: Optional[str] = None
+    db: Session,
+    tenant_id: str,
+    user_id: str,
+    amount: int,
+    reason: str,
+    ref_id: Optional[str] = None,
 ) -> Tuple[bool, Dict]:
     """Mint tokens. Returns (success, data/error)."""
     ensure_tables_created()
     if amount <= 0:
         return False, {"error": "amount must be positive"}
-    
+
     # Check daily limit
     today_minted = _sum_today(db, tenant_id, user_id, positive=True)
     if today_minted + amount > MAX_MINT_PER_DAY:
         return False, {"error": "mint_limit_reached", "limit": MAX_MINT_PER_DAY}
-    
+
     wallet = _ensure_wallet(db, tenant_id, user_id)
     wallet.balance += amount
-    
+
     ledger_entry = P2ETokenLedger(
         tenant_id=tenant_id, user_id=user_id, delta=amount, reason=reason, ref_id=ref_id
     )
     db.add(ledger_entry)
     db.commit()
     db.refresh(wallet)
-    
+
     return True, {"balance": wallet.balance, "delta": amount}
 
 
 def burn(
-    db: Session, tenant_id: str, user_id: str, amount: int, reason: str, ref_id: Optional[str] = None
+    db: Session,
+    tenant_id: str,
+    user_id: str,
+    amount: int,
+    reason: str,
+    ref_id: Optional[str] = None,
 ) -> Tuple[bool, Dict]:
     """Burn tokens. Returns (success, data/error)."""
     ensure_tables_created()
     if amount <= 0:
         return False, {"error": "amount must be positive"}
-    
+
     # Check daily limit
     today_burned = _sum_today(db, tenant_id, user_id, positive=False)
     if today_burned + amount > MAX_REDEEM_PER_DAY:
         return False, {"error": "redeem_limit_reached", "limit": MAX_REDEEM_PER_DAY}
-    
+
     wallet = _ensure_wallet(db, tenant_id, user_id)
     if wallet.balance < amount:
-        return False, {"error": "insufficient_balance", "balance": wallet.balance, "requested": amount}
-    
+        return False, {
+            "error": "insufficient_balance",
+            "balance": wallet.balance,
+            "requested": amount,
+        }
+
     wallet.balance -= amount
-    
+
     ledger_entry = P2ETokenLedger(
         tenant_id=tenant_id, user_id=user_id, delta=-amount, reason=reason, ref_id=ref_id
     )
     db.add(ledger_entry)
     db.commit()
     db.refresh(wallet)
-    
+
     return True, {"balance": wallet.balance, "delta": -amount}
 
 
@@ -125,4 +139,3 @@ def list_quests(db: Session, tenant_id: str):
         }
         for q in quests
     ]
-

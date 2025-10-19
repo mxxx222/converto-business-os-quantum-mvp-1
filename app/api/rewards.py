@@ -37,4 +37,3 @@ def get_history(
 ):
     """Get user's redemption history."""
     return list_redemptions(db, tenant_id=tenant_id, user_id=user_id)
-

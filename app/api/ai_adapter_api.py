@@ -31,7 +31,7 @@ class ChatResponse(BaseModel):
 def whoami():
     """
     Get current AI provider configuration
-    
+
     Returns info about configured providers and models
     """
     return {
@@ -49,8 +49,8 @@ def whoami():
             "anthropic": {
                 "configured": bool(os.getenv("ANTHROPIC_API_KEY")),
                 "model": os.getenv("ANTHROPIC_MODEL", "claude-3-haiku-20240307"),
-            }
-        }
+            },
+        },
     }
 
 
@@ -58,30 +58,20 @@ def whoami():
 def test_provider(provider: str):
     """
     Test if provider is available and working
-    
+
     Args:
         provider: openai, ollama, or anthropic
     """
     try:
         ai = AIAdapter(provider=provider)
         info = ai.get_info()
-        
+
         # Try a simple ping
         try:
             response = ai.simple("Say 'pong' in one word", temperature=0, max_tokens=10)
-            return {
-                "status": "ok",
-                "provider": provider,
-                "info": info,
-                "test_response": response
-            }
+            return {"status": "ok", "provider": provider, "info": info, "test_response": response}
         except Exception as e:
-            return {
-                "status": "error",
-                "provider": provider,
-                "info": info,
-                "error": str(e)
-            }
+            return {"status": "error", "provider": provider, "info": info, "error": str(e)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Provider test failed: {str(e)}")
 
@@ -90,7 +80,7 @@ def test_provider(provider: str):
 def chat(req: ChatRequest):
     """
     Chat with AI
-    
+
     Body:
     ```json
     {
@@ -102,20 +92,11 @@ def chat(req: ChatRequest):
     """
     try:
         ai = AIAdapter(provider=req.provider)
-        
-        text = ai.simple(
-            prompt=req.prompt,
-            temperature=req.temperature,
-            max_tokens=req.max_tokens
-        )
-        
-        return ChatResponse(
-            ok=True,
-            text=text,
-            provider=ai.provider,
-            model=ai.model
-        )
-        
+
+        text = ai.simple(prompt=req.prompt, temperature=req.temperature, max_tokens=req.max_tokens)
+
+        return ChatResponse(ok=True, text=text, provider=ai.provider, model=ai.model)
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Chat failed: {str(e)}")
 
@@ -125,13 +106,13 @@ def structured_chat(
     prompt: str,
     system: Optional[str] = None,
     temperature: float = 0.1,
-    provider: Optional[str] = None
+    provider: Optional[str] = None,
 ):
     """
     Structured chat with system message
-    
+
     Useful for JSON responses, classification, etc.
-    
+
     Query params:
     - prompt: User prompt
     - system: System message (optional)
@@ -140,20 +121,11 @@ def structured_chat(
     """
     try:
         ai = AIAdapter(provider=provider)
-        
-        text = ai.structured(
-            prompt=prompt,
-            system=system,
-            temperature=temperature
-        )
-        
-        return {
-            "ok": True,
-            "text": text,
-            "provider": ai.provider,
-            "model": ai.model
-        }
-        
+
+        text = ai.structured(prompt=prompt, system=system, temperature=temperature)
+
+        return {"ok": True, "text": text, "provider": ai.provider, "model": ai.model}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Structured chat failed: {str(e)}")
 
@@ -162,7 +134,7 @@ def structured_chat(
 def list_models():
     """
     List available models for each provider
-    
+
     Returns suggested models for different use cases
     """
     return {
@@ -171,8 +143,8 @@ def list_models():
             "models": {
                 "gpt-4o": "Most capable (expensive)",
                 "gpt-4o-mini": "Fast and cheap (recommended)",
-                "gpt-3.5-turbo": "Legacy (not recommended)"
-            }
+                "gpt-3.5-turbo": "Legacy (not recommended)",
+            },
         },
         "ollama": {
             "recommended": "mistral",
@@ -181,17 +153,16 @@ def list_models():
                 "llama3": "8B, Meta's latest",
                 "phi3": "3.8B, lightweight, Microsoft",
                 "codellama": "7B, specialized for code",
-                "gemma": "7B, Google"
+                "gemma": "7B, Google",
             },
-            "install": "ollama pull <model>"
+            "install": "ollama pull <model>",
         },
         "anthropic": {
             "recommended": "claude-3-haiku-20240307",
             "models": {
                 "claude-3-opus-20240229": "Most capable (expensive)",
                 "claude-3-sonnet-20240229": "Balanced",
-                "claude-3-haiku-20240307": "Fast and cheap (recommended)"
-            }
-        }
+                "claude-3-haiku-20240307": "Fast and cheap (recommended)",
+            },
+        },
     }
-

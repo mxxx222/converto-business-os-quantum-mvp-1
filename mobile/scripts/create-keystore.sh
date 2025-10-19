@@ -51,4 +51,3 @@ echo "   RELEASE_KEY_PASSWORD=$STORE_PASS"
 echo ""
 echo "⚠️  SECURITY: Add $KEYSTORE_FILE to .gitignore!"
 echo "   Never commit keystores to version control."
-

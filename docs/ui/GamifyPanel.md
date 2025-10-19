@@ -27,7 +27,7 @@ The Gamify Panel displays user points, rewards, and wallet balance with Fixu™ 
   <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
     = 3.35 € hyvitystä seuraavaan laskuun
   </p>
-  <button 
+  <button
     className="w-full py-3 rounded-xl font-bold transition-all active:scale-95"
     style={{ backgroundColor: "#39FF14", color: "#000" }}
   >
@@ -66,4 +66,3 @@ if (points % 100 === 0 && points > 0) {
 - ✅ High contrast neon green on dark backgrounds
 - ✅ Sound effects optional (user preference)
 - ✅ Animation respects `prefers-reduced-motion`
-

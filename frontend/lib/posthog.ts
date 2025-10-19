@@ -73,4 +73,3 @@ export const trackEvent = {
 };
 
 export default posthog;
-

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 class DocLineIn(BaseModel):
     """Document line item (quote or invoice)"""
+
     sku: Optional[str] = Field(None, description="Stock keeping unit (if applicable)")
     description: str = Field(..., description="Line item description")
     qty: float = Field(..., description="Quantity")
@@ -18,6 +19,7 @@ class DocLineIn(BaseModel):
 
 class QuoteIn(BaseModel):
     """Input model for creating quote"""
+
     quote_no: str = Field(..., description="Quote number")
     customer: str = Field(..., description="Customer name")
     valid_until: date = Field(..., description="Quote valid until date")
@@ -28,6 +30,7 @@ class QuoteIn(BaseModel):
 
 class InvoiceIn(BaseModel):
     """Input model for creating invoice"""
+
     invoice_no: str = Field(..., description="Invoice number")
     customer: str = Field(..., description="Customer name")
     due_date: date = Field(..., description="Payment due date")
@@ -39,8 +42,8 @@ class InvoiceIn(BaseModel):
 
 class QuoteToInvoiceIn(BaseModel):
     """Input model for converting quote to invoice"""
+
     quote_no: str = Field(..., description="Quote number to convert")
     invoice_no: str = Field(..., description="New invoice number")
     due_date: date = Field(..., description="Payment due date")
     send_to_notion: bool = Field(False, description="Push to Notion database")
-

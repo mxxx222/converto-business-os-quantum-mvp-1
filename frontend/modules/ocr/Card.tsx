@@ -24,6 +24,3 @@ export default function OCRCard(){
     </div>
   );
 }
-
-
-

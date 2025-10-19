@@ -1,6 +1,6 @@
 # 🔍 Converto™ Gap Analysis vs. European Top 10
 
-**Date**: October 2025  
+**Date**: October 2025
 **Comparison**: Converto Business OS vs. SAP, Odoo, Exact, Qonto, Pleo, Moss, Visma, Ageras, Holvi, Procountor
 
 ---
@@ -25,23 +25,23 @@
 ## ✅ **MITÄ CONVERTOLLA ON JO (VAHVUUDET)**
 
 ### **Design & Tech:**
-✅ **Moderni UI** - Next.js 14 + Tailwind + Framer Motion  
-✅ **Dark/Light teemat** - Automaattinen systeemipreferenssi  
-✅ **Monikielinen** - FI/EN/RU (kilpailijoilla usein vain EN)  
-✅ **AI-adapter** - Vaihdettava "aivot" (OpenAI/Ollama/Anthropic)  
-✅ **Vision-adapter** - OCR ilman vendor lock-in  
-✅ **Command Palette** - ⌘K (mod ernit SaaS:t)  
-✅ **Gamification** - Pisteet + wallet (ainutlaatuinen)  
-✅ **Converto Blue brand** - Oma tunnistettava värimaailma  
-✅ **Premium Landing** - StoryBrand 2.0 rakenne  
-✅ **Developer Handbook** - UI-dokumentaatio  
+✅ **Moderni UI** - Next.js 14 + Tailwind + Framer Motion
+✅ **Dark/Light teemat** - Automaattinen systeemipreferenssi
+✅ **Monikielinen** - FI/EN/RU (kilpailijoilla usein vain EN)
+✅ **AI-adapter** - Vaihdettava "aivot" (OpenAI/Ollama/Anthropic)
+✅ **Vision-adapter** - OCR ilman vendor lock-in
+✅ **Command Palette** - ⌘K (mod ernit SaaS:t)
+✅ **Gamification** - Pisteet + wallet (ainutlaatuinen)
+✅ **Converto Blue brand** - Oma tunnistettava värimaailma
+✅ **Premium Landing** - StoryBrand 2.0 rakenne
+✅ **Developer Handbook** - UI-dokumentaatio
 
 ### **Features:**
-✅ **OCR/AI-skannaus** - Kuitit + ALV automaattisesti  
-✅ **POS-integraatiot** - Zettle, SumUp, Stripe, Square  
-✅ **Self-learning ML** - Itsekorjaava järjestelmä  
-✅ **Local Intelligence** - Data ei poistu Suomesta (GDPR-etu)  
-✅ **Magic Link + TOTP** - Passwordless auth  
+✅ **OCR/AI-skannaus** - Kuitit + ALV automaattisesti
+✅ **POS-integraatiot** - Zettle, SumUp, Stripe, Square
+✅ **Self-learning ML** - Itsekorjaava järjestelmä
+✅ **Local Intelligence** - Data ei poistu Suomesta (GDPR-etu)
+✅ **Magic Link + TOTP** - Passwordless auth
 
 ---
 
@@ -58,11 +58,11 @@
 - 📰 "Featured in" -media-mainokset
 
 **Converto:**
-❌ Ei customer logo -riviä  
-❌ Ei käyttäjämäärä-numeroita  
-❌ Ei testimonial-videoita  
-❌ Ei G2/Capterra-integraatiota  
-❌ Ei palkintoja näkyvissä  
+❌ Ei customer logo -riviä
+❌ Ei käyttäjämäärä-numeroita
+❌ Ei testimonial-videoita
+❌ Ei G2/Capterra-integraatiota
+❌ Ei palkintoja näkyvissä
 
 **FIX:**
 ```tsx
@@ -112,10 +112,10 @@
 - 🎮 "Try it now" sandbox-tili
 
 **Converto:**
-✅ OCR-sivu toimii  
-❌ Ei upotettua demo-videota  
-❌ Ei interaktiivista guided tour:ia  
-❌ Ei "Try without signup" -sandbox:ia  
+✅ OCR-sivu toimii
+❌ Ei upotettua demo-videota
+❌ Ei interaktiivista guided tour:ia
+❌ Ei "Try without signup" -sandbox:ia
 
 **FIX:**
 ```tsx
@@ -151,17 +151,17 @@
 - 💳 "Start free trial" - ei korttia vaadita
 
 **Converto:**
-✅ Hinnat näkyvissä (/billing)  
-❌ Ei ROI-laskuria  
-❌ Ei "Compare plans" -modaalia  
-❌ Ei "No credit card" -tekstiä  
+✅ Hinnat näkyvissä (/billing)
+❌ Ei ROI-laskuria
+❌ Ei "Compare plans" -modaalia
+❌ Ei "No credit card" -tekstiä
 
 **FIX:**
 ```tsx
 // Pricing CTA:n alle
 <p className="text-sm text-gray-600 mt-2">
-  ✓ Ei luottokorttia vaadita  
-  ✓ Peruuta milloin tahansa  
+  ✓ Ei luottokorttia vaadita
+  ✓ Peruuta milloin tahansa
   ✓ 14 päivän rahat takaisin -takuu
 </p>
 
@@ -187,11 +187,11 @@
 - ⭐ "Verified by [Trusted Partner]"
 
 **Converto:**
-✅ "Local Intelligence 🇫🇮" -chip  
-✅ "Data ei poistu Suomesta"  
-❌ Ei GDPR-badgea näkyvissä  
-❌ Ei ISO/SOC-sertifikaatteja  
-❌ Ei "Verified" -merkkejä  
+✅ "Local Intelligence 🇫🇮" -chip
+✅ "Data ei poistu Suomesta"
+❌ Ei GDPR-badgea näkyvissä
+❌ Ei ISO/SOC-sertifikaatteja
+❌ Ei "Verified" -merkkejä
 
 **FIX:**
 ```tsx
@@ -216,11 +216,11 @@
 - 📰 Newsletter
 
 **Converto:**
-✅ Case studies -sivu (raaka)  
-❌ Ei blogia  
-❌ Ei Help Center:iä  
-❌ Ei video-tutoriaaleja  
-❌ Ei newsletteria  
+✅ Case studies -sivu (raaka)
+❌ Ei blogia
+❌ Ei Help Center:iä
+❌ Ei video-tutoriaaleja
+❌ Ei newsletteria
 
 **FIX:**
 ```
@@ -247,12 +247,12 @@
 - 👥 Community Slack/Discord
 
 **Converto:**
-✅ Contact-lomake  
-✅ contact@converto.fi  
-❌ Ei live chat:ia  
-❌ Ei puhelinnumeroa  
-❌ Ei vastausaikaa mainittu  
-❌ Ei community-kanavaa  
+✅ Contact-lomake
+✅ contact@converto.fi
+❌ Ei live chat:ia
+❌ Ei puhelinnumeroa
+❌ Ei vastausaikaa mainittu
+❌ Ei community-kanavaa
 
 **FIX:**
 ```tsx
@@ -288,18 +288,18 @@
 - 🎓 Guided tour (Shepherd.js, Intro.js)
 
 **Converto:**
-✅ Auth-sivu  
-❌ Ei onboarding-flow:ta  
-❌ Ei sample-dataa  
-❌ Ei "Get started" -checklistiä  
-❌ Ei guided tour:ia  
+✅ Auth-sivu
+❌ Ei onboarding-flow:ta
+❌ Ei sample-dataa
+❌ Ei "Get started" -checklistiä
+❌ Ei guided tour:ia
 
 **FIX:**
 ```tsx
 // app/onboarding/page.tsx
 <div className="max-w-2xl mx-auto px-4 py-12">
   <h1 className="text-3xl font-bold mb-8">Tervetuloa Convertoon! 👋</h1>
-  
+
   {/* Step 1: Goal */}
   <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 mb-6">
     <h2 className="font-bold mb-4">Miksi käytät Convertoa?</h2>
@@ -359,10 +359,10 @@
 - ➕ "Add first item" CTA
 
 **Converto:**
-✅ OCR empty state ("Pudota kuitti")  
-❌ Ei illustraatioita  
-❌ Dashboard empty: näyttää mock-dataa (hämmentävää!)  
-❌ Reports empty: ei ohjeita  
+✅ OCR empty state ("Pudota kuitti")
+❌ Ei illustraatioita
+❌ Dashboard empty: näyttää mock-dataa (hämmentävää!)
+❌ Reports empty: ei ohjeita
 
 **FIX:**
 ```tsx
@@ -390,10 +390,10 @@
 - 🎯 Toast messages (Sonner, React-Hot-Toast)
 
 **Converto:**
-❌ Ei toast-notifikaatioita  
-❌ Ei in-app notification center:iä  
-❌ Ei push-notificationeita  
-✅ Vain settings/notifications -sivu (konfiguraatio)  
+❌ Ei toast-notifikaatioita
+❌ Ei in-app notification center:iä
+❌ Ei push-notificationeita
+✅ Vain settings/notifications -sivu (konfiguraatio)
 
 **FIX:**
 ```bash
@@ -423,9 +423,9 @@ toast("💰 +10p ansaittu!");
 - 🎯 Step indicators (1/5, 2/5...)
 
 **Converto:**
-❌ Ei skeleton-loadereitä  
-❌ Ei progress-bareja  
-❌ Ei "uploading..." -indikaattoreita  
+❌ Ei skeleton-loadereitä
+❌ Ei progress-bareja
+❌ Ei "uploading..." -indikaattoreita
 
 **FIX:**
 ```tsx
@@ -438,7 +438,7 @@ toast("💰 +10p ansaittu!");
 // Upload progress
 <div className="relative">
   <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-    <div 
+    <div
       className="h-full bg-converto-blue transition-all"
       style={{ width: `${progress}%` }}
     />
@@ -459,12 +459,12 @@ toast("💰 +10p ansaittu!");
 - 📥 Export (CSV, PDF, Excel)
 
 **Converto:**
-✅ Dashboard KPI-kortit (staattisia)  
-✅ VAT breakdown -taulukko  
-❌ Ei trendikäyriä  
-❌ Ei "vs. last month" -vertailua  
-❌ Ei date picker:iä  
-❌ Ei CSV/PDF-export-nappeja  
+✅ Dashboard KPI-kortit (staattisia)
+✅ VAT breakdown -taulukko
+❌ Ei trendikäyriä
+❌ Ei "vs. last month" -vertailua
+❌ Ei date picker:iä
+❌ Ei CSV/PDF-export-nappeja
 
 **FIX:**
 ```bash
@@ -478,7 +478,7 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
   <LineChart data={monthlyData}>
     <XAxis dataKey="month" stroke="var(--text-secondary)" />
     <YAxis stroke="var(--text-secondary)" />
-    <Tooltip 
+    <Tooltip
       contentStyle={{
         backgroundColor: "var(--surface)",
         border: "1px solid var(--border)"
@@ -501,11 +501,11 @@ import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from "rec
 - 👆 Touch-optimoidut napit (min 44x44px)
 
 **Converto:**
-✅ PWA manifest  
-✅ Responsive design  
-❌ Ei Service Worker:ia  
-❌ Ei "Install app" -promptia  
-❌ Ei offline-tilaa  
+✅ PWA manifest
+✅ Responsive design
+❌ Ei Service Worker:ia
+❌ Ei "Install app" -promptia
+❌ Ei offline-tilaa
 
 **FIX:**
 ```tsx
@@ -545,11 +545,11 @@ useEffect(() => {
 - 📦 API documentation -portaali
 
 **Converto:**
-✅ AI/Vision adapter (tekninen)  
-✅ Zettle/POS-integraatio mainittu  
-❌ Ei Integrations-sivua  
-❌ Ei Zapier/Make-yhteyttä  
-❌ Ei API docs -portaalia (vain /docs-sivu)  
+✅ AI/Vision adapter (tekninen)
+✅ Zettle/POS-integraatio mainittu
+❌ Ei Integrations-sivua
+❌ Ei Zapier/Make-yhteyttä
+❌ Ei API docs -portaalia (vain /docs-sivu)
 
 **FIX:**
 ```tsx
@@ -579,10 +579,10 @@ useEffect(() => {
 - 📊 Custom dashboards
 
 **Converto:**
-✅ Settings/notifications  
-❌ Ei profile-sivua  
-❌ Ei avatar-uploadia  
-❌ Ei white-label-ominaisuutta (vaikka mainittu)  
+✅ Settings/notifications
+❌ Ei profile-sivua
+❌ Ei avatar-uploadia
+❌ Ei white-label-ominaisuutta (vaikka mainittu)
 
 ---
 
@@ -704,4 +704,3 @@ Converto on **teknisesti edellä**, mutta **markkinoinnillisesti ja UX:ltä** j�
 ---
 
 **Haluatko että toteutetaan TOP 5 quick win:it heti?** 🚀
-

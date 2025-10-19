@@ -17,5 +17,3 @@ async def guardian_review(payload: dict = Body(...)):
         "timestamp": datetime.now().isoformat(),
         "status": "ok",
     }
-
-

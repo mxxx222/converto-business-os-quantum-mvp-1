@@ -14,5 +14,3 @@ class GamifyEvent(Base):
     points = Column(Integer, nullable=False, default=0)
     meta = Column(JSON)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
-
-

@@ -8,10 +8,10 @@ interface UnifiedHeaderProps {
   showQuickReplies?: boolean;
 }
 
-export function UnifiedHeader({ 
-  title, 
+export function UnifiedHeader({
+  title,
   confidence = 0.92,
-  showQuickReplies = true 
+  showQuickReplies = true
 }: UnifiedHeaderProps) {
   return (
     <>
@@ -49,4 +49,3 @@ export function UnifiedHeader({
     </>
   );
 }
-

@@ -1,41 +1,32 @@
-# Python
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.egg-info/
-dist/
-build/
-.python-version
+# ignore everything by default
+*
 
-# Virtualenv
-.venv/
-venv/
-ENV/
+# allow only these roots
+!.gitignore
+!README.md
+!requirements.txt
+!pyproject.toml
+!start_backend.sh
+!start_frontend.sh
+!.pre-commit-config.yaml
 
-# Testing/coverage
-.pytest_cache/
-.mypy_cache/
-.coverage
-coverage.xml
-htmlcov/
+# allow code dirs
+!app/
+!frontend/
+!scripts/
 
-# Node/Next.js
-node_modules/
-.next/
-next-env.d.ts
-
-# Environment
-.env
-.env.*
-
-# Editors/OS
-.DS_Store
-.idea/
-.vscode/
-
-# Logs
+# inside allowed dirs, re-ignore heavy junk
+app/**/node_modules/
+app/**/.venv/
+app/**/__pycache__/
+app/**/dist/
+app/**/build/
+frontend/**/node_modules/
+frontend/**/.turbo/
+frontend/**/.next/
+frontend/**/dist/
+frontend/**/build/
+scripts/**/.venv/
+scripts/**/__pycache__/
 *.log
-logs/
-
-
+.DS_Store

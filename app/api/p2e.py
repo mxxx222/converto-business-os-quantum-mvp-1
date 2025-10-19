@@ -31,7 +31,11 @@ class RedeemIn(BaseModel):
 
 
 @router.get("/wallet", response_model=WalletOut)
-def get_wallet_endpoint(t: str = Query(..., alias="t"), u: str = Query(..., alias="u"), db: Session = Depends(get_session)):
+def get_wallet_endpoint(
+    t: str = Query(..., alias="t"),
+    u: str = Query(..., alias="u"),
+    db: Session = Depends(get_session),
+):
     balance = get_balance(db, tenant_id=t, user_id=u)
     return {"tenant_id": t, "user_id": u, "balance": balance}
 
@@ -56,4 +60,3 @@ def post_redeem(body: RedeemIn, db: Session = Depends(get_session)):
 @router.get("/quests")
 def get_quests(tenant_id: str = Query(...), db: Session = Depends(get_session)):
     return list_quests(db, tenant_id=tenant_id)
-

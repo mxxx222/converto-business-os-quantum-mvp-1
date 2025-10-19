@@ -2,6 +2,7 @@
 Enhanced OpenAI Vision-based receipt data extraction.
 Structured output with merchant, date, total, VAT, items, category.
 """
+
 import os
 import base64
 import json
@@ -25,16 +26,16 @@ PROMPT = (
 async def extract_receipt_data(file: UploadFile) -> Dict[str, Any]:
     """
     Extract structured data from receipt image using OpenAI Vision.
-    
+
     Args:
         file: Uploaded image file
-    
+
     Returns:
         Dict with merchant, date, total, vat, items, category, confidence
     """
     content = await file.read()
     img_b64 = base64.b64encode(content).decode()
-    
+
     payload = {
         "model": VISION_MODEL,
         "messages": [
@@ -46,21 +47,26 @@ async def extract_receipt_data(file: UploadFile) -> Dict[str, Any]:
                 "role": "user",
                 "content": [
                     {"type": "text", "text": PROMPT},
-                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"}},
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": f"data:image/jpeg;base64,{img_b64}"},
+                    },
                 ],
             },
         ],
         "temperature": 0,
     }
-    
+
     headers = {"Authorization": f"Bearer {OPENAI_API_KEY}"}
-    
+
     try:
         async with httpx.AsyncClient(timeout=120) as client:
-            r = await client.post("https://api.openai.com/v1/chat/completions", json=payload, headers=headers)
+            r = await client.post(
+                "https://api.openai.com/v1/chat/completions", json=payload, headers=headers
+            )
             r.raise_for_status()
             text = r.json()["choices"][0]["message"]["content"]
-        
+
         # Try parse JSON
         try:
             data = json.loads(text)
@@ -68,15 +74,15 @@ async def extract_receipt_data(file: UploadFile) -> Dict[str, Any]:
             # Fallback: strip code fence
             text = text.strip("` \n").replace("json\n", "")
             data = json.loads(text)
-        
+
         # Minimal normalization
         data.setdefault("currency", "EUR")
         data.setdefault("items", [])
         data.setdefault("merchant", "Tuntematon")
         data.setdefault("total", 0.0)
-        
+
         return data
-    
+
     except Exception as e:
         return {
             "merchant": "Virhe",
@@ -85,4 +91,3 @@ async def extract_receipt_data(file: UploadFile) -> Dict[str, Any]:
             "confidence": 0.0,
             "error": str(e),
         }
-

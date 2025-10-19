@@ -5,7 +5,23 @@ import hashlib
 from collections import Counter
 
 
-CODE_EXT = {".py", ".ts", ".tsx", ".js", ".java", ".kt", ".go", ".rs", ".cs", ".cpp", ".c", ".md", ".yaml", ".yml", ".toml"}
+CODE_EXT = {
+    ".py",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".java",
+    ".kt",
+    ".go",
+    ".rs",
+    ".cs",
+    ".cpp",
+    ".c",
+    ".md",
+    ".yaml",
+    ".yml",
+    ".toml",
+}
 INDEX_FILE = ".agent_index.json"
 
 
@@ -50,5 +66,3 @@ def build_or_load(root: str = "."):
         idx["built_at"] = int(time.time())
         idx_path.write_text(json.dumps(idx, ensure_ascii=False), encoding="utf-8")
     return idx
-
-

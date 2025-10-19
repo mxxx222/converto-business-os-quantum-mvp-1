@@ -19,7 +19,12 @@ def ensure_tables_created() -> None:
 def list_rewards(db: Session, tenant_id: str) -> List[Dict]:
     """List available rewards with stock > 0."""
     ensure_tables_created()
-    rewards = db.query(RewardCatalogItem).filter_by(tenant_id=tenant_id).filter(RewardCatalogItem.stock > 0).all()
+    rewards = (
+        db.query(RewardCatalogItem)
+        .filter_by(tenant_id=tenant_id)
+        .filter(RewardCatalogItem.stock > 0)
+        .all()
+    )
     return [
         {
             "id": str(r.id),
@@ -39,28 +44,39 @@ def redeem_reward(db: Session, tenant_id: str, user_id: str, reward_id: str) -> 
     Redeem a reward: check balance, burn tokens, decrement stock, record redemption.
     """
     ensure_tables_created()
-    
+
     # Find reward
     reward = db.query(RewardCatalogItem).filter_by(id=reward_id, tenant_id=tenant_id).first()
     if not reward:
         return False, {"error": "reward_not_found"}
-    
+
     if reward.stock <= 0:
         return False, {"error": "out_of_stock"}
-    
+
     # Check user balance
     balance = get_balance(db, tenant_id, user_id)
     if balance < reward.points_cost:
-        return False, {"error": "insufficient_balance", "balance": balance, "required": reward.points_cost}
-    
+        return False, {
+            "error": "insufficient_balance",
+            "balance": balance,
+            "required": reward.points_cost,
+        }
+
     # Burn tokens
-    ok, burn_data = burn(db, tenant_id, user_id, reward.points_cost, reason=f"redeem:{reward.name}", ref_id=str(reward.id))
+    ok, burn_data = burn(
+        db,
+        tenant_id,
+        user_id,
+        reward.points_cost,
+        reason=f"redeem:{reward.name}",
+        ref_id=str(reward.id),
+    )
     if not ok:
         return False, burn_data
-    
+
     # Decrement stock
     reward.stock -= 1
-    
+
     # Record redemption
     redemption = RedemptionRecord(
         tenant_id=tenant_id,
@@ -73,7 +89,7 @@ def redeem_reward(db: Session, tenant_id: str, user_id: str, reward_id: str) -> 
     db.add(redemption)
     db.commit()
     db.refresh(redemption)
-    
+
     return True, {
         "message": f"Lunastettu: {reward.name}",
         "redemption_id": str(redemption.id),
@@ -102,4 +118,3 @@ def list_redemptions(db: Session, tenant_id: str, user_id: str) -> List[Dict]:
         }
         for r in redemptions
     ]
-

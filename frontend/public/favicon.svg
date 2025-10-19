@@ -11,22 +11,21 @@
       <stop offset="100%" stop-color="#e0e7ff"/>
     </linearGradient>
   </defs>
-  
+
   <!-- Rounded square background -->
   <rect width="64" height="64" rx="14" fill="url(#bgGrad)"/>
-  
+
   <!-- "C" letter -->
-  <path d="M 38 16 
+  <path d="M 38 16
            A 16 16 0 1 1 38 48
            L 38 40
            A 8 8 0 1 0 38 24
-           L 38 16 Z" 
-        fill="url(#cGrad)" 
-        stroke="rgba(255,255,255,0.3)" 
+           L 38 16 Z"
+        fill="url(#cGrad)"
+        stroke="rgba(255,255,255,0.3)"
         stroke-width="1"/>
-  
+
   <!-- Sparkle accent -->
   <circle cx="48" cy="18" r="3" fill="#39FF14" opacity="0.8"/>
   <circle cx="52" cy="22" r="1.5" fill="#39FF14" opacity="0.6"/>
 </svg>
-

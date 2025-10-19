@@ -90,7 +90,7 @@ def tier_includes_module(tier_name: str, module_name: str) -> bool:
 def calculate_roi(module_name: str) -> Optional[Dict]:
     """
     Calculate ROI for a module
-    
+
     Returns:
         ROI data (time saved, value, cost, percentage)
     """
@@ -101,22 +101,21 @@ def calculate_roi(module_name: str) -> Optional[Dict]:
             "hourly_rate": 30,
             "monthly_value": 60,
             "cost": 9,
-            "roi_percent": 600
+            "roi_percent": 600,
         },
         "bank_sync": {
             "time_saved_hours": 4,
             "hourly_rate": 30,
             "monthly_value": 120,
             "cost": 15,
-            "roi_percent": 700
+            "roi_percent": 700,
         },
         "whatsapp_notify": {
             "retention_improvement": 0.20,
             "churn_reduction_value": 50,
             "cost": 9,
-            "roi_percent": 456
-        }
+            "roi_percent": 456,
+        },
     }
-    
-    return roi_data.get(module_name)
 
+    return roi_data.get(module_name)

@@ -161,4 +161,3 @@ export default function AIChatBubble({ enabled = false, quota }: AIChatBubblePro
     </>
   );
 }
-

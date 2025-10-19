@@ -76,4 +76,3 @@ export default function GlobalNavbar() {
     </nav>
   );
 }
-

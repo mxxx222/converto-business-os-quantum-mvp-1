@@ -9,5 +9,3 @@ export function useOcrResults(tenant?: string) {
   const { data, error, isLoading, mutate } = useSWR(`${base}/api/v1/ocr/results${qs}`, fetcher, { refreshInterval: 15000 });
   return { data: (data ?? []) as any[], error, isLoading, mutate };
 }
-
-

@@ -29,4 +29,3 @@ export function QuickReplies({ items }: QuickRepliesProps) {
     </div>
   );
 }
-

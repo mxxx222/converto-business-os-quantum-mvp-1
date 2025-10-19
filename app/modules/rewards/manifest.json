@@ -5,6 +5,3 @@
   "apis": ["/api/v1/rewards/*"],
   "permissions": ["protected"]
 }
-
-
-

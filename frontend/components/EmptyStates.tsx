@@ -156,4 +156,3 @@ export function DashboardEmpty() {
     </motion.div>
   );
 }
-

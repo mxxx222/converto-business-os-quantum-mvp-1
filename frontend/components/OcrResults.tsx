@@ -103,5 +103,3 @@ function avgPct(list: any[] = [], key: string) {
   return Math.round(100*vals.reduce((a:number,b:number)=>a+b,0)/vals.length);
 }
 function formatNum(v:any){ return typeof v==="number" ? v.toLocaleString("fi-FI") : v; }
-
-

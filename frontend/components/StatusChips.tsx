@@ -194,4 +194,3 @@ export function RiskFlag({ level }: { level: "low" | "medium" | "high" }) {
     </div>
   );
 }
-

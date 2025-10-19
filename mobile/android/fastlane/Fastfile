@@ -37,7 +37,7 @@ platform :android do
       task: "clean assembleRelease",
       project_dir: "app"
     )
-    
+
     puts "✅ APK built: app/build/outputs/apk/release/app-release.apk"
   end
 
@@ -75,4 +75,3 @@ platform :android do
     ) if ENV['SLACK_WEBHOOK_URL']
   end
 end
-

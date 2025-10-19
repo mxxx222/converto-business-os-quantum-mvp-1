@@ -272,7 +272,7 @@ scheduler.add_job(schedule_vat_reminders, "cron", day=1, hour=9)
 ### 1. Formula: VAT Calculation
 Add a formula property to Receipts database:
 
-**Property Name:** `VAT Amount`  
+**Property Name:** `VAT Amount`
 **Formula:**
 ```
 prop("Amount") * 0.24 / 1.24
@@ -287,16 +287,16 @@ prop("Amount") * 0.24 / 1.24
 ### 3. Rollup: Monthly Summary
 Add a rollup property:
 
-**Property Name:** `Monthly Total`  
-**Relation:** (self)  
-**Property:** Amount  
-**Calculate:** Sum  
+**Property Name:** `Monthly Total`
+**Relation:** (self)
+**Property:** Amount
+**Calculate:** Sum
 **Filter:** Date is within this month
 
 ### 4. Button: Mark as Reviewed
 Add a button property:
 
-**Property Name:** `Mark Reviewed`  
+**Property Name:** `Mark Reviewed`
 **Action:** Edit property → Status → "Reviewed"
 
 ---
@@ -408,4 +408,3 @@ Add a button property:
 ---
 
 **✅ Ready to automate your bookkeeping with Notion!**
-

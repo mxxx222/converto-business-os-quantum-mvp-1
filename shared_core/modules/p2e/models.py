@@ -37,4 +37,3 @@ class P2EQuest(Base):
     period = Column(String(32), nullable=False, default="weekly")  # daily|weekly|oneoff
     active = Column(Integer, nullable=False, default=1)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-

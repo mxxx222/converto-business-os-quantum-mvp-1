@@ -181,7 +181,7 @@ def on_ocr_success(user_id: str, receipt_data: dict):
 def on_invoice_paid(user_id: str, invoice_amount: float):
     # Award points based on invoice amount
     value = min(invoice_amount / 100, 5.0)  # Max 5 points per invoice
-    
+
     record_event(GamifyEventIn(
         user_id=user_id,
         category="finance",
@@ -197,7 +197,7 @@ def on_invoice_paid(user_id: str, invoice_amount: float):
 # In task management system
 def on_task_completed(user_id: str, task_priority: str):
     value_map = {"high": 3.0, "medium": 2.0, "low": 1.0}
-    
+
     record_event(GamifyEventIn(
         user_id=user_id,
         category="productivity",
@@ -213,7 +213,7 @@ def on_task_completed(user_id: str, task_priority: str):
 # In learning platform
 def on_lesson_completed(user_id: str, lesson_duration_minutes: int):
     value = lesson_duration_minutes / 30  # 1 point per 30 minutes
-    
+
     record_event(GamifyEventIn(
         user_id=user_id,
         category="learning",
@@ -252,11 +252,11 @@ export default function GamifyWallet({ userId }: { userId: string }) {
     async function fetchData() {
       const balanceRes = await fetch(`/api/v2/gamify/balance/${userId}`);
       const eventsRes = await fetch(`/api/v2/gamify/events/${userId}?limit=5`);
-      
+
       setBalance(await balanceRes.json());
       setEvents(await eventsRes.json());
     }
-    
+
     fetchData();
   }, [userId]);
 
@@ -457,4 +457,3 @@ with open("gamify_balances.json", "w") as f:
 ---
 
 **✅ Ready to optimize user behavior with AI-driven gamification!**
-

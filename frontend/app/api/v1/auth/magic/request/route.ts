@@ -10,7 +10,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_BASE || "http://localhost:8010";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    
+
     const response = await fetch(`${BACKEND_URL}/api/v1/auth/magic/request`, {
       method: "POST",
       headers: {
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     });
 
     const data = await response.json();
-    
+
     return NextResponse.json(data, { status: response.status });
   } catch (error) {
     console.error("Magic link request proxy error:", error);
@@ -30,5 +30,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-

@@ -5,4 +5,3 @@ export function formatDate(ts: number | string) {
 export function formatCurrency(amount: number, currency: string) {
   return new Intl.NumberFormat("fi-FI", { style: "currency", currency }).format(amount / 100);
 }
-

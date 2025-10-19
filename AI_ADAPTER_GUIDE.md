@@ -434,4 +434,3 @@ for receipt in receipts:
 ---
 
 **🧠 Converto™ - Your AI, Your Way**
-

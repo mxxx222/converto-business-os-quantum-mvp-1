@@ -200,18 +200,18 @@ async def stripe_webhook(request: Request):
         request.headers.get("stripe-signature"),
         os.getenv("STRIPE_WEBHOOK_SECRET")
     )
-    
+
     if event.type == "checkout.session.completed":
         session = event.data.object
         tenant_id = session.metadata["tenant_id"]
         price_id = session.line_items.data[0].price.id
-        
+
         # Map to tier/module
         tier = PRODUCT_MAP.get(price_id)
-        
+
         # Activate features
         activate_tier_features(tenant_id, tier)
-    
+
     return {"status": "ok"}
 ```
 
@@ -372,4 +372,3 @@ curl http://localhost:8000/api/v1/pricing/modules?tier=pro
 ---
 
 **✅ Ready to maximize revenue with smart pricing!**
-

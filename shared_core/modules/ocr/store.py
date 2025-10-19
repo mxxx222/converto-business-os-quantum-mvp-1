@@ -37,5 +37,3 @@ def list_results(db: Session, tenant_id: Optional[str], limit: int = 50, offset:
 
 def get_result(db: Session, result_id):
     return db.query(OcrResult).get(result_id)
-
-

@@ -21,5 +21,3 @@ async def forecast(days: int = Query(default=14)):
         "generatedAt": datetime.now().isoformat(),
         "status": "ok",
     }
-
-

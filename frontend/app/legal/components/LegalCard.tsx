@@ -62,4 +62,3 @@ export default function LegalCard({ rule }: { rule: LegalRule }) {
     </motion.div>
   );
 }
-

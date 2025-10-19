@@ -9,5 +9,3 @@ router = APIRouter(prefix="/api/v1/dev", tags=["dev"])
 @router.get("/manifests", dependencies=[Depends(admin_required)])
 def manifests():
     return [{"id": (v.get("id") or k), **v} for k, v in registry.manifests.items()]
-
-

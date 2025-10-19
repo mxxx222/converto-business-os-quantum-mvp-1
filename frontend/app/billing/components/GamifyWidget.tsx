@@ -33,4 +33,3 @@ export default function GamifyWidget({ tenant }: { tenant?: string }) {
     </div>
   );
 }
-

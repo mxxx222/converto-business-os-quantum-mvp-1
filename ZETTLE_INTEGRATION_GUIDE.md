@@ -4,8 +4,8 @@
 
 Integrate Zettle POS with Converto™ for seamless payment processing and automatic accounting.
 
-**Setup Time:** 1-2 hours  
-**Cost:** €0 (Starter) to €99/mo (Business)  
+**Setup Time:** 1-2 hours
+**Cost:** €0 (Starter) to €99/mo (Business)
 **Hardware:** iPad + Zettle Reader 2
 
 ---
@@ -111,7 +111,7 @@ Settings → Receipts
 ```
 Settings → Users
 → Add staff members
-→ Permissions: 
+→ Permissions:
   - Cashier: Take payments only
   - Manager: Take payments + reports
   - Admin: Full access
@@ -233,7 +233,7 @@ https://developer.zettle.com
 → My Apps → Create App
 → Name: Converto Integration
 → Redirect URI: https://app.converto.fi/integrations/zettle/callback
-→ Scopes: 
+→ Scopes:
   - READ:PURCHASE
   - READ:PRODUCT
   - READ:FINANCE
@@ -365,17 +365,17 @@ ZETTLE_CSV_MAPPING = {
 def parse_zettle_csv(file_path: str) -> list:
     """
     Parse Zettle CSV export
-    
+
     Returns list of transactions
     """
     import csv
     from datetime import datetime
-    
+
     transactions = []
-    
+
     with open(file_path, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
-        
+
         for row in reader:
             # Parse transaction
             transaction = {
@@ -396,9 +396,9 @@ def parse_zettle_csv(file_path: str) -> list:
                 "staff": row["Staff"],
                 "refund": float(row["Refund Amount"]) if row["Refund Amount"] else 0
             }
-            
+
             transactions.append(transaction)
-    
+
     return transactions
 ```
 
@@ -425,11 +425,11 @@ class ZettleAPI:
             "Authorization": f"Bearer {access_token}",
             "Content-Type": "application/json"
         }
-    
+
     def get_purchases(self, start_date: datetime, end_date: datetime):
         """
         Fetch purchases in date range
-        
+
         API: GET /purchases/v2
         """
         with httpx.Client() as client:
@@ -445,11 +445,11 @@ class ZettleAPI:
             )
             r.raise_for_status()
             return r.json()["purchases"]
-    
+
     def get_products(self):
         """
         Fetch all products
-        
+
         API: GET /organizations/self/products
         """
         with httpx.Client() as client:
@@ -460,11 +460,11 @@ class ZettleAPI:
             )
             r.raise_for_status()
             return r.json()["products"]
-    
+
     def get_payouts(self, start_date: datetime):
         """
         Fetch payouts (for fee reconciliation)
-        
+
         API: GET /organizations/self/accounts/balance/transactions
         """
         with httpx.Client() as client:
@@ -484,28 +484,28 @@ class ZettleAPI:
 def sync_purchases(db: Session, zettle: ZettleAPI):
     """
     Sync purchases from Zettle to Converto
-    
+
     Runs every 5 minutes via cron
     """
     # Get purchases from last 24h (to catch any delayed syncs)
     start = datetime.now() - timedelta(days=1)
     end = datetime.now()
-    
+
     purchases = zettle.get_purchases(start, end)
-    
+
     synced = 0
     skipped = 0
-    
+
     for purchase in purchases:
         # Check if already imported (idempotent)
         existing = db.query(Transaction).filter(
             Transaction.external_id == purchase["globalPurchaseId"]
         ).first()
-        
+
         if existing:
             skipped += 1
             continue
-        
+
         # Parse and save
         transaction = Transaction(
             external_id=purchase["globalPurchaseId"],
@@ -518,12 +518,12 @@ def sync_purchases(db: Session, zettle: ZettleAPI):
             items=purchase["products"],
             raw_data=purchase
         )
-        
+
         db.add(transaction)
         synced += 1
-    
+
     db.commit()
-    
+
     return {"synced": synced, "skipped": skipped}
 ```
 
@@ -554,7 +554,7 @@ router = APIRouter(prefix="/api/v1/integrations/zettle", tags=["zettle"])
 def init_oauth():
     """
     Initialize OAuth flow
-    
+
     Redirects user to Zettle authorization page
     """
     auth_url = (
@@ -564,14 +564,14 @@ def init_oauth():
         f"&redirect_uri={os.getenv('ZETTLE_REDIRECT_URI')}"
         f"&scope=READ:PURCHASE READ:PRODUCT READ:FINANCE"
     )
-    
+
     return {"auth_url": auth_url}
 
 @router.get("/oauth/callback")
 async def oauth_callback(code: str, db: Session = Depends(get_db)):
     """
     Handle OAuth callback
-    
+
     Exchanges code for access token
     """
     # Exchange code for token
@@ -588,7 +588,7 @@ async def oauth_callback(code: str, db: Session = Depends(get_db)):
         )
         r.raise_for_status()
         token_data = r.json()
-    
+
     # Save token to database
     integration = Integration(
         provider="zettle",
@@ -596,31 +596,31 @@ async def oauth_callback(code: str, db: Session = Depends(get_db)):
         refresh_token=token_data.get("refresh_token"),
         expires_at=datetime.now() + timedelta(seconds=token_data["expires_in"])
     )
-    
+
     db.add(integration)
     db.commit()
-    
+
     return {"status": "connected", "redirect": "/settings/integrations"}
 
 @router.post("/sync")
 async def manual_sync(db: Session = Depends(get_db)):
     """
     Manually trigger sync
-    
+
     Fetches latest purchases from Zettle
     """
     # Get token
     integration = db.query(Integration).filter(
         Integration.provider == "zettle"
     ).first()
-    
+
     if not integration:
         raise HTTPException(404, "Zettle not connected")
-    
+
     # Sync
     zettle = ZettleAPI(integration.access_token)
     result = sync_purchases(db, zettle)
-    
+
     return result
 ```
 
@@ -637,13 +637,13 @@ import { useEffect, useState } from "react";
 
 export default function ZettleWidget() {
   const [stats, setStats] = useState(null);
-  
+
   useEffect(() => {
     fetch("/api/v1/integrations/zettle/stats")
       .then(r => r.json())
       .then(setStats);
   }, []);
-  
+
   return (
     <div className="p-6 bg-white rounded-2xl border shadow-sm">
       <div className="flex items-center justify-between mb-4">
@@ -652,7 +652,7 @@ export default function ZettleWidget() {
           Synced
         </span>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-4">
         <div>
           <div className="text-sm text-gray-500">Tänään</div>
@@ -660,21 +660,21 @@ export default function ZettleWidget() {
             {stats?.today_sales || 0} €
           </div>
         </div>
-        
+
         <div>
           <div className="text-sm text-gray-500">Transaktiot</div>
           <div className="text-2xl font-bold">
             {stats?.today_count || 0}
           </div>
         </div>
-        
+
         <div>
           <div className="text-sm text-gray-500">Keskiostos</div>
           <div className="text-xl font-semibold">
             {stats?.avg_ticket || 0} €
           </div>
         </div>
-        
+
         <div>
           <div className="text-sm text-gray-500">Tipit</div>
           <div className="text-xl font-semibold text-green-600">
@@ -682,7 +682,7 @@ export default function ZettleWidget() {
           </div>
         </div>
       </div>
-      
+
       <button
         onClick={() => fetch("/api/v1/integrations/zettle/sync", {method: "POST"})}
         className="mt-4 w-full py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
@@ -852,4 +852,3 @@ Settings → Receipt Template
 ---
 
 **💳 Ready to Accept Payments with Converto™!**
-

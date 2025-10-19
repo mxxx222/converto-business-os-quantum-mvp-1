@@ -10,5 +10,3 @@ def test_diff_and_apply(tmp_path):
     out = apply_change(ApplyIn(file_path=str(f), content="new\n"))
     assert out.written == len("new\n".encode("utf-8"))
     assert Path(str(f) + ".bak").exists()
-
-

@@ -117,4 +117,3 @@ platform :ios do
     ) if ENV['SLACK_WEBHOOK_URL']
   end
 end
-

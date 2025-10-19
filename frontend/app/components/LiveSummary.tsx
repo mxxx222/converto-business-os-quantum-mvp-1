@@ -19,7 +19,7 @@ export default function LiveSummary() {
           </span>
         </div>
       </div>
-      
+
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <div className="p-4 rounded-xl bg-white border border-gray-100">
           <h3 className="font-semibold text-gray-900 mb-2">Profiilointi</h3>
@@ -38,7 +38,7 @@ export default function LiveSummary() {
             </li>
           </ul>
         </div>
-        
+
         <div className="p-4 rounded-xl bg-white border border-gray-100">
           <h3 className="font-semibold text-gray-900 mb-2">Tarjousstrategia</h3>
           <div className="space-y-2 text-sm">
@@ -57,7 +57,7 @@ export default function LiveSummary() {
           </div>
         </div>
       </div>
-      
+
       <div className="flex gap-3">
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -77,4 +77,3 @@ export default function LiveSummary() {
     </motion.div>
   );
 }
-

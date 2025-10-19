@@ -14,5 +14,3 @@ async def get_quantum_status():
         "timestamp": datetime.now().isoformat(),
         "status": "operational",
     }
-
-

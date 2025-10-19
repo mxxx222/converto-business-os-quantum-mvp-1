@@ -374,4 +374,3 @@ python -c "from app.core.db import engine; print(engine.connect())"
 ---
 
 **✅ Ready to deploy Converto 2.0 to production!**
-

@@ -8,24 +8,44 @@ from app.services.index import build_or_load, tokenize
 
 router = APIRouter(prefix="/api/v2/search", tags=["search"])
 
-CODE_EXT = {".py", ".ts", ".tsx", ".js", ".java", ".kt", ".go", ".rs", ".cs", ".cpp", ".c", ".md", ".yaml", ".yml", ".toml"}
+CODE_EXT = {
+    ".py",
+    ".ts",
+    ".tsx",
+    ".js",
+    ".java",
+    ".kt",
+    ".go",
+    ".rs",
+    ".cs",
+    ".cpp",
+    ".c",
+    ".md",
+    ".yaml",
+    ".yml",
+    ".toml",
+}
+
 
 class Hit(BaseModel):
     path: str
     score: float
 
+
 class SearchOut(BaseModel):
     results: list[Hit]
+
 
 def score(query_tokens, doc_tokens):
     q = Counter(query_tokens)
     d = Counter(doc_tokens)
-    qnorm = math.sqrt(sum(v*v for v in q.values()))
-    dnorm = math.sqrt(sum(v*v for v in d.values()))
+    qnorm = math.sqrt(sum(v * v for v in q.values()))
+    dnorm = math.sqrt(sum(v * v for v in d.values()))
     if qnorm == 0 or dnorm == 0:
         return 0.0
-    dot = sum(q[t]*d.get(t,0) for t in q)
-    return dot/(qnorm*dnorm)
+    dot = sum(q[t] * d.get(t, 0) for t in q)
+    return dot / (qnorm * dnorm)
+
 
 @router.get("/code", response_model=SearchOut)
 def code(q: str = Query(...), k: int = 5, root: str = "."):
@@ -41,9 +61,11 @@ def code(q: str = Query(...), k: int = 5, root: str = "."):
     track_event("search.code", {"q": q, "k": k, "root": root})
     return SearchOut(results=hits[:k])
 
+
 class ReindexOut(BaseModel):
     files_indexed: int
     built_at: int
+
 
 @router.post("/reindex", response_model=ReindexOut)
 def reindex(root: str = "."):

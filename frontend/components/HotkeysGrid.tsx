@@ -5,15 +5,15 @@
 
 "use client";
 import { motion } from "framer-motion";
-import { 
-  Receipt, 
-  Calculator, 
-  Share2, 
-  Calendar, 
+import {
+  Receipt,
+  Calculator,
+  Share2,
+  Calendar,
   FileText,
   Send,
   CheckCircle,
-  Sparkles 
+  Sparkles
 } from "lucide-react";
 import { useSfx } from "@/hooks/useSfx";
 
@@ -27,63 +27,63 @@ interface HotkeyAction {
 }
 
 const HOTKEY_ACTIONS: HotkeyAction[] = [
-  { 
-    id: "ocr", 
-    label: "Skannaa kuitti", 
-    icon: Receipt, 
+  {
+    id: "ocr",
+    label: "Skannaa kuitti",
+    icon: Receipt,
     action: "ocr.upload",
     kbd: "⇧O",
     color: "from-blue-500 to-indigo-600"
   },
-  { 
-    id: "vat", 
-    label: "Laske ALV", 
-    icon: Calculator, 
+  {
+    id: "vat",
+    label: "Laske ALV",
+    icon: Calculator,
     action: "vat.calc",
     kbd: "⇧V",
     color: "from-green-500 to-emerald-600"
   },
-  { 
-    id: "notion", 
-    label: "Lähetä Notioniin", 
-    icon: Sparkles, 
+  {
+    id: "notion",
+    label: "Lähetä Notioniin",
+    icon: Sparkles,
     action: "notion.upsert",
     color: "from-purple-500 to-pink-600"
   },
-  { 
-    id: "share", 
-    label: "Jaa WhatsApp", 
-    icon: Share2, 
+  {
+    id: "share",
+    label: "Jaa WhatsApp",
+    icon: Share2,
     action: "wa.share",
     color: "from-emerald-500 to-teal-600"
   },
-  { 
-    id: "task", 
-    label: "Lisää kalenteriin", 
-    icon: Calendar, 
+  {
+    id: "task",
+    label: "Lisää kalenteriin",
+    icon: Calendar,
     action: "notion.calendar",
     kbd: "⇧C",
     color: "from-orange-500 to-red-600"
   },
-  { 
-    id: "report", 
-    label: "Viikkoraportti", 
-    icon: FileText, 
+  {
+    id: "report",
+    label: "Viikkoraportti",
+    icon: FileText,
     action: "reports.weekly",
     kbd: "⇧R",
     color: "from-cyan-500 to-blue-600"
   },
-  { 
-    id: "send", 
-    label: "Lähetä lasku", 
-    icon: Send, 
+  {
+    id: "send",
+    label: "Lähetä lasku",
+    icon: Send,
     action: "invoice.send",
     color: "from-violet-500 to-purple-600"
   },
-  { 
-    id: "confirm", 
-    label: "Merkitse maksetuksi", 
-    icon: CheckCircle, 
+  {
+    id: "confirm",
+    label: "Merkitse maksetuksi",
+    icon: CheckCircle,
     action: "invoice.paid",
     color: "from-lime-500 to-green-600"
   }
@@ -102,10 +102,10 @@ export default function HotkeysGrid({ onAction, context = "dashboard" }: Hotkeys
     if (navigator.vibrate) {
       navigator.vibrate(10);
     }
-    
+
     // Sound effect
     play("click");
-    
+
     // Execute action
     onAction(actionId);
   };
@@ -115,7 +115,7 @@ export default function HotkeysGrid({ onAction, context = "dashboard" }: Hotkeys
     if (navigator.vibrate) {
       navigator.vibrate([10, 50, 10]);
     }
-    
+
     // Show options menu
     onAction(`${actionId}-options`);
   };
@@ -147,7 +147,7 @@ export default function HotkeysGrid({ onAction, context = "dashboard" }: Hotkeys
         >
           {/* Gradient background on hover */}
           <div className={`absolute inset-0 bg-gradient-to-br ${item.color || "from-gray-400 to-gray-600"} opacity-0 group-hover:opacity-10 transition-opacity`} />
-          
+
           {/* Icon */}
           <div className="flex items-start justify-between mb-2">
             <item.icon className="w-6 h-6 text-gray-700 group-hover:text-gray-900" />
@@ -157,7 +157,7 @@ export default function HotkeysGrid({ onAction, context = "dashboard" }: Hotkeys
               </kbd>
             )}
           </div>
-          
+
           {/* Label */}
           <div className="text-sm font-medium text-gray-800 text-left">
             {item.label}
@@ -167,4 +167,3 @@ export default function HotkeysGrid({ onAction, context = "dashboard" }: Hotkeys
     </div>
   );
 }
-

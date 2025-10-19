@@ -12,19 +12,19 @@ export default function OCRDropzone({ onResult }: { onResult: (r: any) => void }
     form.append("file", file);
     form.append("tenant_id", "t_demo");
     form.append("user_id", "u_demo");
-    
+
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/v1/ocr/scan`, {
         method: "POST",
         body: form,
       });
-      
+
       if (!res.ok) {
         setErr(await res.text());
         setLoading(false);
         return;
       }
-      
+
       const data = await res.json();
       setLoading(false);
       onResult(data.result);
@@ -59,4 +59,3 @@ export default function OCRDropzone({ onResult }: { onResult: (r: any) => void }
     </div>
   );
 }
-

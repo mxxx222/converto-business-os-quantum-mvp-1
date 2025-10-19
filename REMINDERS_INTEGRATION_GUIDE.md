@@ -435,4 +435,3 @@ curl http://localhost:8000/api/v1/reminders/logs
 ---
 
 **✅ Ready to never miss a deadline again!**
-

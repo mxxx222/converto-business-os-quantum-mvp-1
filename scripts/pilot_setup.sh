@@ -171,4 +171,3 @@ echo "3. Monitor usage: ${FRONTEND_URL}/admin/economy"
 echo "4. Schedule feedback call (Week 1)"
 echo "5. Track metrics in PILOT_CHECKLIST.md"
 echo ""
-

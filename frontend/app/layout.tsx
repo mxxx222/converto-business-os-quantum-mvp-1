@@ -24,13 +24,13 @@ export default function RootLayout({
         <Providers>
           {/* Global Navigation */}
           <GlobalNavbar />
-          
+
           {/* Command Palette (⌘K) */}
           <CommandPalette />
-          
+
           {/* Toast Notifications */}
           <Toaster richColors position="top-right" />
-          
+
           {/* Main Content */}
           {children}
         </Providers>

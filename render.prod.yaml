@@ -113,4 +113,3 @@ services:
         fromDatabase:
           name: converto-db
           property: connectionString
-

@@ -34,7 +34,7 @@ Secondary:   #94a3b8  (Slate - Secondary text)
 ## 📸 Screenshot Concepts (6 Required)
 
 ### Screenshot 1: OCR Scanning
-**Headline:** "Älykkäin kuittiskannaus Suomessa"  
+**Headline:** "Älykkäin kuittiskannaus Suomessa"
 **Subtext:** "Skannaa, tallenna ja valmis – ALV laskettu automaattisesti."
 
 **Visual Elements:**
@@ -49,7 +49,7 @@ Secondary:   #94a3b8  (Slate - Secondary text)
 ---
 
 ### Screenshot 2: VAT Calculator
-**Headline:** "ALV ja raportointi automaattisesti"  
+**Headline:** "ALV ja raportointi automaattisesti"
 **Subtext:** "Vero.fi-tietojen mukainen automaattinen laskenta."
 
 **Visual Elements:**
@@ -64,7 +64,7 @@ Secondary:   #94a3b8  (Slate - Secondary text)
 ---
 
 ### Screenshot 3: Gamification
-**Headline:** "Gamify – tee säästämisestä peli"  
+**Headline:** "Gamify – tee säästämisestä peli"
 **Subtext:** "Palkitse itseäsi säästöistä ja rutiineista."
 
 **Visual Elements:**
@@ -79,7 +79,7 @@ Secondary:   #94a3b8  (Slate - Secondary text)
 ---
 
 ### Screenshot 4: Billing
-**Headline:** "Laskutus ja maksut sekunnissa"  
+**Headline:** "Laskutus ja maksut sekunnissa"
 **Subtext:** "Turvallinen maksu ja lasku yhdellä napilla."
 
 **Visual Elements:**
@@ -94,7 +94,7 @@ Secondary:   #94a3b8  (Slate - Secondary text)
 ---
 
 ### Screenshot 5: Legal Compliance
-**Headline:** "Lakimuutokset automaattisesti päivitettynä"  
+**Headline:** "Lakimuutokset automaattisesti päivitettynä"
 **Subtext:** "Pysy aina lain tasalla – AI tarkistaa säännökset puolestasi."
 
 **Visual Elements:**
@@ -109,7 +109,7 @@ Secondary:   #94a3b8  (Slate - Secondary text)
 ---
 
 ### Screenshot 6: Dashboard Overview
-**Headline:** "Kaikki yrityksen hallinta samassa"  
+**Headline:** "Kaikki yrityksen hallinta samassa"
 **Subtext:** "Converto Business OS yhdistää kaiken yhdelle näytölle."
 
 **Visual Elements:**
@@ -213,7 +213,7 @@ Effect: Subtle glow around symbol
 ## 📝 Store Listing Copy
 
 ### App Name
-**Primary:** Converto Business OS  
+**Primary:** Converto Business OS
 **Short:** Converto
 
 ### Subtitle (iOS, 30 chars)
@@ -233,32 +233,32 @@ kuittiskannaus,yritys,ALV,tekoäly,kirjanpito,automaatio,laskutus,suomi,business
 
 ### Full Description (4000 chars max)
 ```
-Tuo tekoäly yrityksesi arkeen. Converto Business OS helpottaa kirjanpitoa, 
+Tuo tekoäly yrityksesi arkeen. Converto Business OS helpottaa kirjanpitoa,
 laskutusta ja päätöksentekoa automaation voimalla.
 
 ✨ OMINAISUUDET
 
 🧾 Älykäs kuittiskannaus
-Skannaa kuitit kameralla tai lataa kuvia. Tekoäly tunnistaa automaattisesti 
+Skannaa kuitit kameralla tai lataa kuvia. Tekoäly tunnistaa automaattisesti
 kauppiaan, summan, ALV:n ja tuoterivit.
 
 🧮 Automaattinen ALV-laskenta
-Suomen verosäännöt sisäänrakennettuna. Saat oikeat ALV-prosentit ja 
+Suomen verosäännöt sisäänrakennettuna. Saat oikeat ALV-prosentit ja
 yhteenvedot automaattisesti.
 
 📊 Reaaliaikaiset analytiikkat
-Seuraa myyntiä, kuluja, ROI:ta ja kassavirtaa reaaliajassa. Exportoi 
+Seuraa myyntiä, kuluja, ROI:ta ja kassavirtaa reaaliajassa. Exportoi
 raportit PDF/CSV-muodossa.
 
 ⚖️ Lakisääteinen compliance
-Integroitu Finlex-tietokanta pitää sinut ajan tasalla Suomen 
+Integroitu Finlex-tietokanta pitää sinut ajan tasalla Suomen
 liiketoimintasäädöksistä.
 
 💳 Laskutus ja maksut
 Stripe-integraatio mahdollistaa nopeat maksut ja tilausten hallinnan.
 
 🎮 Gamification
-Ansaitse pisteitä ja palkintoja hyvistä liiketoimintatavoista. 
+Ansaitse pisteitä ja palkintoja hyvistä liiketoimintatavoista.
 Streak-bonukset ja tiimikampanjat.
 
 🚀 MIKSI CONVERTO?
@@ -472,4 +472,3 @@ converto_promo_video.mp4
 **✅ Ready to create stunning store visuals! Follow this guide for maximum approval rate.**
 
 **Need help?** Contact: support@converto.fi
-

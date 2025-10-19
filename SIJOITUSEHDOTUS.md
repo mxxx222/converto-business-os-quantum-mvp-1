@@ -2,9 +2,9 @@
 
 ## Yhteenveto
 
-**Tavoite:** Kerää alkupääoma tuotteen lanseeraukseen ja markkinointiin  
-**Maksimi luovutettava osuus:** 30%  
-**Perustajan osuus (sinä):** 70% (vähintään)  
+**Tavoite:** Kerää alkupääoma tuotteen lanseeraukseen ja markkinointiin
+**Maksimi luovutettava osuus:** 30%
+**Perustajan osuus (sinä):** 70% (vähintään)
 **Kierros:** Pre-seed / Angel / Friends & Family
 
 ---
@@ -617,4 +617,3 @@ yritysautomaatio-alustaa!
 **Onnea sijoittajien etsintään! 🚀💰**
 
 **Questions?** info@converto.fi
-

@@ -325,21 +325,21 @@ Once everything is stable:
 1. **Email beta users:**
    ```
    Subject: 🚀 Converto™ 2.0 is Live!
-   
+
    We're excited to announce that Converto™ Business OS 2.0
    is now live and ready for you to use!
-   
+
    Login: https://app.converto.fi
-   
+
    New features:
    - Self-learning AI (gets smarter over time)
    - 100% local option (GDPR-compliant)
    - Mobile apps (iOS + Android)
    - Command Palette (⌘K shortcuts)
-   
+
    Questions? Reply to this email or book a demo:
    https://calendly.com/converto-demo
-   
+
    Kiitos!
    Converto Team
    ```
@@ -354,4 +354,3 @@ Once everything is stable:
 ---
 
 **🚀 Congratulations - You're Live!**
-

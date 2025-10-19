@@ -45,7 +45,7 @@ else
     ((FAIL++))
 fi
 
-# Test 4: Gamify endpoint  
+# Test 4: Gamify endpoint
 echo "Test 4: Gamify API..."
 if curl -s "http://localhost:8000/api/v1/gamify/summary?tenant_id=demo&user_id=user_demo&days=7" > /dev/null 2>&1; then
     echo -e "${GREEN}✅ Gamify API responds${NC}"
@@ -98,4 +98,3 @@ else
     echo "  Frontend: cd frontend && npm run dev"
     exit 1
 fi
-

@@ -33,4 +33,3 @@ class RewardRedemption(Base):
     status = Column(Enum(RewardStatus), nullable=False, default=RewardStatus.reserved)
     meta = Column(JSON)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), index=True)
-

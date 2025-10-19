@@ -50,4 +50,3 @@ echo "Pysäytä palvelut:"
 echo "  kill $BACKEND_PID $FRONTEND_PID"
 echo ""
 echo "🎉 Onnea matkaan!"
-

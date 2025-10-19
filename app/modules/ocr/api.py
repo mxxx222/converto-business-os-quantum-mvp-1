@@ -11,6 +11,3 @@ async def scan(file: UploadFile = File(...)):
         "text": "[stub] OCR result text",
         "confidence": 0.93,
     }
-
-
-

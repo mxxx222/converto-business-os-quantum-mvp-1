@@ -21,7 +21,7 @@ export default function LogosBar() {
             className="flex items-center justify-center h-16 px-4 opacity-60 hover:opacity-100 transition-opacity"
           >
             <div className="text-center">
-              <div 
+              <div
                 className="text-2xl font-bold mb-1"
                 style={{ color: logo.color }}
               >
@@ -37,4 +37,3 @@ export default function LogosBar() {
     </div>
   );
 }
-

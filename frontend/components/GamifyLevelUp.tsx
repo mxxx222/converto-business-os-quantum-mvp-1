@@ -22,7 +22,7 @@ export default function GamifyLevelUp({ show, level, onClose }: GamifyLevelUpPro
     if (show) {
       // Play level up sound
       play("levelup");
-      
+
       // Haptic feedback (if supported)
       if (navigator.vibrate) {
         navigator.vibrate([100, 50, 100, 50, 200]);
@@ -112,4 +112,3 @@ export default function GamifyLevelUp({ show, level, onClose }: GamifyLevelUpPro
     </AnimatePresence>
   );
 }
-

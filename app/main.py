@@ -1,4 +1,3 @@
-
 from fastapi import FastAPI
 import os
 import sentry_sdk
@@ -101,15 +100,19 @@ registry.load_all(app)
 
 # Start ML retraining scheduler (every 24h)
 from app.ml.retrain import schedule_retraining
+
 schedule_retraining(interval_hours=24)
 
 # Start reminder scheduler (background thread)
 from app.modules.reminders.scheduler import start_scheduler
+
 start_scheduler(interval_seconds=60)
+
 
 @app.get("/")
 def root():
     return {"ok": True, "name": "Converto Business OS – Quantum Edition (MVP+)"}
+
 
 # simple insights demo endpoint
 ins = APIRouter(prefix="/api/v1/insights", tags=["insights"])

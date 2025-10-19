@@ -1,7 +1,7 @@
 # ✅ RENDER DEPLOYMENT CHECKLIST
 
-**Converto™ Business OS MVP**  
-**Target**: Production-ready deployment  
+**Converto™ Business OS MVP**
+**Target**: Production-ready deployment
 **Time**: ~30 min
 
 ---
@@ -224,12 +224,12 @@ curl -X POST https://api.converto.fi/api/v1/auth/magic/request \
 
 ## 🎉 **SUCCESS CRITERIA**
 
-✅ **Backend**: Käynnissä, health check OK, database yhdistetty  
-✅ **Frontend**: Käynnissä, kaikki sivut latautuvat, API-yhteys toimii  
-✅ **Auth**: Magic Link ja TOTP-lomakkeet näkyvät  
-✅ **UI**: Premium UI yhtenäinen kaikilla sivuilla  
-✅ **Themes**: Dark/Light toimivat  
-✅ **i18n**: FI/EN/RU vaihtuvat  
+✅ **Backend**: Käynnissä, health check OK, database yhdistetty
+✅ **Frontend**: Käynnissä, kaikki sivut latautuvat, API-yhteys toimii
+✅ **Auth**: Magic Link ja TOTP-lomakkeet näkyvät
+✅ **UI**: Premium UI yhtenäinen kaikilla sivuilla
+✅ **Themes**: Dark/Light toimivat
+✅ **i18n**: FI/EN/RU vaihtuvat
 
 ---
 
@@ -258,14 +258,14 @@ curl -X POST https://api.converto.fi/api/v1/auth/magic/request \
 
 ## 📞 **TUKI**
 
-**Render Docs**: https://render.com/docs  
-**Converto Docs**: `docs/ENV_REQUIREMENTS_MVP.md`  
+**Render Docs**: https://render.com/docs
+**Converto Docs**: `docs/ENV_REQUIREMENTS_MVP.md`
 **Support**: support@converto.fi
 
 ---
 
-**DEPLOYMENT TIME**: ~30 min  
-**MONTHLY COST**: $14-21 (Starter plan x2 + PostgreSQL)  
-**UPTIME**: 99.9%  
+**DEPLOYMENT TIME**: ~30 min
+**MONTHLY COST**: $14-21 (Starter plan x2 + PostgreSQL)
+**UPTIME**: 99.9%
 
 **VALMIS! 🚀**

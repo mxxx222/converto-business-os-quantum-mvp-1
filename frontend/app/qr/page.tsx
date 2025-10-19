@@ -64,7 +64,7 @@ export default function QRLandingPage() {
             Tervetuloa Convertoon!
           </h1>
           <p className="text-gray-600 text-sm leading-relaxed">
-            Automaattinen kuittien käsittely ja ALV-laskenta yrittäjille. 
+            Automaattinen kuittien käsittely ja ALV-laskenta yrittäjille.
             Säästä aikaa ja vähennä virheitä.
           </p>
         </div>
@@ -108,14 +108,14 @@ export default function QRLandingPage() {
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-6 text-white text-center mb-6">
           <h3 className="text-lg font-bold mb-2">Aloita heti</h3>
           <p className="text-blue-100 text-sm mb-4">
-            {process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true' 
+            {process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true'
               ? 'Rekisteröidy ja käsittele ensimmäinen kuitti ilmaiseksi'
               : 'Ilmoittautuminen alkaa 5-6 päivän kuluttua'
             }
           </p>
           <Link href="/register">
             <button className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors">
-              {process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true' 
+              {process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true'
                 ? 'Ilmoittaudu nyt'
                 : 'Ilmoittautuminen alkaa pian'
               }

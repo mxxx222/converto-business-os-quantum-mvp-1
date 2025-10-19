@@ -40,7 +40,9 @@ def load_weights() -> Dict[str, int]:
     return _weights_cache
 
 
-def compute_event_id(tenant_id: Optional[str], kind: str, user_id: Optional[str], meta: Optional[Dict]) -> str:
+def compute_event_id(
+    tenant_id: Optional[str], kind: str, user_id: Optional[str], meta: Optional[Dict]
+) -> str:
     """Generate deterministic event_id for idempotency (e.g., webhook deduplication)."""
     base = f"{tenant_id}|{kind}|{user_id}|{meta.get('external_id') if meta else ''}"
     return hashlib.sha256(base.encode()).hexdigest()[:16]
@@ -61,15 +63,25 @@ def record_event(
     ensure_tables_created()
     weights = load_weights()
     pts = int(points if points is not None else weights.get(kind, 5))
-    
+
     # Idempotency check
     eid = event_id or compute_event_id(tenant_id, kind, user_id, meta)
-    existing = db.query(GamifyEvent).filter_by(tenant_id=tenant_id, kind=kind, user_id=user_id).filter(
-        func.substr(GamifyEvent.id.cast(db.bind.dialect.name == "postgresql" and "text" or "varchar"), 1, 16) == eid[:16]
-    ).first()
+    existing = (
+        db.query(GamifyEvent)
+        .filter_by(tenant_id=tenant_id, kind=kind, user_id=user_id)
+        .filter(
+            func.substr(
+                GamifyEvent.id.cast(db.bind.dialect.name == "postgresql" and "text" or "varchar"),
+                1,
+                16,
+            )
+            == eid[:16]
+        )
+        .first()
+    )
     if existing:
         return None  # duplicate
-    
+
     ev = GamifyEvent(tenant_id=tenant_id, user_id=user_id, kind=kind, points=pts, meta=meta or {})
     db.add(ev)
     db.commit()
@@ -77,23 +89,29 @@ def record_event(
     return ev
 
 
-def compute_streak(db: Session, tenant_id: Optional[str], user_id: Optional[str], days: int = 30) -> int:
+def compute_streak(
+    db: Session, tenant_id: Optional[str], user_id: Optional[str], days: int = 30
+) -> int:
     """
     Calculate consecutive days with at least one event, counting backwards from today.
     """
     ensure_tables_created()
     since = datetime.utcnow() - timedelta(days=days)
-    q = db.query(func.date(GamifyEvent.created_at).label("d")).filter(GamifyEvent.created_at >= since)
+    q = db.query(func.date(GamifyEvent.created_at).label("d")).filter(
+        GamifyEvent.created_at >= since
+    )
     if tenant_id:
         q = q.filter(GamifyEvent.tenant_id == tenant_id)
     if user_id:
         q = q.filter(GamifyEvent.user_id == user_id)
-    q = q.group_by(func.date(GamifyEvent.created_at)).order_by(func.date(GamifyEvent.created_at).desc())
+    q = q.group_by(func.date(GamifyEvent.created_at)).order_by(
+        func.date(GamifyEvent.created_at).desc()
+    )
     active_dates = [r.d for r in q.all()]
-    
+
     if not active_dates:
         return 0
-    
+
     streak = 0
     today = date.today()
     for i in range(days):
@@ -105,11 +123,13 @@ def compute_streak(db: Session, tenant_id: Optional[str], user_id: Optional[str]
     return streak
 
 
-def summary_since(db: Session, tenant_id: Optional[str], user_id: Optional[str] = None, days: int = 7) -> Dict:
+def summary_since(
+    db: Session, tenant_id: Optional[str], user_id: Optional[str] = None, days: int = 7
+) -> Dict:
     ensure_tables_created()
     since = datetime.utcnow() - timedelta(days=days - 1)
     since = since.replace(hour=0, minute=0, second=0, microsecond=0)
-    
+
     q = db.query(
         func.date_trunc("day", GamifyEvent.created_at).label("d"),
         func.sum(GamifyEvent.points).label("p"),
@@ -118,9 +138,11 @@ def summary_since(db: Session, tenant_id: Optional[str], user_id: Optional[str] 
         q = q.filter(GamifyEvent.tenant_id == tenant_id)
     if user_id:
         q = q.filter(GamifyEvent.user_id == user_id)
-    q = q.group_by(func.date_trunc("day", GamifyEvent.created_at)).order_by(func.date_trunc("day", GamifyEvent.created_at))
+    q = q.group_by(func.date_trunc("day", GamifyEvent.created_at)).order_by(
+        func.date_trunc("day", GamifyEvent.created_at)
+    )
     rows = q.all()
-    
+
     # Build 7-day buckets
     buckets = [0] * days
     today = date.today()
@@ -128,13 +150,17 @@ def summary_since(db: Session, tenant_id: Optional[str], user_id: Optional[str] 
         day_offset = (r.d.date() - (today - timedelta(days=days - 1))).days
         if 0 <= day_offset < days:
             buckets[day_offset] = int(r.p or 0)
-    
+
     total = sum(buckets)
     streak = compute_streak(db, tenant_id, user_id, days=30)
-    
+
     # Streak bonus (every 7 consecutive days → +5p bonus shown)
     streak_bonus = (streak // 7) * 5
-    
-    return {"days": days, "total": total, "series": buckets, "streak_days": streak, "streak_bonus": streak_bonus}
 
-
+    return {
+        "days": days,
+        "total": total,
+        "series": buckets,
+        "streak_days": streak,
+        "streak_bonus": streak_bonus,
+    }
