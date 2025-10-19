@@ -34,6 +34,7 @@ from app.modules.reminders.api import router as reminders_router
 from app.api.auth_magic import router as auth_magic_router
 from app.api.pricing import router as pricing_router
 from app.api.entitlements import router as entitlements_router
+from app.api.vat import router as vat_router
 from app.api.standalone import router as standalone_router
 from app.api.standalone_backup import router as standalone_backup_router
 from app.api.ai_adapter_api import router as ai_adapter_api_router
@@ -89,6 +90,7 @@ app.include_router(reminders_router)
 app.include_router(auth_magic_router)
 app.include_router(pricing_router)
 app.include_router(entitlements_router)
+app.include_router(vat_router)
 app.include_router(standalone_router)
 app.include_router(standalone_backup_router)
 app.include_router(ai_adapter_api_router)

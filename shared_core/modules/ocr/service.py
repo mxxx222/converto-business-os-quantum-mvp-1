@@ -1,4 +1,4 @@
-from typing import Optional, Dict
+from typing import Optional
 import re
 import io
 import os
@@ -37,7 +37,7 @@ V_REGEX = re.compile(r"(\d{2,3})\s*V\b")
 A_REGEX = re.compile(r"(\d{1,3}(?:[.,]\d{1,2})?)\s*A\b", re.I)
 
 
-def extract_specs(text: str) -> Dict:
+def extract_specs(text: str) -> dict:
     t = text.replace(",", ".")
     rated_watts = None
     m = W_REGEX.search(t)
@@ -49,7 +49,7 @@ def extract_specs(text: str) -> Dict:
     return {"rated_watts": rated_watts, "voltage_v": voltage, "current_a": current, "ocr_raw": text}
 
 
-def merge(device_hint: Optional[str], ocr: Dict, vision: Optional[Dict]) -> Dict:
+def merge(device_hint: Optional[str], ocr: dict, vision: Optional[dict]) -> dict:
     d = {
         "device_type": (vision or {}).get("device_type") or (device_hint or "device"),
         "brand_model": (vision or {}).get("brand_model"),
