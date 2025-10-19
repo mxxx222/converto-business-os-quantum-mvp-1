@@ -1,0 +1,11 @@
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-select = ["I", "UP", "B", "SIM", "F401"]
+
+[tool.ruff.lint.per-file-ignores]
+"app/services/billing.py" = ["C901"]
+"app/api/stripe_webhook.py" = ["S104"]
+
+[tool.black]
+line-length = 100
