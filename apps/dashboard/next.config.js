@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: { runtime: 'edge' }
+}
+
+module.exports = nextConfig
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   experimental: { runtime: 'edge' },
   transpilePackages: ['@converto/ui']
 }

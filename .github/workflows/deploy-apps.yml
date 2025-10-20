@@ -30,11 +30,19 @@ jobs:
         if: env.VERCEL_TOKEN != ''
         run: |
           npm i -g vercel
-          url=$(vercel deploy apps/${{ matrix.app }} --token=$VERCEL_TOKEN --prod --yes)
-          echo "Deployed: $url"
-          domain=${{ secrets[format('VERCEL_DOMAIN_{0}', upper(matrix.app))] }}
-          if [ -n "$domain" ]; then
-            vercel alias --token=$VERCEL_TOKEN $url $domain || true
+          if [ "${{ matrix.app }}" = "dashboard" ]; then
+            url=$(vercel deploy apps/dashboard --token=$VERCEL_TOKEN --prod --yes --regions fra1)
+            echo "Deployed (dashboard FRA1): $url"
+            # Ensure domain is added to project and aliased
+            vercel domains add dashboard.converto.fi --project converto-dashboard --token=$VERCEL_TOKEN || true
+            vercel alias --token=$VERCEL_TOKEN $url dashboard.converto.fi || true
+          else
+            url=$(vercel deploy apps/${{ matrix.app }} --token=$VERCEL_TOKEN --prod --yes)
+            echo "Deployed: $url"
+            domain=${{ secrets[format('VERCEL_DOMAIN_{0}', upper(matrix.app))] }}
+            if [ -n "$domain" ]; then
+              vercel alias --token=$VERCEL_TOKEN $url $domain || true
+            fi
           fi
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
