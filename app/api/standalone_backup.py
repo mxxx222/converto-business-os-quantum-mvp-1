@@ -9,7 +9,7 @@ import subprocess
 from datetime import datetime
 from fastapi import APIRouter, HTTPException
 from sqlalchemy import text
-from app.core.db import engine
+from shared_core.utils.db import engine
 
 
 router = APIRouter(prefix="/api/v1/standalone", tags=["standalone"])
