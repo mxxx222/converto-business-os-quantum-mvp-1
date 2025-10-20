@@ -15,6 +15,8 @@ services:
     autoDeploy: true
     buildCommand: npm install && npm run build --workspace=@converto/dashboard
     startCommand: npm run start --workspace=@converto/dashboard
+    rootDir: apps/dashboard
+    nodeVersion: 18
     healthCheckPath: /api/health
 
     envVars:
@@ -98,6 +100,8 @@ services:
     healthCheckPath: /api/health
     buildCommand: npm install && npm run build --workspace=@converto/dashboard
     startCommand: npm run start --workspace=@converto/dashboard
+    rootDir: apps/dashboard
+    nodeVersion: 18
 
     envVars:
       - key: NODE_ENV
@@ -178,6 +182,7 @@ jobs:
     plan: starter
     serviceName: converto-dashboard
     command: curl -fsSL https://converto.fi/api/pilot-report
+    rootDir: apps/dashboard
     envVars:
       - key: NODE_ENV
         value: production
