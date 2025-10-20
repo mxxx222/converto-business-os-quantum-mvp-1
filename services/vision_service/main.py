@@ -11,6 +11,8 @@ import os
 import json
 import logging
 from openai import OpenAI
+import hashlib
+import redis
 
 app = FastAPI(title="Vision AI Service", version="1.0.0")
 
@@ -20,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize OpenAI client
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+redis_client = redis.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", "6379")), db=0, decode_responses=True)
 
 
 class VisionRequest(BaseModel):
@@ -58,8 +61,13 @@ async def analyze_image(request: VisionRequest):
     start_time = time.time()
     
     try:
-        # Convert image to base64
-        image_b64 = base64.b64encode(request.image_data).decode()
+        # Cache key
+        digest = hashlib.sha256(request.image_data).hexdigest()
+        cache_key = f"vision:{request.analysis_type}:{digest}:{hashlib.sha256((request.prompt or '').encode()).hexdigest()}"
+        cached = redis_client.get(cache_key)
+        if cached:
+            obj = json.loads(cached)
+            return VisionResponse(**obj)
         
         # Route to appropriate analysis
         if request.analysis_type == "receipt":
@@ -77,13 +85,18 @@ async def analyze_image(request: VisionRequest):
         
         processing_time_ms = int((time.time() - start_time) * 1000)
         
-        return VisionResponse(
+        resp_obj = VisionResponse(
             analysis_type=request.analysis_type,
             results=results,
             confidence=results.get("confidence", 0.8),
             processing_time_ms=processing_time_ms,
             model_used="gpt-4-vision"
         )
+        try:
+            redis_client.setex(cache_key, 60 * 60 * 24 * 30, resp_obj.model_dump())
+        except Exception:
+            pass
+        return resp_obj
         
     except Exception as e:
         logger.error(f"Vision analysis failed: {str(e)}")

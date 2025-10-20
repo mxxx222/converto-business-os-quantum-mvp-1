@@ -11,12 +11,27 @@ import time
 import logging
 from enum import Enum
 import os
+import hashlib
+import json
+import redis
+import httpx
 
 app = FastAPI(title="AI Gateway", version="1.0.0")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Redis cache for inference
+redis_client = redis.Redis(
+    host=os.getenv("REDIS_HOST", "localhost"),
+    port=int(os.getenv("REDIS_PORT", "6379")),
+    db=int(os.getenv("REDIS_DB", "0")),
+    decode_responses=True,
+)
+
+BILLING_URL = os.getenv("BILLING_URL", "http://billing-service:8004")
+ENABLE_EMBED_DEDUP = os.getenv("ENABLE_EMBED_DEDUP", "false").lower() == "true"
 
 
 class AIModel(str, Enum):
@@ -133,6 +148,16 @@ async def chat_completion(request: AIRequest):
     
     start_time = time.time()
     
+    # Caching key (prompt + images + optional tenant)
+    cache_key = build_prompt_cache_key(request)
+    cached = redis_client.get(f"ai:inference:{cache_key}")
+    if cached:
+        try:
+            cached_obj = json.loads(cached)
+            return AIResponse(**cached_obj)
+        except Exception:
+            pass
+
     # Select optimal model
     selected_model = request.model_preference or metrics.get_optimal_model(request)
     
@@ -156,13 +181,26 @@ async def chat_completion(request: AIRequest):
         latency_ms = int((time.time() - start_time) * 1000)
         cost_usd = (tokens / 1000) * metrics.models[selected_model]["cost_per_1k_tokens"]
         
-        return AIResponse(
+        response_obj = AIResponse(
             content=content,
             model_used=selected_model,
             tokens_used=tokens,
             cost_usd=cost_usd,
             latency_ms=latency_ms
         )
+
+        # Write cache
+        try:
+            redis_client.setex(f"ai:inference:{cache_key}", 60 * 60 * 24 * 7, response_obj.model_dump())
+        except Exception:
+            pass
+
+        # Bill token usage if tenant_id present
+        tenant_id = (request.context or {}).get("tenant_id") if request.context else None
+        if tenant_id:
+            asyncio.create_task(record_token_usage(tenant_id, tokens))
+
+        return response_obj
         
     except Exception as e:
         logger.error(f"AI request failed: {str(e)}")
@@ -219,3 +257,25 @@ async def call_google_vision(request: AIRequest) -> tuple[str, int]:
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8001)
+
+# Helpers
+def build_prompt_cache_key(req: AIRequest) -> str:
+    base = {
+        "prompt": req.prompt.strip(),
+        "images": [hashlib.sha256(img.encode()).hexdigest() for img in (req.images or [])],
+        "tenant": (req.context or {}).get("tenant_id") if req.context else None,
+    }
+    raw = json.dumps(base, sort_keys=True)
+    h = hashlib.sha256(raw.encode()).hexdigest()
+    return h
+
+
+async def record_token_usage(tenant_id: str, tokens: int) -> None:
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            await client.post(
+                f"{BILLING_URL}/billing/usage",
+                json={"tenant_id": tenant_id, "feature": "ai_tokens_per_month", "quantity": int(tokens)},
+            )
+    except Exception:
+        pass

@@ -12,6 +12,8 @@ from PIL import Image
 import io
 import os
 import logging
+import hashlib
+import redis
 
 app = FastAPI(title="OCR Service", version="1.0.0")
 
@@ -29,6 +31,7 @@ except Exception:
 
 VISION_URL = os.getenv("VISION_SERVICE_URL", "http://vision-service:8003")
 import requests
+redis_client = redis.Redis(host=os.getenv("REDIS_HOST", "localhost"), port=int(os.getenv("REDIS_PORT", "6379")), db=0, decode_responses=True)
 
 
 class OCRRequest(BaseModel):
@@ -108,6 +111,15 @@ async def upload_and_extract(file: UploadFile = File(...), language: str = "fin+
         raise HTTPException(status_code=400, detail="File must be an image")
     
     file_data = await file.read()
+    digest = hashlib.sha256(file_data).hexdigest()
+    ck = f"ocr:tesseract:{language}:{digest}"
+    cached = redis_client.get(ck)
+    if cached:
+        try:
+            obj = OCRResponse(**json.loads(cached))
+            return obj
+        except Exception:
+            pass
     
     request = OCRRequest(
         file_data=file_data,
@@ -115,7 +127,25 @@ async def upload_and_extract(file: UploadFile = File(...), language: str = "fin+
         preprocessing=True
     )
     
-    return await extract_text(request)
+    result = await extract_text(request)
+    try:
+        redis_client.setex(ck, 60 * 60 * 24 * 30, result.model_dump())
+    except Exception:
+        pass
+    # bill 1 scan if tenant header
+    try:
+        import httpx
+        tenant_id = file.headers.get('x-tenant-id') if hasattr(file, 'headers') else None
+        if tenant_id:
+            async with httpx.AsyncClient(timeout=3.0) as client:
+                await client.post(os.getenv('BILLING_URL', 'http://billing-service:8004') + '/billing/usage', json={
+                    'tenant_id': tenant_id,
+                    'feature': 'ocr_scans_per_month',
+                    'quantity': 1,
+                })
+    except Exception:
+        pass
+    return result
 
 
 @app.post("/ocr/extract-data", response_model=OCRExtractionResponse)
@@ -149,6 +179,13 @@ async def ocr_ensemble(file: UploadFile = File(...), language: str = "fin+eng"):
     if not file.content_type.startswith('image/'):
         raise HTTPException(status_code=400, detail="File must be an image")
     img_bytes = await file.read()
+
+    # Cache check for ensemble
+    digest = hashlib.sha256(img_bytes).hexdigest()
+    ck = f"ocr:ensemble:{language}:{digest}"
+    cached = redis_client.get(ck)
+    if cached:
+        return json.loads(cached)
 
     # Tesseract branch
     tess_res = await extract_text(OCRRequest(file_data=img_bytes, language=language))
@@ -209,7 +246,7 @@ async def ocr_ensemble(file: UploadFile = File(...), language: str = "fin+eng"):
 
     # Attempt structured extraction for invoice fields
     fields = extract_invoice_data(merged_text)
-    return {
+    result = {
         "text": merged_text,
         "confidence": conf,
         "sources": {
@@ -219,6 +256,11 @@ async def ocr_ensemble(file: UploadFile = File(...), language: str = "fin+eng"):
         },
         "extracted": fields,
     }
+    try:
+        redis_client.setex(ck, 60 * 60 * 24 * 30, json.dumps(result))
+    except Exception:
+        pass
+    return result
 
 
 @app.get("/ocr/health")
