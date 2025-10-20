@@ -7,12 +7,13 @@ import { useMemo } from 'react'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
 
-async function fetchSuggestions(context: Record<string, unknown> | null): Promise<Suggestion[]> {
+async function fetchSuggestions(context: Record<string, unknown> | null, uiContext?: string): Promise<Suggestion[]> {
   try {
-    const res = await fetch(`${API_BASE}/api/v1/ai/suggestions`, {
+    const qs = uiContext ? `?context=${encodeURIComponent(uiContext)}` : ''
+    const res = await fetch(`${API_BASE}/api/v1/ai/suggestions${qs}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ context })
+      body: JSON.stringify({ context, uiContext })
     })
     if (!res.ok) throw new Error('Failed suggestions')
     return await res.json()
@@ -28,16 +29,17 @@ async function fetchSuggestions(context: Record<string, unknown> | null): Promis
 
 type Props = {
   className?: string
+  context?: string
 }
 
-export function CoPilotDrawer({ className }: Props) {
+export function CoPilotDrawer({ className, context: uiContext }: Props) {
   const { isOpen, toggle, context, setSuggestions, lastSuggestions } = useCoPilotStore()
 
   const queryKey = useMemo(() => ['copilot-suggestions', context], [context])
 
   const { data, isLoading } = useQuery({
     queryKey,
-    queryFn: () => fetchSuggestions(context),
+    queryFn: () => fetchSuggestions(context, uiContext),
     staleTime: 30_000
   })
 
