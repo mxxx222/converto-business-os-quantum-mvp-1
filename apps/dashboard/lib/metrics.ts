@@ -1,5 +1,6 @@
 import { metrics } from '@opentelemetry/api'
 import { DEDUPE, getLastDedupeResetAt } from './alerts-dedupe'
+import { countTenantLocks } from './redis-lock-metrics'
 
 const meter = metrics.getMeter('converto-alerts')
 
@@ -40,5 +41,19 @@ export function incResetCounter() {
     // ignore
   }
 }
+
+// Gauge: active tenant locks in Redis
+meter
+  .createObservableGauge('tenant_locks_active', {
+    description: 'Number of active tenant lock keys in Redis',
+  })
+  .addCallback(async (obs) => {
+    try {
+      const n = await countTenantLocks()
+      obs.observe(n)
+    } catch {
+      // ignore
+    }
+  })
 
 
