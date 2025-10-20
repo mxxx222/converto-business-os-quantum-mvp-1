@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { verifyJWT } from './lib/auth/jwt'
+import { getTenantSecurity } from './lib/tenant-security-cache'
 
 export const config = {
   matcher: [
@@ -18,6 +19,12 @@ export async function middleware(req: NextRequest) {
   const tenantId = req.headers.get('x-tenant-id') || (claims as any).tid
   if (!tenantId || tenantId !== (claims as any).tid) {
     return NextResponse.redirect(new URL('/403', req.url))
+  }
+
+  // Tenant security lock check (Redis-backed)
+  const sec = await getTenantSecurity((claims as any).tid)
+  if (sec?.locked_until && new Date(sec.locked_until) > new Date()) {
+    return NextResponse.json({ error: 'tenant_locked', until: sec.locked_until }, { status: 423 })
   }
 
   const res = NextResponse.next()

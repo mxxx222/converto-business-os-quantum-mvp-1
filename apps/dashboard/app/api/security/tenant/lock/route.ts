@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { pool } from '../../../../../lib/db'
+import { invalidateTenantSecurity } from '../../../../../lib/tenant-security-cache'
 
 function isAuthorized(req: Request) {
   const hdr = req.headers.get('authorization') || ''
@@ -50,6 +51,7 @@ export async function POST(req: Request) {
   } catch (e) {
     return NextResponse.json({ error: 'db_error' }, { status: 500 })
   }
+  await invalidateTenantSecurity(tenantId)
   return NextResponse.json({ ok: true, tenantId, until })
 }
 

@@ -7,6 +7,7 @@
     "packages/*"
   ],
   "scripts": {
+    "prebuild": "node scripts/check-env-file.mjs && node scripts/check-debug-env.mjs",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
