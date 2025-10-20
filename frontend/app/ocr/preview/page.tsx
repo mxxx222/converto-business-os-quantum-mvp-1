@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useMemo, useState } from 'react'
+import OCRCanvasViewer from '@/frontend/components/OCRCanvasViewer'
 
 export const runtime = 'edge'
 
@@ -78,13 +79,8 @@ export default function OCRPreviewPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="rounded-lg border p-2 min-h-[360px] flex items-center justify-center bg-gray-50">
-          {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={imageUrl} alt="preview" className="max-h-[520px] object-contain" />
-          ) : (
-            <span className="text-gray-500 text-sm">Esikatselukuva</span>
-          )}
+        <div className="rounded-lg border p-2 min-h-[360px] bg-gray-50">
+          {imageUrl ? <OCRCanvasViewer imageUrl={imageUrl} /> : <span className="text-gray-500 text-sm">Esikatselukuva</span>}
         </div>
 
         <div className="rounded-lg border p-3 min-h-[360px] bg-white overflow-auto">

@@ -1,5 +1,31 @@
 // Converto Business OS - Service Worker
 // PWA functionality with offline support and caching
+// Try Workbox if available
+try {
+  importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
+  if (self.workbox) {
+    // Images / static assets: cache-first, fallback network
+    self.workbox.routing.registerRoute(
+      ({request}) => ['image', 'style', 'script', 'font'].includes(request.destination),
+      new self.workbox.strategies.CacheFirst({
+        cacheName: 'wb-static-v1',
+        plugins: [
+          new self.workbox.expiration.ExpirationPlugin({maxEntries: 200, maxAgeSeconds: 30 * 24 * 3600}),
+        ],
+      })
+    );
+    // API: network-first with fallback cache
+    self.workbox.routing.registerRoute(
+      ({url}) => url.pathname.startsWith('/api/'),
+      new self.workbox.strategies.NetworkFirst({
+        cacheName: 'wb-api-v1',
+        networkTimeoutSeconds: 5,
+      })
+    );
+  }
+} catch (e) {
+  // Workbox unavailable; fallback to custom handlers below
+}
 
 const CACHE_NAME = 'converto-v1.0.0';
 const STATIC_CACHE = 'converto-static-v1';
