@@ -9,6 +9,9 @@ export default function NotificationProvider({ children }: { children: React.Rea
   const qc = useQueryClient()
 
   useEffect(() => {
+    const windowMs = 2000
+    const maxToasts = 3
+    const recent: number[] = []
     const es = new EventSource('/api/events')
     es.onmessage = (e) => {
       try {
@@ -20,7 +23,13 @@ export default function NotificationProvider({ children }: { children: React.Rea
           } catch {}
         }
         if (ev.msg) {
-          ;(toast as any)[ev.type || 'info'](ev.msg)
+          const now = Date.now()
+          // drop old timestamps
+          while (recent.length && now - recent[0] > windowMs) recent.shift()
+          if (recent.length < maxToasts) {
+            recent.push(now)
+            ;(toast as any)[ev.type || 'info'](ev.msg)
+          }
         }
       } catch {}
     }

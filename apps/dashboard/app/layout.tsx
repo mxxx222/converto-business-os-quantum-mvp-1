@@ -15,13 +15,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <NotificationProvider>
-            <ScoreProvider>
-              <div className="max-w-6xl mx-auto px-4">
-                <TopNav />
-                {children}
-              </div>
-              <CoPilotDrawer />
-            </ScoreProvider>
+            {process.env.NEXT_PUBLIC_SCORE_ENABLED === 'true' ? (
+              <ScoreProvider>
+                <div className="max-w-6xl mx-auto px-4">
+                  <TopNav />
+                  {children}
+                </div>
+                <CoPilotDrawer />
+              </ScoreProvider>
+            ) : (
+              <>
+                <div className="max-w-6xl mx-auto px-4">
+                  <TopNav />
+                  {children}
+                </div>
+                <CoPilotDrawer />
+              </>
+            )}
           </NotificationProvider>
         </Providers>
       </body>

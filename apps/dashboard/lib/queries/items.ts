@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { QP } from '../queryPresets'
 
 export function useItem(id: string) {
   return useQuery({
     queryKey: ['items', id],
     queryFn: () => fetch(`/api/items/${id}`).then((r) => r.json()),
+    ...QP.medium,
   })
 }
 
