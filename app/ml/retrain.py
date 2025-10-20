@@ -12,7 +12,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
-from app.core.db import engine
+from shared_core.utils.db import engine
 from app.ml.feedback_loop import FeedbackSample, get_recent_corrections
 
 
