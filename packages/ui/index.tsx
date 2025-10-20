@@ -1,3 +1,5 @@
+export * from './state/copilotStore'
+export * from './copilot/CoPilotDrawer'
 import React from 'react'
 
 export function Button({ label }: { label: string }) {
