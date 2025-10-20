@@ -1,6 +1,6 @@
 # render.yaml
 # Converto Business OS — Landing / Coming Soon
-# Tuotanto + Staging -ympäristöt, valmiina Render Blueprint deploylle
+# Yksinkertainen versio ilman staging-ympäristöä
 
 services:
   # ==========================
@@ -74,89 +74,6 @@ services:
       # SECURITY
       - key: ALLOWED_ORIGINS
         value: "https://converto.fi,https://app.converto.fi"
-      - key: TRUST_PROXY_HEADERS
-        value: "true"
-
-      # HEALTHCHECK
-      - key: ENABLE_HEALTHCHECK
-        value: "true"
-
-    routes:
-      - type: rewrite
-        source: "/"
-        destination: "/coming-soon"
-
-  # ==========================
-  # 🧪 STAGING SERVICE
-  # ==========================
-  - type: web
-    name: converto-staging
-    env: node
-    region: frankfurt
-    plan: starter
-    branch: dev
-    autoDeploy: true
-    healthCheckPath: /api/health
-    buildCommand: cd apps/dashboard && npm install && npm run build
-    startCommand: cd apps/dashboard && npm start
-    nodeVersion: 18
-
-    envVars:
-      - key: NODE_ENV
-        value: staging
-      - key: NEXT_RUNTIME
-        value: nodejs
-
-      # SUPABASE (voit käyttää samaa projektia tai erillistä stagingia)
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        value: "https://your-project.supabase.co"
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE
-        sync: false
-
-      # RESEND
-      - key: RESEND_API_KEY
-        sync: false
-      - key: FROM_EMAIL
-        value: "no-reply@staging.converto.fi"
-
-      # I18N
-      - key: NEXT_PUBLIC_I18N_ENABLED
-        value: "true"
-
-      # SITE + THEME
-      - key: SITE_URL
-        value: "https://staging.converto.fi"
-      - key: NEXT_PUBLIC_THEME
-        value: "emerald"
-
-      # ANALYTICS
-      - key: NEXT_PUBLIC_PLAUSIBLE_DOMAIN
-        value: "staging.converto.fi"
-
-      # SENTRY
-      - key: SENTRY_DSN
-        value: ""
-      - key: SENTRY_ENVIRONMENT
-        value: staging
-
-      # RATE LIMITS
-      - key: RATE_LIMIT_MAX
-        value: "5"
-      - key: RATE_LIMIT_WINDOW
-        value: "60000"
-
-      # PWA
-      - key: NEXT_PUBLIC_PWA_ENABLED
-        value: "true"
-      - key: NEXT_PUBLIC_PWA_NAME
-        value: "Converto Staging"
-      - key: NEXT_PUBLIC_PWA_THEME_COLOR
-        value: "#22C55E"
-
-      # SECURITY
-      - key: ALLOWED_ORIGINS
-        value: "https://staging.converto.fi"
       - key: TRUST_PROXY_HEADERS
         value: "true"
 
