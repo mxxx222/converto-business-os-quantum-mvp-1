@@ -42,6 +42,7 @@ from app.api.vision import router as vision_router
 from app.api.auto_heal import router as auto_heal_router
 from app.api.ml_feedback import router as ml_feedback_router
 from app.api.audit import router as audit_router
+from app.api.pii import router as pii_router
 
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
@@ -99,6 +100,7 @@ app.include_router(vision_router)
 app.include_router(auto_heal_router)
 app.include_router(ml_feedback_router)
 app.include_router(audit_router)
+app.include_router(pii_router)
 
 registry.load_all(app)
 

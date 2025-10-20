@@ -13,6 +13,8 @@ import logging
 import os
 from datetime import datetime, timedelta
 import redis
+from fastapi_limiter import FastAPILimiter
+from fastapi_limiter.depends import RateLimiter
 import json
 
 app = FastAPI(title="API Gateway", version="1.0.0")
@@ -31,6 +33,13 @@ redis_client = redis.Redis(
     db=int(os.getenv("REDIS_DB", "0")),
     decode_responses=True
 )
+
+@app.on_event("startup")
+async def _init_rate_limiter():
+    try:
+        await FastAPILimiter.init(redis_client)
+    except Exception as e:
+        logger.warning(f"Rate limiter init failed: {e}")
 
 # Service registry
 SERVICES = {
@@ -198,7 +207,7 @@ async def get_gateway_stats():
 
 
 # AI Gateway proxy
-@app.post("/ai/chat")
+@app.post("/ai/chat", dependencies=[Depends(RateLimiter(times=60, seconds=60))])
 async def ai_chat_proxy(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Proxy AI chat requests"""
     
@@ -218,7 +227,7 @@ async def ai_chat_proxy(request: Request, credentials: HTTPAuthorizationCredenti
 
 
 # OCR Service proxy
-@app.post("/ocr/extract")
+@app.post("/ocr/extract", dependencies=[Depends(RateLimiter(times=120, seconds=60))])
 async def ocr_extract_proxy(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Proxy OCR extraction requests"""
     
@@ -235,7 +244,7 @@ async def ocr_extract_proxy(request: Request, credentials: HTTPAuthorizationCred
         return response.json()
 
 
-@app.post("/ocr/upload")
+@app.post("/ocr/upload", dependencies=[Depends(RateLimiter(times=60, seconds=60))])
 async def ocr_upload_proxy(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Proxy OCR upload requests"""
     
@@ -253,7 +262,7 @@ async def ocr_upload_proxy(request: Request, credentials: HTTPAuthorizationCrede
 
 
 # Vision Service proxy
-@app.post("/vision/analyze")
+@app.post("/vision/analyze", dependencies=[Depends(RateLimiter(times=90, seconds=60))])
 async def vision_analyze_proxy(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
     """Proxy vision analysis requests"""
     
