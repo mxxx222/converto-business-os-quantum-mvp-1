@@ -1,5 +1,8 @@
 {
-  "version": 2,
-  "routes": []
+  "framework": "nextjs",
+  "edge": false,
+  "regions": ["fra1"],
+  "buildCommand": "npx turbo run build --filter=@converto/billing",
+  "outputDirectory": ".next"
 }
 
