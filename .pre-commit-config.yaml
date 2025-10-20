@@ -3,6 +3,7 @@ repos:
     rev: v0.6.8
     hooks:
       - id: ruff
+        args: ["--fix", "--unsafe-fixes"]
       - id: ruff-format
   - repo: https://github.com/psf/black
     rev: 24.8.0
@@ -23,3 +24,20 @@ repos:
     rev: v8.18.4
     hooks:
       - id: gitleaks
+
+  # Type checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.10.0
+    hooks:
+      - id: mypy
+        additional_dependencies: ["pydantic>=2.5.0"]
+
+  # Optional AI autofix (runs only if OPENAI_API_KEY is set)
+  - repo: local
+    hooks:
+      - id: ai-autofix
+        name: AI Autofix (OpenAI)
+        entry: python scripts/ai_autofix.py
+        language: system
+        pass_filenames: true
+        stages: [pre-commit]
