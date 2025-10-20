@@ -1,5 +1,6 @@
 import Providers from './providers'
 import { CoPilotDrawer } from '@converto/ui'
+import TopNav from './components/TopNav'
 
 export const metadata = {
   title: 'Converto Dashboard',
@@ -11,7 +12,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Providers>
-          {children}
+          <div className="max-w-6xl mx-auto px-4">
+            <TopNav />
+            {children}
+          </div>
           <CoPilotDrawer />
         </Providers>
       </body>
