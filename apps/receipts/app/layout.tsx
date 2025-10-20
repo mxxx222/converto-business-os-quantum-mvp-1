@@ -1,5 +1,6 @@
 import Providers from './providers'
 import NotificationProvider from './providers/notifications'
+import { ExampleDialog } from '../components/ui/example-dialog'
 import dynamic from 'next/dynamic'
 
 const CoPilotDrawer = dynamic(() => import('@converto/ui/copilot/CoPilotDrawer').then(m => m.CoPilotDrawer), { ssr: false })
@@ -15,6 +16,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           <NotificationProvider>
+            <div className="flex items-center justify-between px-4 py-2">
+              <div />
+              <ExampleDialog />
+            </div>
             {children}
             <CoPilotDrawer context="receipts" />
           </NotificationProvider>

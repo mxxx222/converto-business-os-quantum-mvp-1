@@ -3,9 +3,11 @@
 import { useState } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { trpc } from '../lib/trpc'
+import { httpBatchLink } from '@trpc/client'
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  const [client] = useState(
+  const [queryClient] = useState(
     () =>
       new QueryClient({
         defaultOptions: {
@@ -19,13 +21,16 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         },
       }),
   )
+  const [trpcClient] = useState(() => trpc.createClient({ links: [httpBatchLink({ url: '/api/trpc' })] }))
   return (
-    <QueryClientProvider client={client}>
-      {children}
-      {process.env.NODE_ENV !== 'production' ? (
-        <ReactQueryDevtools initialIsOpen={false} />
-      ) : null}
-    </QueryClientProvider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        {children}
+        {process.env.NODE_ENV !== 'production' ? (
+          <ReactQueryDevtools initialIsOpen={false} />
+        ) : null}
+      </QueryClientProvider>
+    </trpc.Provider>
   )
 }
 
