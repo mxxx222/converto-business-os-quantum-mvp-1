@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server'
 import { getConfig } from '../../../../lib/alerts-config'
 import { sendSlack } from '../../../../lib/slack'
+import { DEDUPE, clearDedupe } from '../../../../lib/alerts-dedupe'
 
-const DEDUPE = new Map<string, number>()
 const sevRank = { info: 0, warn: 1, critical: 2 } as const
 
 export async function POST(req: Request) {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const url = new URL(req.url)
   if (url.searchParams.get('reset') === 'true') {
-    DEDUPE.clear()
+    clearDedupe()
     return NextResponse.json({ ok: true, reset: true })
   }
   return NextResponse.json({ ok: false, reset: false }, { status: 400 })
