@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getConfig } from '../../../../lib/alerts-config'
 import { sendSlack } from '../../../../lib/slack'
 import { DEDUPE, clearDedupe } from '../../../../lib/alerts-dedupe'
+import { isAdminFromRequest, setDevAdminHeader } from '../../../../lib/admin'
 
 const sevRank = { info: 0, warn: 1, critical: 2 } as const
 
@@ -35,8 +36,11 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const url = new URL(req.url)
   if (url.searchParams.get('reset') === 'true') {
+    const isAdmin = await isAdminFromRequest(req)
+    if (!isAdmin) return NextResponse.json({ error: 'forbidden' }, { status: 403 })
     clearDedupe()
-    return NextResponse.json({ ok: true, reset: true })
+    const res = NextResponse.json({ ok: true, reset: true })
+    return setDevAdminHeader(res, isAdmin)
   }
   return NextResponse.json({ ok: false, reset: false }, { status: 400 })
 }
