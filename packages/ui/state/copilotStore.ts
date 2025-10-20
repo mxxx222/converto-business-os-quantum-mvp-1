@@ -16,6 +16,8 @@ type CoPilotState = {
   toggle: () => void
   lastSuggestions: Suggestion[]
   setSuggestions: (s: Suggestion[]) => void
+  connectionType: 'sse' | 'ws' | 'offline'
+  setConnectionType: (t: 'sse' | 'ws' | 'offline') => void
 }
 
 export const useCoPilotStore = create<CoPilotState>((set) => ({
@@ -26,7 +28,9 @@ export const useCoPilotStore = create<CoPilotState>((set) => ({
   close: () => set({ isOpen: false }),
   toggle: () => set((s) => ({ isOpen: !s.isOpen })),
   lastSuggestions: [],
-  setSuggestions: (s) => set({ lastSuggestions: s })
+  setSuggestions: (s) => set({ lastSuggestions: s }),
+  connectionType: 'offline',
+  setConnectionType: (t) => set({ connectionType: t })
 }))
 
 export type { Suggestion }

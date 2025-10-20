@@ -6,6 +6,16 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
+function deriveWsBase(httpBase?: string) {
+  try {
+    if (!httpBase) return undefined
+    const u = new URL(httpBase)
+    u.protocol = u.protocol === 'https:' ? 'wss:' : 'ws:'
+    return u.origin
+  } catch {
+    return undefined
+  }
+}
 
 async function fetchSuggestions(context: Record<string, unknown> | null, uiContext?: string): Promise<Suggestion[]> {
   try {
@@ -50,12 +60,15 @@ export function CoPilotDrawer({ className, context: uiContext }: Props) {
   useEffect(() => {
     if (!isOpen) return
     const qs = uiContext ? `?context=${encodeURIComponent(uiContext)}` : ''
-    const url = `${API_BASE}/api/v1/ai/stream${qs}`
+    const url = (API_BASE ? `${API_BASE}` : '') + `/api/v1/ai/stream${qs}`
 
     let closed = false
     try {
       const evt = new EventSource(url)
-      evt.onopen = () => setConnected(true)
+      evt.onopen = () => {
+        setConnected(true)
+        setConnectionType('sse')
+      }
       evt.onmessage = (e) => {
         try {
           const incoming: Suggestion[] = JSON.parse(e.data)
@@ -67,6 +80,7 @@ export function CoPilotDrawer({ className, context: uiContext }: Props) {
       }
       evt.onerror = () => {
         setConnected(false)
+        setConnectionType('offline')
         evt.close()
         if (!closed) {
           // fallback to refetch if stream drops
@@ -80,10 +94,38 @@ export function CoPilotDrawer({ className, context: uiContext }: Props) {
       }
     } catch (_) {
       setConnected(false)
+      setConnectionType('offline')
       // best-effort refresh
       refetch().catch(() => {})
     }
   }, [isOpen, uiContext, context, queryClient, queryKey, refetch, setSuggestions])
+
+  // WebSocket optional channel (two-way feedback)
+  useEffect(() => {
+    if (!isOpen || typeof window === 'undefined' || !('WebSocket' in window)) return
+    const base = deriveWsBase(API_BASE) || (typeof window !== 'undefined' ? (window.location.protocol === 'https:' ? 'wss:' : 'ws:') + '//' + window.location.host : undefined)
+    if (!base) return
+    const wsUrl = `${base}/ai/updates${uiContext ? `?context=${encodeURIComponent(uiContext)}` : ''}`
+    let ws: WebSocket | null = null
+    try {
+      ws = new WebSocket(wsUrl)
+      ws.onopen = () => setConnectionType('ws')
+      ws.onmessage = (e) => {
+        try {
+          const incoming: Suggestion[] = JSON.parse(e.data)
+          setSuggestions(incoming)
+          queryClient.setQueryData(queryKey, incoming)
+        } catch {}
+      }
+      ws.onerror = () => setConnectionType('offline')
+      ws.onclose = () => setConnectionType('offline')
+    } catch {
+      // ignore
+    }
+    return () => {
+      try { ws?.close() } catch {}
+    }
+  }, [isOpen, uiContext, queryClient, queryKey, setSuggestions])
 
   const suggestions: Suggestion[] = data ?? lastSuggestions
 
@@ -127,12 +169,17 @@ export function CoPilotDrawer({ className, context: uiContext }: Props) {
                 <ul className="space-y-2">
                   {suggestions.map((s) => (
                     <li key={s.id}>
-                      <button
-                        className="w-full text-left rounded border px-3 py-2 hover:bg-gray-50"
-                        onClick={() => handleSuggestion(s)}
-                      >
-                        {s.title}
-                      </button>
+                      <div className="w-full rounded border px-3 py-2 hover:bg-gray-50">
+                        <div className="flex items-center justify-between gap-3">
+                          <button className="text-left flex-1" onClick={() => handleSuggestion(s)}>
+                            {s.title}
+                          </button>
+                          <div className="flex items-center gap-2">
+                            <button className="text-green-600 text-sm" onClick={() => sendFeedback(uiContext, s.id, 'accepted')}>👍</button>
+                            <button className="text-red-600 text-sm" onClick={() => sendFeedback(uiContext, s.id, 'rejected')}>👎</button>
+                          </div>
+                        </div>
+                      </div>
                     </li>
                   ))}
                 </ul>
@@ -167,5 +214,23 @@ function handleSuggestion(s: Suggestion) {
 function handleTemplate(template: string) {
   // Save or execute template via API
   // noop placeholder
+}
+
+async function postFeedback(uiContext: string | undefined, id: string, action: 'accepted' | 'rejected') {
+  const body = { type: 'feedback', context: uiContext, id, action }
+  const base = API_BASE || ''
+  try {
+    await fetch(`${base}/api/v1/ai/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+  } catch {}
+}
+
+function sendFeedback(uiContext: string | undefined, id: string, action: 'accepted' | 'rejected') {
+  // If WS is active, prefer it; otherwise POST
+  // For simplicity, rely on POST; WS hook could store a ref if needed
+  void postFeedback(uiContext, id, action)
 }
 
