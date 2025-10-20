@@ -2,13 +2,12 @@ services:
   - type: web
     name: converto-dashboard
     env: node
-    region: frankfurt
-    plan: starter
+    region: oregon
+    plan: free
     branch: main
     autoDeploy: true
     buildCommand: npm install && npm run build
-    startCommand: npm start
-
+    startCommand: npm run start
     rootDir: apps/dashboard
     healthCheckPath: /api/health
     envVars:
@@ -52,4 +51,3 @@ services:
         value: "true"
       - key: ENABLE_HEALTHCHECK
         value: "true"
-    
