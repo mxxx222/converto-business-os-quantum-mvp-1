@@ -2,8 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCoPilotStore, type Suggestion } from '../state/copilotStore'
-import { useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || ''
 
@@ -34,14 +34,56 @@ type Props = {
 
 export function CoPilotDrawer({ className, context: uiContext }: Props) {
   const { isOpen, toggle, context, setSuggestions, lastSuggestions } = useCoPilotStore()
+  const queryClient = useQueryClient()
 
-  const queryKey = useMemo(() => ['copilot-suggestions', context], [context])
+  const queryKey = useMemo(() => ['copilot-suggestions', uiContext, context], [uiContext, context])
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey,
     queryFn: () => fetchSuggestions(context, uiContext),
     staleTime: 30_000
   })
+
+  const [connected, setConnected] = useState(false)
+
+  // Server-Sent Events for realtime suggestion updates
+  useEffect(() => {
+    if (!isOpen) return
+    const qs = uiContext ? `?context=${encodeURIComponent(uiContext)}` : ''
+    const url = `${API_BASE}/api/v1/ai/stream${qs}`
+
+    let closed = false
+    try {
+      const evt = new EventSource(url)
+      evt.onopen = () => setConnected(true)
+      evt.onmessage = (e) => {
+        try {
+          const incoming: Suggestion[] = JSON.parse(e.data)
+          setSuggestions(incoming)
+          queryClient.setQueryData(queryKey, incoming)
+        } catch (_) {
+          // ignore malformed frames
+        }
+      }
+      evt.onerror = () => {
+        setConnected(false)
+        evt.close()
+        if (!closed) {
+          // fallback to refetch if stream drops
+          refetch().catch(() => {})
+        }
+      }
+      return () => {
+        closed = true
+        setConnected(false)
+        evt.close()
+      }
+    } catch (_) {
+      setConnected(false)
+      // best-effort refresh
+      refetch().catch(() => {})
+    }
+  }, [isOpen, uiContext, context, queryClient, queryKey, refetch, setSuggestions])
 
   const suggestions: Suggestion[] = data ?? lastSuggestions
 
@@ -68,7 +110,13 @@ export function CoPilotDrawer({ className, context: uiContext }: Props) {
             aria-label="Co-pilot Drawer"
           >
             <div className="flex items-center justify-between px-4 py-3 border-b">
-              <h2 className="text-lg font-semibold">Co-pilot</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-semibold">Co-pilot</h2>
+                <span className={`inline-flex items-center gap-1 text-xs ${connected ? 'text-green-600' : 'text-gray-500'}`}>
+                  <span className={`h-2 w-2 rounded-full ${connected ? 'bg-green-500' : 'bg-gray-400'}`} />
+                  {connected ? 'Yhteys aktiivinen' : 'Offline'}
+                </span>
+              </div>
               <button onClick={toggle} className="text-sm text-gray-600 hover:text-black">Sulje</button>
             </div>
 
