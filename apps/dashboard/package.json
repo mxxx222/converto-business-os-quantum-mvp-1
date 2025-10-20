@@ -48,5 +48,8 @@
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.5",
     "@types/react": "19.2.2"
+  },
+  "engines": {
+    "node": ">=18 <20"
   }
 }
