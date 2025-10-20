@@ -28,4 +28,17 @@ meter
     }
   })
 
+// Counter: total number of dedupe resets since process start
+const resets = meter.createCounter('alerts_resets_total', {
+  description: 'Total number of dedupe resets since process start',
+})
+
+export function incResetCounter() {
+  try {
+    resets.add(1)
+  } catch {
+    // ignore
+  }
+}
+
 
