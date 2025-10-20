@@ -3,6 +3,7 @@ import os
 import sentry_sdk
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.starlette import StarletteIntegration
 
@@ -116,7 +117,7 @@ start_scheduler(interval_seconds=60)
 
 @app.get("/")
 def root():
-    return {"ok": True, "name": "Converto Business OS – Quantum Edition (MVP+)"}
+    return RedirectResponse(url="https://www.converto.fi/coming-soon", status_code=308)
 
 
 # simple insights demo endpoint
