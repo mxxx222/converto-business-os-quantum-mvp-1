@@ -1,4 +1,5 @@
 import Providers from './providers'
+import NotificationProvider from './providers/notifications'
 import dynamic from 'next/dynamic'
 
 const CoPilotDrawer = dynamic(() => import('@converto/ui/copilot/CoPilotDrawer').then(m => m.CoPilotDrawer), { ssr: false })
@@ -13,8 +14,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <Providers>
-          {children}
-          <CoPilotDrawer context="receipts" />
+          <NotificationProvider>
+            {children}
+            <CoPilotDrawer context="receipts" />
+          </NotificationProvider>
         </Providers>
       </body>
     </html>
