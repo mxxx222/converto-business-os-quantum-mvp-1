@@ -9,7 +9,7 @@ from datetime import datetime
 from typing import Dict, Any, Optional
 from sqlalchemy import Column, Integer, String, JSON, DateTime, Boolean, Float
 from sqlalchemy.orm import Session
-from app.core.db import Base, engine
+from shared_core.utils.db import Base, engine
 
 
 class FeedbackSample(Base):
