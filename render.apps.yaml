@@ -1,0 +1,69 @@
+services:
+  - name: dashboard
+    type: web
+    env: node
+    plan: starter
+    autoDeploy: true
+    buildCommand: npm ci && npx turbo run build --filter=@converto/dashboard
+    startCommand: cd apps/dashboard && npx next start -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: NEXT_PUBLIC_API_BASE
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+  - name: billing
+    type: web
+    env: node
+    plan: starter
+    autoDeploy: true
+    buildCommand: npm ci && npx turbo run build --filter=@converto/billing
+    startCommand: cd apps/billing && npx next start -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: NEXT_PUBLIC_API_BASE
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+  - name: receipts
+    type: web
+    env: node
+    plan: starter
+    autoDeploy: true
+    buildCommand: npm ci && npx turbo run build --filter=@converto/receipts
+    startCommand: cd apps/receipts && npx next start -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: NEXT_PUBLIC_API_BASE
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+
+  - name: legal
+    type: web
+    env: node
+    plan: starter
+    autoDeploy: true
+    buildCommand: npm ci && npx turbo run build --filter=@converto/legal
+    startCommand: cd apps/legal && npx next start -p $PORT
+    envVars:
+      - key: NODE_VERSION
+        value: 18
+      - key: NEXT_PUBLIC_API_BASE
+        sync: false
+      - key: STRIPE_PUBLIC_KEY
+        sync: false
+      - key: SENTRY_DSN
+        sync: false
+

@@ -1,0 +1,41 @@
+name: Deploy Apps (Render + Vercel)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [dashboard, billing, receipts, legal]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - name: Install deps
+        run: npm ci
+
+      - name: Build (turbo filter)
+        run: npx turbo run build --filter=@converto/${{ matrix.app }}
+
+      - name: Deploy to Render (via deploy hook)
+        if: env.RENDER_DEPLOY_HOOK != ''
+        run: curl -fsSL -X POST "$RENDER_DEPLOY_HOOK"
+        env:
+          RENDER_DEPLOY_HOOK: ${{ secrets[format('RENDER_{0}_DEPLOY_HOOK', upper(matrix.app))] }}
+
+      - name: Deploy to Vercel
+        if: env.VERCEL_TOKEN != ''
+        run: |
+          npm i -g vercel
+          url=$(vercel deploy apps/${{ matrix.app }} --token=$VERCEL_TOKEN --prod --yes)
+          echo "Deployed: $url"
+          domain=${{ secrets[format('VERCEL_DOMAIN_{0}', upper(matrix.app))] }}
+          if [ -n "$domain" ]; then
+            vercel alias --token=$VERCEL_TOKEN $url $domain || true
+          fi
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
