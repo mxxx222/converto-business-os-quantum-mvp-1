@@ -74,8 +74,30 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // Skip non-GET requests
-  if (request.method !== 'GET') {
+  // Background sync for POST requests to /api
+  if (request.method === 'POST' && url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      (async () => {
+        try {
+          return await fetch(request.clone());
+        } catch (err) {
+          // Queue failed POST for background sync
+          const body = await request.clone().text();
+          const entry = {
+            url: request.url,
+            body,
+            headers: Array.from(request.headers.entries()),
+            timestamp: Date.now(),
+          };
+          const queue = await caches.open('bg-sync-queue');
+          await queue.put(new Request(`queue:${entry.timestamp}`, { method: 'GET' }), new Response(JSON.stringify(entry)));
+          if ('sync' in self.registration) {
+            await self.registration.sync.register('api-post-sync');
+          }
+          return new Response(JSON.stringify({ queued: true, offline: true }), { status: 202, headers: { 'Content-Type': 'application/json' } });
+        }
+      })()
+    );
     return;
   }
 
@@ -124,6 +146,31 @@ async function handleApiRequest(request) {
     );
   }
 }
+
+// Background sync: replay queued POST requests when back online
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'api-post-sync') {
+    event.waitUntil(
+      (async () => {
+        const queue = await caches.open('bg-sync-queue');
+        const keys = await queue.keys();
+        for (const key of keys) {
+          const res = await queue.match(key);
+          if (!res) continue;
+          try {
+            const entry = await res.json();
+            const headers = new Headers();
+            for (const [k, v] of entry.headers) headers.append(k, v);
+            await fetch(entry.url, { method: 'POST', body: entry.body, headers });
+            await queue.delete(key);
+          } catch (e) {
+            // Keep entry for next sync attempt
+          }
+        }
+      })()
+    );
+  }
+});
 
 // Push notifications
 self.addEventListener('push', (event) => {

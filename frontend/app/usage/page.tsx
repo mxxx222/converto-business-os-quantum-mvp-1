@@ -1,3 +1,4 @@
+export const runtime = 'edge'
 import { fetchUsage } from './actions'
 import UsageChart from '@/frontend/components/UsageChart'
 

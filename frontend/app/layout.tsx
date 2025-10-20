@@ -5,6 +5,7 @@ import { CommandPalette } from "@/components/CommandPalette";
 import GlobalNavbar from "@/components/GlobalNavbar";
 import Providers from "./providers";
 import { Toaster } from "sonner";
+import PWARegister from "@/components/PWARegister";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,6 +34,8 @@ export default function RootLayout({
 
           {/* Main Content */}
           {children}
+          {/* PWA Service Worker */}
+          <PWARegister />
         </Providers>
       </body>
     </html>
