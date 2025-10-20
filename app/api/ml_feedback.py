@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any, Optional
 from sqlalchemy.orm import Session
-from app.core.db import get_db
+from shared_core.utils.db import get_session as get_db
 from app.ml.feedback_loop import record_feedback, get_feedback_stats
 from app.ml.retrain import retrain_model, retrain_all_models
 
