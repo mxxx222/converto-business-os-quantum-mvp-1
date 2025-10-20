@@ -57,27 +57,3 @@ services:
       - type: rewrite
         source: "/"
         destination: "/coming-soon"
-
-jobs:
-  - name: daily-pilot-report
-    type: cron
-    schedule: "0 8 * * *"
-    env: node
-    plan: starter
-    serviceName: converto-dashboard
-    command: curl -fsSL https://converto.fi/api/pilot-report
-    nodeVersion: "18"
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        value: "https://your-project.supabase.co"
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE
-        sync: false
-      - key: RESEND_API_KEY
-        sync: false
-      - key: FROM_EMAIL
-        value: "no-reply@converto.fi"
-      - key: REPORT_EMAILS
-        value: "ops@converto.fi,founder@converto.fi"
