@@ -13,8 +13,8 @@ services:
     plan: starter
     branch: main
     autoDeploy: true
-    buildCommand: cd apps/dashboard && pnpm install --frozen-lockfile && pnpm run build
-    startCommand: cd apps/dashboard && pnpm start
+    buildCommand: npm install && npm run build --workspace=@converto/dashboard
+    startCommand: npm run start --workspace=@converto/dashboard
     healthCheckPath: /api/health
 
     envVars:
@@ -95,8 +95,8 @@ services:
     branch: dev
     autoDeploy: true
     healthCheckPath: /api/health
-    buildCommand: cd apps/dashboard && pnpm install --frozen-lockfile && pnpm run build
-    startCommand: cd apps/dashboard && pnpm start
+    buildCommand: npm install && npm run build --workspace=@converto/dashboard
+    startCommand: npm run start --workspace=@converto/dashboard
 
     envVars:
       - key: NODE_ENV
