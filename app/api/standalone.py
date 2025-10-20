@@ -5,7 +5,7 @@ Backup, export, import, and inbox endpoints
 
 from fastapi import APIRouter, HTTPException, UploadFile, File
 from fastapi.responses import FileResponse
-from app.services.backup import create_full_export_zip, import_from_export
+from app.services.backup import create_full_export, import_from_export
 from app.services.reports import generate_vat_csv, generate_vat_pdf, generate_ical_reminders
 from app.services.inbox import get_messages, mark_read, create_vat_reminder, create_receipt_reminder
 from pathlib import Path
@@ -22,7 +22,7 @@ async def export_data(tenant_id: str):
     Returns download link to ZIP file
     """
     try:
-        export_file = create_full_export_zip(tenant_id)
+        export_file = create_full_export(tenant_id)
 
         return {
             "status": "ok",
