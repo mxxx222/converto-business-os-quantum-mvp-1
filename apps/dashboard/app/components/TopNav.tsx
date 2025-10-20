@@ -2,6 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ExampleDialog } from '../../components/ui/example-dialog'
 
 export default function TopNav() {
   const pathname = usePathname()
@@ -19,6 +20,9 @@ export default function TopNav() {
       >
         Ops Playbook
       </a>
+      <div className="ml-auto">
+        <ExampleDialog />
+      </div>
     </nav>
   )
 }
