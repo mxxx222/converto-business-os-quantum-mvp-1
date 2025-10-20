@@ -13,10 +13,10 @@ services:
     plan: starter
     branch: main
     autoDeploy: true
-    buildCommand: cd apps/dashboard && npm run build
-    startCommand: cd apps/dashboard && npm start
+    buildCommand: npm install && npm run build
+    startCommand: npm start
     nodeVersion: "18"
-    installCommand: cd apps/dashboard && npm ci
+    rootDir: apps/dashboard
     healthCheckPath: /api/health
 
     envVars:
