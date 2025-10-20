@@ -5,10 +5,10 @@ export async function GET() {
     start(controller) {
       const encoder = new TextEncoder()
       const send = (data: any) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`))
-      send({ text: 'Tervetuloa Co-pilot-virtaan' })
+      send([{ id: 'sse-welcome', title: 'Tervetuloa Co-pilot-virtaan', action: 'custom' }])
       let i = 0
       const interval = setInterval(() => {
-        send({ id: i, suggestion: `Ehdotus ${i + 1}` })
+        send([{ id: `sse-${i}`, title: `Ehdotus ${i + 1}`, action: 'custom' }])
         i += 1
         if (i > 5) {
           clearInterval(interval)
