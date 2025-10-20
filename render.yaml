@@ -8,7 +8,7 @@ services:
     autoDeploy: true
     buildCommand: npm install && npm run build
     startCommand: npm start
-    
+
     rootDir: apps/dashboard
     healthCheckPath: /api/health
     envVars:
@@ -17,7 +17,6 @@ services:
       - key: NEXT_RUNTIME
         value: nodejs
       - key: NEXT_PUBLIC_SUPABASE_URL
-        value: "https://your-project.supabase.co"
         sync: false
       - key: SUPABASE_SERVICE_ROLE
         sync: false
@@ -53,7 +52,4 @@ services:
         value: "true"
       - key: ENABLE_HEALTHCHECK
         value: "true"
-    routes:
-      - type: rewrite
-        source: "/"
-        destination: "/coming-soon"
+    
