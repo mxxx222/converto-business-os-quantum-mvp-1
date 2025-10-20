@@ -1,86 +1,178 @@
-services:
-  # Backend API Service
-  - type: web
-    name: converto-api
-    env: python
-    plan: starter
-    buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: converto-db
-          property: connectionString
-      - key: JWT_SECRET_KEY
-        generateValue: true
-      - key: JWT_ALGORITHM
-        value: HS256
-      - key: JWT_EXPIRE_MINUTES
-        value: 1440
-      - key: STRIPE_SECRET_KEY
-        sync: false
-      - key: STRIPE_WEBHOOK_SECRET
-        sync: false
-      - key: OPENAI_API_KEY
-        sync: false
-      - key: OCR_LANG
-        value: fin+eng
-      - key: VISION_MODEL
-        value: gpt-4o-mini
-      - key: APP_BRAND
-        value: converto
-      - key: ENVIRONMENT
-        value: production
-      - key: P2E_DAILY_MINT_LIMIT
-        value: 500
-      - key: P2E_DAILY_REDEEM_LIMIT
-        value: 500
-      - key: SLACK_BOT_TOKEN
-        sync: false
-      - key: SLACK_DEFAULT_CHANNEL
-        value: "#general"
+# render.yaml
+# Converto Business OS — Landing / Coming Soon
+# Tuotanto + Staging -ympäristöt, valmiina Render Blueprint deploylle
 
-  # Frontend Web Service
+services:
+  # ==========================
+  # 🟢 PRODUCTION SERVICE
+  # ==========================
   - type: web
     name: converto-dashboard
     env: node
+    region: frankfurt
     plan: starter
-    buildCommand: cd apps/dashboard && npm ci && npm run build
-    startCommand: cd apps/dashboard && npm start
+    branch: main
+    autoDeploy: true
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm start
     healthCheckPath: /api/health
+
     envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_RUNTIME
+        value: nodejs
+
+      # SUPABASE
       - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
+        value: "https://<YOUR_PROJECT>.supabase.co"
       - key: SUPABASE_SERVICE_ROLE
         sync: false
+
+      # RESEND
       - key: RESEND_API_KEY
         sync: false
       - key: FROM_EMAIL
-        sync: false
+        value: "no-reply@converto.fi"
+
+      # I18N
       - key: NEXT_PUBLIC_I18N_ENABLED
         value: "true"
+
+      # SITE + THEME
+      - key: SITE_URL
+        value: "https://converto.fi"
       - key: NEXT_PUBLIC_THEME
-        value: neotech
-      - key: NEXT_PUBLIC_PLAUSIBLE
-        value: "false"
+        value: "emerald"
+
+      # ANALYTICS
       - key: NEXT_PUBLIC_PLAUSIBLE_DOMAIN
-        value: converto.fi
-      - key: NEXT_PUBLIC_PLAUSIBLE_SRC
-        value: https://plausible.io/js/script.js
-      - key: NEXT_PUBLIC_GA4
-        value: "false"
-      - key: NEXT_PUBLIC_GA4_ID
+        value: "converto.fi"
+
+      # SENTRY (optional)
+      - key: SENTRY_DSN
+        value: ""
+      - key: SENTRY_ENVIRONMENT
+        value: production
+
+      # RATE LIMITS
+      - key: RATE_LIMIT_MAX
+        value: "10"
+      - key: RATE_LIMIT_WINDOW
+        value: "60000"
+
+      # PWA
+      - key: NEXT_PUBLIC_PWA_ENABLED
+        value: "true"
+      - key: NEXT_PUBLIC_PWA_NAME
+        value: "Converto Business OS"
+      - key: NEXT_PUBLIC_PWA_THEME_COLOR
+        value: "#10B981"
+
+      # SECURITY
+      - key: ALLOWED_ORIGINS
+        value: "https://converto.fi,https://app.converto.fi"
+      - key: TRUST_PROXY_HEADERS
+        value: "true"
+
+      # HEALTHCHECK
+      - key: ENABLE_HEALTHCHECK
+        value: "true"
+
+    routes:
+      - type: rewrite
+        source: "/"
+        destination: "/coming-soon"
+
+  # ==========================
+  # 🧪 STAGING SERVICE
+  # ==========================
+  - type: web
+    name: converto-staging
+    env: node
+    region: frankfurt
+    plan: starter
+    branch: dev
+    autoDeploy: true
+    healthCheckPath: /api/health
+    buildCommand: pnpm install --frozen-lockfile && pnpm run build
+    startCommand: pnpm start
+
+    envVars:
+      - key: NODE_ENV
+        value: staging
+      - key: NEXT_RUNTIME
+        value: nodejs
+
+      # SUPABASE (voit käyttää samaa projektia tai erillistä stagingia)
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: "https://<YOUR_PROJECT>.supabase.co"
+      - key: SUPABASE_SERVICE_ROLE
         sync: false
 
-  # Database
-  - type: pserv
-    name: converto-db
-    env: postgresql
-    plan: starter
-    region: oregon
+      # RESEND
+      - key: RESEND_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        value: "no-reply@staging.converto.fi"
 
-  # Redis Cache (Optional)
-  - type: redis
-    name: converto-redis
+      # I18N
+      - key: NEXT_PUBLIC_I18N_ENABLED
+        value: "true"
+
+      # SITE + THEME
+      - key: SITE_URL
+        value: "https://staging.converto.fi"
+      - key: NEXT_PUBLIC_THEME
+        value: "emerald"
+
+      # ANALYTICS
+      - key: NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+        value: "staging.converto.fi"
+
+      # SENTRY
+      - key: SENTRY_DSN
+        value: ""
+      - key: SENTRY_ENVIRONMENT
+        value: staging
+
+      # RATE LIMITS
+      - key: RATE_LIMIT_MAX
+        value: "5"
+      - key: RATE_LIMIT_WINDOW
+        value: "60000"
+
+      # PWA
+      - key: NEXT_PUBLIC_PWA_ENABLED
+        value: "true"
+      - key: NEXT_PUBLIC_PWA_NAME
+        value: "Converto Staging"
+      - key: NEXT_PUBLIC_PWA_THEME_COLOR
+        value: "#22C55E"
+
+      # SECURITY
+      - key: ALLOWED_ORIGINS
+        value: "https://staging.converto.fi"
+      - key: TRUST_PROXY_HEADERS
+        value: "true"
+
+      # HEALTHCHECK
+      - key: ENABLE_HEALTHCHECK
+        value: "true"
+
+    routes:
+      - type: rewrite
+        source: "/"
+        destination: "/coming-soon"
+
+# ==========================
+# 📊 DAILY PILOT REPORT CRON
+# ==========================
+jobs:
+  - name: daily-pilot-report
+    type: cron
+    schedule: "0 8 * * *"        # joka päivä klo 08:00 UTC (= 10:00 Suomen aikaa)
+    env: node
     plan: starter
-    region: oregon
+    serviceName: converto-dashboard
+    command: curl -fsSL https://converto.fi/api/pilot-report
