@@ -25,7 +25,8 @@ services:
 
       # SUPABASE
       - key: NEXT_PUBLIC_SUPABASE_URL
-        value: "https://<YOUR_PROJECT>.supabase.co"
+        value: "https://your-project.supabase.co"
+        sync: false
       - key: SUPABASE_SERVICE_ROLE
         sync: false
 
@@ -106,7 +107,8 @@ services:
 
       # SUPABASE (voit käyttää samaa projektia tai erillistä stagingia)
       - key: NEXT_PUBLIC_SUPABASE_URL
-        value: "https://<YOUR_PROJECT>.supabase.co"
+        value: "https://your-project.supabase.co"
+        sync: false
       - key: SUPABASE_SERVICE_ROLE
         sync: false
 
@@ -180,7 +182,8 @@ jobs:
       - key: NODE_ENV
         value: production
       - key: NEXT_PUBLIC_SUPABASE_URL
-        value: "https://<YOUR_PROJECT>.supabase.co"
+        value: "https://your-project.supabase.co"
+        sync: false
       - key: SUPABASE_SERVICE_ROLE
         sync: false
       - key: RESEND_API_KEY
