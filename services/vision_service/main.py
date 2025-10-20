@@ -24,7 +24,7 @@ openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class VisionRequest(BaseModel):
     image_data: bytes
-    analysis_type: str = "general"  # general, receipt, device, face, object
+    analysis_type: str = "general"  # general, receipt, invoice, device, face, object
     prompt: Optional[str] = None
     confidence_threshold: float = 0.7
 
@@ -64,6 +64,8 @@ async def analyze_image(request: VisionRequest):
         # Route to appropriate analysis
         if request.analysis_type == "receipt":
             results = await analyze_receipt(request.image_data, request.prompt)
+        elif request.analysis_type == "invoice":
+            results = await analyze_invoice(request.image_data, request.prompt)
         elif request.analysis_type == "device":
             results = await analyze_device(request.image_data, request.prompt)
         elif request.analysis_type == "face":
@@ -194,6 +196,41 @@ async def analyze_receipt(image_data: bytes, prompt: Optional[str] = None) -> Di
             "confidence": 0.6,
             "extracted_data": {}
         }
+
+
+async def analyze_invoice(image_data: bytes, prompt: Optional[str] = None) -> Dict[str, Any]:
+    """Analyze invoice image with stronger field mapping and tax detection."""
+    image_b64 = base64.b64encode(image_data).decode()
+    system_prompt = """You are an expert invoice parser. Extract structured fields:
+    - seller (name, address, VAT ID)
+    - buyer (name, address, VAT ID if present)
+    - invoice_number, date, due_date, payment_terms
+    - line_items [description, quantity, unit_price, net, vat_rate, vat_amount, total]
+    - subtotal, vat_amount_total, total_amount, currency
+    - inferred_tax_fields (which lines had VAT, zero-rated, reverse charge)
+    Return strictly JSON with a confidence score (0..1)."""
+
+    response = openai_client.chat.completions.create(
+        model="gpt-4-vision-preview",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt or "Analyze this invoice"},
+                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{image_b64}"}},
+                ],
+            },
+        ],
+        max_tokens=1200,
+        temperature=0.2,
+    )
+
+    content = response.choices[0].message.content
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        return {"raw_analysis": content, "confidence": 0.65, "extracted_data": {}}
 
 
 async def analyze_device(image_data: bytes, prompt: Optional[str] = None) -> Dict[str, Any]:

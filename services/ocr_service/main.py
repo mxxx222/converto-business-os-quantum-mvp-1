@@ -4,7 +4,7 @@ OCR Microservice - Handles document scanning and text extraction
 
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 import pytesseract
 import cv2
 import numpy as np
@@ -18,6 +18,17 @@ app = FastAPI(title="OCR Service", version="1.0.0")
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+# Optional EasyOCR
+try:
+    import easyocr  # type: ignore
+    _easyocr_reader = easyocr.Reader(["fi", "en"], gpu=False)
+    EASY_AVAILABLE = True
+except Exception:
+    EASY_AVAILABLE = False
+
+VISION_URL = os.getenv("VISION_SERVICE_URL", "http://vision-service:8003")
+import requests
 
 
 class OCRRequest(BaseModel):
@@ -130,6 +141,84 @@ async def extract_structured_data(request: OCRExtractionRequest):
     except Exception as e:
         logger.error(f"Data extraction failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Extraction error: {str(e)}")
+
+
+@app.post("/ocr/ensemble")
+async def ocr_ensemble(file: UploadFile = File(...), language: str = "fin+eng"):
+    """Hybrid OCR: Tesseract + EasyOCR + Vision ensemble with confidence."""
+    if not file.content_type.startswith('image/'):
+        raise HTTPException(status_code=400, detail="File must be an image")
+    img_bytes = await file.read()
+
+    # Tesseract branch
+    tess_res = await extract_text(OCRRequest(file_data=img_bytes, language=language))
+
+    # EasyOCR branch (optional)
+    easy_text = ""
+    easy_conf = 0.0
+    if EASY_AVAILABLE:
+        try:
+            img = np.array(Image.open(io.BytesIO(img_bytes)).convert("RGB"))
+            results: List[List[Any]] = _easyocr_reader.readtext(img)
+            if results:
+                easy_text = "\n".join([r[1] for r in results])
+                confs = [float(r[2]) for r in results if isinstance(r[2], (float, int))]
+                easy_conf = sum(confs) / len(confs) if confs else 0.0
+        except Exception as e:
+            logger.warning(f"EasyOCR failed: {e}")
+
+    # Vision branch (OpenAI Vision via vision-service)
+    vision_text = ""
+    vision_conf = 0.0
+    try:
+        resp = requests.post(
+            f"{VISION_URL}/vision/analyze",
+            json={
+                "image_data": list(img_bytes),  # pydantic may expect bytes; fallback to list
+                "analysis_type": "receipt",
+            },
+            timeout=30,
+        )
+        if resp.ok:
+            v = resp.json()
+            # Flatten results description/raw_analysis
+            vision_text = json.dumps(v.get("results", v), ensure_ascii=False)
+            vision_conf = float(v.get("confidence", 0.8))
+    except Exception as e:
+        logger.warning(f"Vision analyze failed: {e}")
+
+    # Ensemble score (simple weighted average)
+    parts = []
+    weights = []
+    if tess_res.text:
+        parts.append(tess_res.text)
+        weights.append(max(0.1, tess_res.confidence))
+    if easy_text:
+        parts.append(easy_text)
+        weights.append(max(0.1, easy_conf))
+    if vision_text:
+        parts.append(vision_text)
+        weights.append(max(0.1, vision_conf))
+
+    if not parts:
+        raise HTTPException(status_code=500, detail="No OCR results available")
+
+    # Merge: text concatenation; confidence = normalized weights avg
+    merged_text = "\n\n".join(parts)
+    conf = sum(weights) / len(weights)
+
+    # Attempt structured extraction for invoice fields
+    fields = extract_invoice_data(merged_text)
+    return {
+        "text": merged_text,
+        "confidence": conf,
+        "sources": {
+            "tesseract": tess_res.confidence,
+            "easyocr": easy_conf if EASY_AVAILABLE else None,
+            "vision": vision_conf,
+        },
+        "extracted": fields,
+    }
 
 
 @app.get("/ocr/health")
