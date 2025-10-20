@@ -215,6 +215,25 @@ See individual `.md` files:
 npm install next-themes framer-motion lucide-react
 ```
 
+### **ShadCN Baseline (per app)**
+
+```
+npx shadcn@latest init
+npx shadcn@latest add button dialog input tooltip dropdown-menu
+```
+
+StyleGuide (smoke):
+
+- Dashboard: `/apps/dashboard/app/(guides)/styleguide`
+- Billing: `/apps/billing/app/(guides)/styleguide`
+- Receipts: `/apps/receipts/app/(guides)/styleguide`
+- Legal: `/apps/legal/app/(guides)/styleguide`
+
+Checklist:
+- Focus ring visible, Tab/Shift+Tab, Enter/Space/Escape toimii
+- Kontrasti AA
+- Toast throttling (max 3 / 2s)
+
 ### **Import Patterns**
 
 ```tsx
