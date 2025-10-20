@@ -9,7 +9,8 @@
     "destroy": "pulumi destroy -y"
   },
   "dependencies": {
-    "@pulumi/pulumi": "^3.124.0"
+    "@pulumi/pulumi": "^3.124.0",
+    "@pulumi/upstash": "^0.0.10"
   },
   "devDependencies": {
     "typescript": "^5.4.5"

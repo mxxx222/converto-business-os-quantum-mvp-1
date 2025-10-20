@@ -51,4 +51,10 @@ jobs:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_GREEN_SERVICE_ID: ${{ secrets.RENDER_GREEN_SERVICE_ID }}
           RENDER_BLUE_SERVICE_ID: ${{ secrets.RENDER_BLUE_SERVICE_ID }}
+      - name: Rollback to previous (on failure)
+        if: failure()
+        run: |
+          curl -fsSL -X POST "$RENDER_PRIMARY_ROLLBACK_HOOK"
+        env:
+          RENDER_PRIMARY_ROLLBACK_HOOK: ${{ secrets.RENDER_PRIMARY_ROLLBACK_HOOK }}
 
