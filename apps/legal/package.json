@@ -16,7 +16,8 @@
     "@tanstack/react-query-devtools": "^5.35.0",
     "framer-motion": "^10.16.4",
     "zustand": "^4.5.0",
-    "sonner": "^1.4.41"
+    "sonner": "^1.4.41",
+    "zod": "^3.23.8"
   },
   "publishConfig": { "access": "public" }
 }
