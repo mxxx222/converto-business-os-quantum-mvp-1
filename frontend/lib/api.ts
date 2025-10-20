@@ -151,6 +151,32 @@ class ApiClient {
     return this.request('/api/v1/dashboard');
   }
 
+  // Billing usage & pricing
+  async getTenantUsage(tenantId = 'tenant_demo'): Promise<ApiResponse<{
+    tenant_id: string;
+    plan_type: string;
+    usage: { ocr_scans_per_month: number; ai_tokens_per_month: number; ai_chat_queries_per_month?: number };
+    limits: Record<string, number>;
+  }>> {
+    return this.request(`/billing/tenant/${tenantId}/usage`);
+  }
+
+  async getUsageTimeseries(tenantId = 'tenant_demo', days = 30): Promise<ApiResponse<{
+    tenant_id: string;
+    days: number;
+    series: { date: string; ocr_scans: number; ai_tokens: number }[];
+  }>> {
+    return this.request(`/billing/tenant/${tenantId}/usage/timeseries?days=${days}`);
+  }
+
+  async getAdaptivePricing(tenantId = 'tenant_demo'): Promise<ApiResponse<{
+    estimated_monthly_total_eur: number;
+    variable_cost_eur: number;
+    plan_recommendation: { recommended_plan: string; base_price_eur: number; reason: string };
+  }>> {
+    return this.request(`/billing/tenant/${tenantId}/adaptive-pricing`);
+  }
+
   // Health check
   async healthCheck(): Promise<ApiResponse<{ status: string }>> {
     return this.request('/health');

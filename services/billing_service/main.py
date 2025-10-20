@@ -2,7 +2,7 @@
 Billing Microservice - Handles subscriptions, payments, and billing logic
 """
 
-from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks
+from fastapi import FastAPI, HTTPException, Depends, BackgroundTasks, Request
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 import stripe
@@ -10,6 +10,7 @@ import os
 import logging
 from datetime import datetime, timedelta
 from enum import Enum
+from .pricing import PricingInputs, calculate_adaptive_pricing
 
 app = FastAPI(title="Billing Service", version="1.0.0")
 
@@ -242,6 +243,45 @@ async def get_tenant_usage(tenant_id: str):
     except Exception as e:
         logger.error(f"Usage retrieval failed: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Usage error: {str(e)}")
+
+
+@app.get("/billing/tenant/{tenant_id}/usage/timeseries")
+async def get_usage_timeseries(tenant_id: str, days: int = 30):
+    """Return mock daily usage timeseries for the tenant (last N days)."""
+    try:
+        from datetime import timedelta
+        base = datetime.utcnow()
+        series = []
+        for i in range(days - 1, -1, -1):
+            day = (base - timedelta(days=i)).date().isoformat()
+            # Mock variability
+            ocr = 20 + (i * 3) % 15
+            tokens = 5000 + (i * 457) % 12000
+            series.append({"date": day, "ocr_scans": ocr, "ai_tokens": tokens})
+        return {"tenant_id": tenant_id, "days": days, "series": series}
+    except Exception as e:
+        logger.error(f"Timeseries retrieval failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Timeseries error")
+
+
+@app.get("/billing/tenant/{tenant_id}/adaptive-pricing")
+async def get_adaptive_pricing(tenant_id: str):
+    """Compute adaptive pricing recommendation based on current usage."""
+    try:
+        usage_resp = await get_tenant_usage(tenant_id)
+        plan_type = str(usage_resp["plan_type"])
+        usage = usage_resp["usage"]
+        inputs = PricingInputs(
+            plan_type=plan_type,
+            ocr_scans_month=int(usage.get("ocr_scans_per_month", 0)),
+            ai_tokens_month=int(usage.get("ai_tokens_per_month", 0)),
+            users=int(usage_resp["limits"].get("users", 1)),
+        )
+        result = calculate_adaptive_pricing(inputs)
+        return result
+    except Exception as e:
+        logger.error(f"Adaptive pricing failed: {str(e)}")
+        raise HTTPException(status_code=500, detail="Adaptive pricing error")
 
 
 @app.post("/billing/webhook")
