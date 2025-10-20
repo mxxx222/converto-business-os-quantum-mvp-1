@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ExampleDialog } from '../../components/ui/example-dialog'
+import { LocaleSwitcher } from '../../components/LocaleSwitcher'
 
 export default function TopNav() {
   const pathname = usePathname()
@@ -20,7 +21,8 @@ export default function TopNav() {
       >
         Ops Playbook
       </a>
-      <div className="ml-auto">
+      <div className="ml-auto flex items-center gap-3">
+        <LocaleSwitcher />
         <ExampleDialog />
       </div>
     </nav>

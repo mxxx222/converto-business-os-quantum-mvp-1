@@ -1,3 +1,9 @@
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+  return NextResponse.json({ ok: true }, { status: 200 })
+}
+
 import '../../../telemetry/otel'
 import '../../../lib/metrics'
 import { ensureSecurityAlertListener } from '../../../lib/security-alert-listener'

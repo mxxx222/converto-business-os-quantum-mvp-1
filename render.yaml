@@ -42,18 +42,34 @@ services:
 
   # Frontend Web Service
   - type: web
-    name: converto-frontend
+    name: converto-dashboard
     env: node
     plan: starter
-    buildCommand: cd frontend && npm ci && npm run build
-    startCommand: cd frontend && npm start
+    buildCommand: cd apps/dashboard && npm ci && npm run build
+    startCommand: cd apps/dashboard && npm start
+    healthCheckPath: /api/health
     envVars:
-      - key: NEXT_PUBLIC_API_URL
-        fromService:
-          type: web
-          name: converto-api
-          property: host
-      - key: NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        sync: false
+      - key: NEXT_PUBLIC_I18N_ENABLED
+        value: "true"
+      - key: NEXT_PUBLIC_THEME
+        value: neotech
+      - key: NEXT_PUBLIC_PLAUSIBLE
+        value: "false"
+      - key: NEXT_PUBLIC_PLAUSIBLE_DOMAIN
+        value: converto.fi
+      - key: NEXT_PUBLIC_PLAUSIBLE_SRC
+        value: https://plausible.io/js/script.js
+      - key: NEXT_PUBLIC_GA4
+        value: "false"
+      - key: NEXT_PUBLIC_GA4_ID
         sync: false
 
   # Database

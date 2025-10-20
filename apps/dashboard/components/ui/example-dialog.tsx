@@ -15,7 +15,7 @@ export function ExampleDialog() {
               <h3 className="text-sm font-semibold">Example dialog</h3>
               <button className="text-gray-400 hover:text-gray-200" onClick={() => setOpen(false)}>✕</button>
             </div>
-            <p className="text-sm text-gray-300">This is a lightweight dialog placeholder (ShadCN init pending).</n+p>
+            <p className="text-sm text-gray-300">This is a lightweight dialog placeholder (ShadCN init pending).</p>
             <div className="mt-4 flex justify-end gap-2">
               <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>Cancel</Button>
               <Button size="sm" onClick={() => setOpen(false)}>OK</Button>

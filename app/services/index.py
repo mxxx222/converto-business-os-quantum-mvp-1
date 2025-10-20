@@ -3,6 +3,7 @@ import json
 import time
 import hashlib
 from collections import Counter
+import re
 
 
 CODE_EXT = {
@@ -26,7 +27,8 @@ INDEX_FILE = ".agent_index.json"
 
 
 def tokenize(text: str):
-    return [t.lower() for t in text.split() if t.isascii() and t.isalnum()]
+    # Extract alphanumeric tokens (keeps letters and digits, drops punctuation)
+    return [t.lower() for t in re.findall(r"[A-Za-z0-9]+", text)]
 
 
 def file_sig(p: Path) -> str:
