@@ -13,8 +13,8 @@ services:
     plan: starter
     branch: main
     autoDeploy: true
-    buildCommand: pnpm install --frozen-lockfile && pnpm run build
-    startCommand: pnpm start
+    buildCommand: cd apps/dashboard && pnpm install --frozen-lockfile && pnpm run build
+    startCommand: cd apps/dashboard && pnpm start
     healthCheckPath: /api/health
 
     envVars:
@@ -95,8 +95,8 @@ services:
     branch: dev
     autoDeploy: true
     healthCheckPath: /api/health
-    buildCommand: pnpm install --frozen-lockfile && pnpm run build
-    startCommand: pnpm start
+    buildCommand: cd apps/dashboard && pnpm install --frozen-lockfile && pnpm run build
+    startCommand: cd apps/dashboard && pnpm start
 
     envVars:
       - key: NODE_ENV
@@ -176,3 +176,16 @@ jobs:
     plan: starter
     serviceName: converto-dashboard
     command: curl -fsSL https://converto.fi/api/pilot-report
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: "https://<YOUR_PROJECT>.supabase.co"
+      - key: SUPABASE_SERVICE_ROLE
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: FROM_EMAIL
+        value: "no-reply@converto.fi"
+      - key: REPORT_EMAILS
+        value: "ops@converto.fi,founder@converto.fi"
