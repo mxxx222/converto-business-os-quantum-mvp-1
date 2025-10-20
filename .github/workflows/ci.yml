@@ -8,15 +8,18 @@ on:
 jobs:
   guard:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [dashboard, billing, receipts, legal]
     defaults:
       run:
-        working-directory: apps/dashboard
+        working-directory: apps/${{ matrix.app }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Guard DEBUG flags
+      - name: Guard DEBUG flags (${{ matrix.app }})
         run: node scripts/check-env-file.mjs && node scripts/check-debug-env.mjs
         env:
           DEBUG_CACHE: ${{ secrets.DEBUG_CACHE }}

@@ -30,6 +30,12 @@ Esimerkit:
 ✅ [CI] DEBUG-liput pois päältä – ok
 ```
 
+App-kohtaiset polut (monorepo):
+- Dashboard: apps/dashboard/scripts/*
+- Billing: apps/billing/scripts/*
+- Receipts: apps/receipts/scripts/*
+- Legal: apps/legal/scripts/*
+
 ## CI Guard
 CI estää buildin, jos DEBUG_* liput ovat totta ympäristössä tai .env.production‑tiedostossa.
 
