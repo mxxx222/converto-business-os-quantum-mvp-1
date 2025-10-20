@@ -1,0 +1,53 @@
+{
+  "id": null,
+  "title": "Converto Alerts – Operations",
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "version": 1,
+  "editable": true,
+  "tags": ["converto", "alerts", "ops"],
+  "templating": {"list": []},
+  "panels": [
+    {
+      "type": "gauge",
+      "title": "Alerts Status (current dedupe entries)",
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "Prometheus"},
+      "fieldConfig": {"defaults": {"unit": "none", "thresholds": {"mode": "absolute", "steps": [{"color": "green"}, {"color": "yellow", "value": 1}, {"color": "red", "value": 10}] } }, "overrides": []},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "showThresholdLabels": true, "showThresholdMarkers": true},
+      "targets": [{"expr": "alerts_status_count", "refId": "A"}]
+    },
+    {
+      "type": "timeseries",
+      "title": "Alerts Status Trend (alerts_status_count)",
+      "gridPos": {"x": 6, "y": 0, "w": 18, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "Prometheus"},
+      "fieldConfig": {"defaults": {"unit": "none"}, "overrides": []},
+      "options": {"legend": {"showLegend": true, "placement": "bottom"}, "tooltip": {"mode": "single"}},
+      "targets": [{"expr": "alerts_status_count", "refId": "A"}]
+    },
+    {
+      "type": "barchart",
+      "title": "Suppression Events (active > 0)",
+      "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "Prometheus"},
+      "fieldConfig": {"defaults": {"unit": "none"}, "overrides": []},
+      "options": {"legend": {"showLegend": false}, "tooltip": {"mode": "single"}},
+      "targets": [{"expr": "max_over_time((alerts_status_count > 0)[5m])", "refId": "A"}]
+    },
+    {
+      "type": "stat",
+      "title": "Last Reset Timestamp",
+      "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8},
+      "datasource": {"type": "prometheus", "uid": "Prometheus"},
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "values": false}, "orientation": "horizontal", "colorMode": "value"},
+      "fieldConfig": {"defaults": {"unit": "dateTimeAsIso"}, "overrides": []},
+      "targets": [{"expr": "alerts_last_reset_timestamp_seconds", "refId": "A"}]
+    }
+  ],
+  "time": {"from": "now-24h", "to": "now"},
+  "timepicker": {"refresh_intervals": ["5s", "10s", "30s", "1m"]},
+  "refresh": "30s"
+}
+
+
