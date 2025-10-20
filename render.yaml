@@ -93,11 +93,12 @@ services:
 jobs:
   - name: daily-pilot-report
     type: cron
-    schedule: "0 8 * * *"        # joka päivä klo 08:00 UTC (= 10:00 Suomen aikaa)
+    schedule: "0 8 * * *"
     env: node
     plan: starter
     serviceName: converto-dashboard
     command: curl -fsSL https://converto.fi/api/pilot-report
+    nodeVersion: "18"
     envVars:
       - key: NODE_ENV
         value: production
