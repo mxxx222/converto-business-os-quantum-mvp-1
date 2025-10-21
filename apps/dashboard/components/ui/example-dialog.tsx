@@ -2,12 +2,13 @@
 import { useState } from 'react'
 import { Button } from './button'
 
-export function ExampleDialog() {
-  const [open, setOpen] = useState(false)
+export function ExampleDialog(): JSX.Element {
+  const [open, setOpen] = useState<boolean>(false)
+
   return (
     <>
       <Button variant="outline" size="sm" onClick={() => setOpen(true)}>Open</Button>
-      {open ? (
+      {open && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
           <div className="relative z-10 w-full max-w-md rounded-xl border border-white/10 bg-[#0F172A] p-4 text-gray-100 shadow-xl">
@@ -22,9 +23,7 @@ export function ExampleDialog() {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   )
 }
-
-

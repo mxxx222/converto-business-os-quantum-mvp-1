@@ -21,5 +21,3 @@ for (const k of required) {
 }
 if (!ok) process.exit(1)
 console.log('[CI] Required envs present')
-
-

@@ -22,29 +22,26 @@ export async function middleware(req: NextRequest) {
       }
     }
   }
-  const cookieName = process.env.COOKIE_NAME || 'converto.sid'
+
+  const cookieName: string = process.env.COOKIE_NAME || 'converto.sid'
   const cookie = req.cookies.get(cookieName)?.value
   if (!cookie) return NextResponse.redirect(new URL('/login', req.url))
 
   const claims = await verifyJWT(cookie).catch(() => null)
   if (!claims) return NextResponse.redirect(new URL('/login', req.url))
 
-  const tenantId = req.headers.get('x-tenant-id') || (claims as any).tid
-  if (!tenantId || tenantId !== (claims as any).tid) {
+  const tenantId: string | undefined = req.headers.get('x-tenant-id') || claims.tid
+  if (!tenantId || tenantId !== claims.tid) {
     return NextResponse.redirect(new URL('/403', req.url))
   }
 
-  // Tenant security lock check is disabled in dev to avoid Redis in middleware
-
   // Get tenant theme and add to headers
   const tenantTheme = getTenantTheme(tenantId)
-  
+
   const res = NextResponse.next()
-  res.headers.set('x-user-id', String((claims as any).sub))
-  res.headers.set('x-tenant-id', String((claims as any).tid))
-  res.headers.set('x-roles', ((claims as any).roles || []).join(','))
+  res.headers.set('x-user-id', String(claims.sub))
+  res.headers.set('x-tenant-id', String(claims.tid))
+  res.headers.set('x-roles', (claims.roles || []).join(','))
   res.headers.set('x-tenant-theme', JSON.stringify(tenantTheme))
   return res
 }
-
-

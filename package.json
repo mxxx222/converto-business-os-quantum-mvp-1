@@ -1,26 +1,16 @@
 {
-  "name": "converto-monorepo",
-  "private": true,
-  "workspaces": [
-    "frontend",
-    "apps/*",
-    "packages/*"
-  ],
+  "name": "render-mcp-server",
+  "version": "1.0.0",
+  "description": "Render MCP Server for Cursor",
+  "type": "module",
+  "main": "mcp_render_server.js",
   "scripts": {
-    "prebuild": "node scripts/check-env-file.mjs && node scripts/check-debug-env.mjs",
-    "build": "turbo run build",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "test": "turbo run test",
-    "changeset": "changeset",
-    "version": "changeset version && git add -A && git commit -m 'chore(release): version packages' || true",
-    "version-packages": "changeset version",
-    "release": "changeset publish"
+    "start": "node mcp_render_server.js"
   },
-  "devDependencies": {
-    "turbo": "^1.13.3",
-    "@changesets/cli": "^2.27.0",
-    "@changesets/changelog-git": "^0.2.0"
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
-

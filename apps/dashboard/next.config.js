@@ -8,13 +8,13 @@ const securityHeaders = [
 ]
 
 const nextConfig = {
-  experimental: { 
+  experimental: {
     runtime: 'edge',
     // Enable React Server Components
     serverComponentsExternalPackages: ['d3', 'framer-motion']
   },
   transpilePackages: ['@converto/ui'],
-  
+
   // Performance optimizations
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -28,12 +28,12 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
   },
-  
+
   // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
-  
+
   // Bundle optimization
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
@@ -43,7 +43,7 @@ const nextConfig = {
     }
     return config;
   },
-  
+
   async headers() {
     return [
       { source: '/(.*)', headers: securityHeaders },
@@ -71,4 +71,3 @@ const nextConfig = {
 }
 const withBundleAnalyzer = require('@next/bundle-analyzer')({ enabled: process.env.ANALYZE === 'true' })
 module.exports = withBundleAnalyzer(nextConfig)
-

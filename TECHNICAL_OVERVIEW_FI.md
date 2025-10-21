@@ -152,8 +152,8 @@ const useAchievements = create((set) => ({
   xp: 0,
   badges: [],
   addXP: (amount) => set(state => ({ xp: state.xp + amount })),
-  unlockAchievement: (id) => set(state => ({ 
-    badges: [...state.badges, id] 
+  unlockAchievement: (id) => set(state => ({
+    badges: [...state.badges, id]
   }))
 }));
 
@@ -213,7 +213,7 @@ useEffect(() => {
 self.addEventListener('fetch', (event) => {
   if (event.request.url.includes('/api/ocr/upload')) {
     event.respondWith(
-      navigator.onLine 
+      navigator.onLine
         ? fetch(event.request)
         : putInQueue(event.request)
     );

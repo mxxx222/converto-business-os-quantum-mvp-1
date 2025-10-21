@@ -1,18 +1,9 @@
-import { NextResponse } from 'next/server'
+import { NextResponse } from 'next/server';
+import { ensureSecurityAlertListener } from '../../../lib/security-alert-listener';
 
-export async function GET() {
-  return NextResponse.json({ ok: true }, { status: 200 })
-}
-
-import '../../../telemetry/otel'
-import '../../../lib/metrics'
-import { ensureSecurityAlertListener } from '../../../lib/security-alert-listener'
-
-export async function GET() {
+export async function GET(): Promise<NextResponse> {
   if (process.env.DATABASE_URL) {
-    await ensureSecurityAlertListener(process.env.DATABASE_URL)
+    await ensureSecurityAlertListener(process.env.DATABASE_URL);
   }
-  return new Response('ok')
+  return NextResponse.json({ ok: true }, { status: 200 });
 }
-
-

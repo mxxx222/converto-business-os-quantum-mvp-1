@@ -2,12 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ExampleDialog } from '../../components/ui/example-dialog'
-import { LocaleSwitcher } from '../../components/LocaleSwitcher'
+import ExampleDialog from '../../components/ui/example-dialog'
+import LocaleSwitcher from '../../components/LocaleSwitcher'
 
-export default function TopNav() {
+export default function TopNav(): JSX.Element {
   const pathname = usePathname()
-  const isAlerts = pathname.startsWith('/copilot/settings/alerts')
+  const isAlerts: boolean = pathname.startsWith('/copilot/settings/alerts')
+
   return (
     <nav className="flex items-center gap-3 text-sm mb-4">
       <Link href="/" className="px-2 py-1 rounded hover:bg-white/5">Home</Link>
@@ -28,5 +29,3 @@ export default function TopNav() {
     </nav>
   )
 }
-
-

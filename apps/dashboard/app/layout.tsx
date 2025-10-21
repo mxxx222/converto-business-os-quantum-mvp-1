@@ -3,7 +3,6 @@ import Providers from './providers'
 import NotificationProvider from './providers/notifications'
 import { ScoreProvider } from '../lib/score/context'
 import dynamic from 'next/dynamic'
-const CoPilotDrawer = dynamic(() => import('../components/CoPilotDrawer'), { ssr: false })
 import { SWRegister } from '../components/sw-register'
 import { UploadQueue } from '../components/UploadQueue'
 import { Toaster } from 'sonner'
@@ -15,16 +14,18 @@ import Script from 'next/script'
 import { Inter, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 
+const CoPilotDrawer = dynamic(() => import('../components/CoPilotDrawer'), { ssr: false })
+
 const inter = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-inter' })
 const space = Space_Grotesk({ subsets: ['latin'], display: 'swap', variable: '--font-space' })
 
 export const metadata: Metadata = {
   title: 'Converto Business OS — Älykäs automaatio',
   description: 'Kuitit, laskutus ja verolaskenta — kaikki toimii itsestään.',
-  openGraph: { 
-    title: 'Converto Business OS', 
-    description: 'Älykäs automaatio yrityksille.', 
-    images: ['/og-cover.png'] 
+  openGraph: {
+    title: 'Converto Business OS',
+    description: 'Älykäs automaatio yrityksille.',
+    images: ['/og-cover.png']
   },
   manifest: '/manifest.json',
 }
@@ -44,7 +45,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ThemeProvider>
         <Toaster richColors position="top-center" />
         <SWRegister />
-        
+
         {/* Load analytics script after interactive */}
         {process.env.NEXT_PUBLIC_PLAUSIBLE === 'true' && (
           <Script
