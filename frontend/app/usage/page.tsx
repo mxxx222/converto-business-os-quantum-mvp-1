@@ -1,9 +1,9 @@
-export const runtime = 'edge'
-import { fetchUsage } from './actions'
-import UsageChart from '@/frontend/components/UsageChart'
+export const runtime = 'edge';
+import { fetchUsage } from './actions';
+import UsageChart from '../../components/UsageChart';
 
-export default async function UsagePage() {
-  const { usage, series, pricing } = await fetchUsage('tenant_demo')
+export default async function UsagePage(): Promise<JSX.Element> {
+  const { usage, series, pricing } = await fetchUsage('tenant_demo');
 
   return (
     <div className="p-6 space-y-6">
@@ -28,9 +28,8 @@ export default async function UsagePage() {
       </div>
 
       <div className="rounded-lg border p-4">
-        <UsageChart data={series?.series || []} />
+        <UsageChart data={series?.series ?? []} />
       </div>
     </div>
-  )
+  );
 }
-

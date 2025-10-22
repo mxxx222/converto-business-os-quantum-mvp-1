@@ -1,24 +1,42 @@
-"use client"
+"use client";
 
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import React from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-type Point = { date: string; ocr_scans: number; ai_tokens: number }
-
-export default function UsageChart({ data }: { data: Point[] }) {
-  return (
-    <div style={{ width: '100%', height: 360 }}>
-      <ResponsiveContainer>
-        <LineChart data={data} margin={{ top: 16, right: 24, left: 8, bottom: 8 }}>
-          <XAxis dataKey="date" tick={{ fontSize: 12 }} />
-          <YAxis yAxisId="left" tick={{ fontSize: 12 }} />
-          <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 12 }} />
-          <Tooltip />
-          <Legend />
-          <Line yAxisId="left" type="monotone" dataKey="ocr_scans" stroke="#0ea5e9" name="OCR scans" dot={false} strokeWidth={2} />
-          <Line yAxisId="right" type="monotone" dataKey="ai_tokens" stroke="#84cc16" name="AI tokens" dot={false} strokeWidth={2} />
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
-  )
+interface UsageChartProps {
+  data?: Array<{
+    date: string;
+    usage: number;
+    cost: number;
+  }>;
 }
 
+export default function UsageChart({ data = [] }: UsageChartProps): JSX.Element {
+  const defaultData: Array<{ date: string; usage: number; cost: number }> = [
+    { date: '2025-01-01', usage: 100, cost: 25.50 },
+    { date: '2025-01-02', usage: 150, cost: 38.25 },
+    { date: '2025-01-03', usage: 200, cost: 51.00 },
+    { date: '2025-01-04', usage: 180, cost: 45.90 },
+    { date: '2025-01-05', usage: 220, cost: 56.10 },
+  ];
+
+  const chartData = data.length > 0 ? data : defaultData;
+
+  return (
+    <div className="p-4 bg-white border border-gray-200 rounded-lg">
+      <h3 className="font-semibold text-gray-900 mb-4">Usage Chart</h3>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={chartData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="date" />
+            <YAxis />
+            <Tooltip />
+            <Line type="monotone" dataKey="usage" stroke="#0047FF" strokeWidth={2} name="Usage" />
+            <Line type="monotone" dataKey="cost" stroke="#059669" strokeWidth={2} name="Cost" />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+}

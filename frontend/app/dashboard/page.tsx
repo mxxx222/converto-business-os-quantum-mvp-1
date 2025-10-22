@@ -2,7 +2,6 @@
 import { motion } from "framer-motion";
 import {
   Shield,
-  Zap,
   TrendingUp,
   FileText,
   Award,
@@ -15,7 +14,7 @@ import Link from "next/link";
 import GamifyCard from "@/components/GamifyCard";
 import WalletWidget from "@/components/WalletWidget";
 import RewardsList from "@/components/RewardsList";
-import { ProviderChip, PrivacyChip, LatencyChip, ConfidenceChip } from "@/components/StatusChips";
+import { ProviderChip, PrivacyChip, ConfidenceChip } from "@/components/StatusChips";
 import { QuickReplies } from "@/components/CommandPalette";
 
 const container = {
@@ -32,10 +31,16 @@ const item = {
 };
 
 export default function Dashboard() {
-  const tenant = "demo";
-  const user = "user_demo";
+  const tenant: string = "demo";
+  const user: string = "user_demo";
 
-  const features = [
+  const features: Array<{
+    icon: React.ElementType;
+    title: string;
+    desc: string;
+    color: string;
+    link: string;
+  }> = [
     {
       icon: FileText,
       title: "OCR AI Kuitit",
@@ -80,7 +85,11 @@ export default function Dashboard() {
     }
   ];
 
-  const stats = [
+  const stats: Array<{
+    label: string;
+    value: string;
+    change: string;
+  }> = [
     { label: "Skannattuja kuitteja", value: "247", change: "+12%" },
     { label: "Säästetty aikaa", value: "18h", change: "+8%" },
     { label: "ALV-tarkkuus", value: "99.8%", change: "0%" },
@@ -174,7 +183,7 @@ export default function Dashboard() {
             animate="show"
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16"
           >
-            {stats.map((stat, i) => (
+            {stats.map((stat) => (
               <motion.div
                 key={stat.label}
                 variants={item}
@@ -200,112 +209,4 @@ export default function Dashboard() {
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
             Kaikki mitä tarvitset yhdessä paikassa
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Integroidut työkalut, jotka säästävät aikaa ja rahaa – AI-ohjattu automaatio joka askeleella.
-          </p>
-        </motion.div>
-
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {features.map((feature, i) => {
-            const Icon = feature.icon;
-            return (
-              <Link key={feature.title} href={feature.link}>
-                <motion.div
-                  variants={item}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  className="group relative overflow-hidden rounded-2xl bg-white p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100"
-                >
-                  {/* Gradient Background on Hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity`} />
-
-                  <div className="relative z-10">
-                    <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${feature.color} text-white mb-4 shadow-lg`}>
-                      <Icon className="w-6 h-6" />
-                    </div>
-
-                    <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:bg-clip-text group-hover:from-indigo-600 group-hover:to-purple-600 transition-all">
-                      {feature.title}
-                    </h3>
-
-                    <p className="text-gray-600 text-sm mb-4">
-                      {feature.desc}
-                    </p>
-
-                    <div className="flex items-center text-indigo-600 font-medium text-sm group-hover:translate-x-2 transition-transform">
-                      Avaa
-                      <ArrowRight className="w-4 h-4 ml-1" />
-                    </div>
-                  </div>
-                </motion.div>
-              </Link>
-            );
-          })}
-        </motion.div>
-      </section>
-
-      {/* Gamification Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Ansaitse käyttäessä 🎮
-          </h2>
-          <p className="text-lg text-gray-600">
-            Joka toiminto palkitsee – kerää pisteitä, lunasta palkintoja ja kilpaile muiden kanssa!
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <GamifyCard tenant={tenant} user={user} />
-          </div>
-          <div className="space-y-6">
-            <WalletWidget tenant={tenant} user={user} />
-          </div>
-        </div>
-
-        <div className="mt-6">
-          <RewardsList tenant={tenant} />
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 p-12 text-center shadow-2xl"
-        >
-          <div className="absolute inset-0 bg-grid-white/10" />
-          <div className="relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Valmis aloittamaan?
-            </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-              Liity yli 500 suomalaisyrittäjän joukkoon, jotka ovat automatisoineet kirjanpitonsa.
-            </p>
-            <Link href="/billing">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-8 py-4 rounded-xl bg-white text-indigo-600 font-bold text-lg shadow-xl hover:shadow-2xl transition-all"
-              >
-                Valitse suunnitelma
-              </motion.button>
-            </Link>
-          </div>
-        </motion.div>
-      </section>
-    </div>
-  );
-}
+          <p className="text-lg text-gray-600 max-w-

@@ -1,27 +1,10 @@
-import { NextRequest, NextResponse } from 'next/server'
+import createMiddleware from 'next-intl/middleware';
 
-export function middleware(request: NextRequest) {
-  // CSRF-suojaus POST-reiteille
-  if (request.method === 'POST') {
-    const origin = request.headers.get('origin')
-    const host = request.headers.get('host')
+export default createMiddleware({
+  locales: ['fi', 'en', 'sv', 'ru', 'et'],
+  defaultLocale: 'fi',
+});
 
-    // Salli vain same-origin POST-pyynnöt
-    if (!origin || !host) {
-      return NextResponse.json({ error: 'Missing origin or host header' }, { status: 403 })
-    }
-
-    const originUrl = new URL(origin)
-    if (originUrl.host !== host) {
-      return NextResponse.json({ error: 'Cross-origin request blocked' }, { status: 403 })
-    }
-  }
-
-  return NextResponse.next()
-}
-
-export const config = {
-  matcher: [
-    '/api/:path*',
-  ],
-}
+export const config: { matcher: string[] } = {
+  matcher: ['/', '/(fi|en|sv|ru|et)/:path*'],
+};

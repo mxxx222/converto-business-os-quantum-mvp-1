@@ -1,5 +1,5 @@
-import { apiClient } from '@/frontend/lib/api'
-import UsageChart from '@/frontend/components/UsageChart'
+import { apiClient } from '../../../lib/api'
+import UsageChart from '../../../components/UsageChart'
 
 export const runtime = 'edge'
 
@@ -14,7 +14,7 @@ export default async function CostDashboard({ tenantId = 'tenant_demo' }: { tena
   const series = seriesRes.data?.series || []
   const limits = usageRes.data?.limits || {}
 
-  const euroSeries = series.map((p) => ({
+  const euroSeries = series.map((p: { date: string; ai_tokens: number; ocr_scans: number }) => ({
     date: p.date,
     eur: (p.ai_tokens / 1000) * TOKEN_COST_EUR_PER_1K + p.ocr_scans * OCR_COST_EUR_PER_SCAN,
     ocr_scans: p.ocr_scans,
@@ -43,10 +43,8 @@ export default async function CostDashboard({ tenantId = 'tenant_demo' }: { tena
       </div>
 
       <div className="rounded-lg border p-4">
-        <UsageChart data={series.map(s => ({ date: s.date, ocr_scans: s.ocr_scans, ai_tokens: s.ai_tokens }))} />
+        <UsageChart data={series.map((s: { date: string; ocr_scans: number; ai_tokens: number }) => ({ date: s.date, ocr_scans: s.ocr_scans, ai_tokens: s.ai_tokens }))} />
       </div>
     </div>
   )
 }
-
-

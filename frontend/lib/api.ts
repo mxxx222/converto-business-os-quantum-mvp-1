@@ -1,41 +1,20 @@
-// API Client for Converto Business OS
-export interface ApiResponse<T> {
+/**
+ * API client for Converto Business OS
+ */
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://127.0.0.1:8000';
+
+export interface ApiResponse<T = any> {
+  success: boolean;
   data?: T;
   error?: string;
-  message?: string;
 }
 
-export interface ReceiptData {
-  id?: string;
-  merchant_name?: string;
-  amount?: number;
-  date?: string;
-  items?: ReceiptItem[];
-  vat_amount?: number;
-  net_amount?: number;
-  gross_amount?: number;
-}
-
-export interface ReceiptItem {
-  description: string;
-  quantity: number;
-  unit_price: number;
-  total: number;
-  category?: string;
-}
-
-export interface Entitlements {
-  tier: string;
-  modules: Record<string, boolean>;
-  limits: Record<string, number>;
-  usage: Record<string, number>;
-}
-
-class ApiClient {
+export class ApiClient {
   private baseUrl: string;
 
-  constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  constructor(baseUrl: string = API_BASE_URL) {
+    this.baseUrl = baseUrl;
   }
 
   private async request<T>(
@@ -44,158 +23,62 @@ class ApiClient {
   ): Promise<ApiResponse<T>> {
     try {
       const url = `${this.baseUrl}${endpoint}`;
-      const token = localStorage.getItem('auth_token');
-      
       const response = await fetch(url, {
-        ...options,
         headers: {
           'Content-Type': 'application/json',
-          ...(token && { Authorization: `Bearer ${token}` }),
           ...options.headers,
         },
+        ...options,
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        return {
-          error: errorData.detail || `HTTP ${response.status}: ${response.statusText}`,
-        };
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      return { data };
+      return { success: true, data };
     } catch (error) {
       return {
-        error: error instanceof Error ? error.message : 'Network error',
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown error',
       };
     }
   }
 
-  // Receipt management
-  async uploadReceipt(file: File): Promise<ApiResponse<ReceiptData>> {
-    const formData = new FormData();
-    formData.append('file', file);
-
-    try {
-      const response = await fetch(`${this.baseUrl}/api/v1/ocr/power`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('auth_token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        return { error: errorData.detail || 'Upload failed' };
-      }
-
-      const data = await response.json();
-      return { data };
-    } catch (error) {
-      return { error: error instanceof Error ? error.message : 'Upload error' };
-    }
+  async get<T>(endpoint: string): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, { method: 'GET' });
   }
 
-  async getReceipts(limit = 50, offset = 0): Promise<ApiResponse<ReceiptData[]>> {
-    return this.request<ReceiptData[]>(`/api/v1/ocr/results?limit=${limit}&offset=${offset}`);
-  }
-
-  async getReceipt(id: string): Promise<ApiResponse<ReceiptData>> {
-    return this.request<ReceiptData>(`/api/v1/ocr/results/${id}`);
-  }
-
-  // Authentication
-  async login(email: string, password: string): Promise<ApiResponse<{ access_token: string; token_type: string }>> {
-    return this.request('/api/v1/auth/login', {
+  async post<T>(endpoint: string, data?: T): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  async register(email: string, password: string, company_name: string): Promise<ApiResponse<{ message: string }>> {
-    return this.request('/api/v1/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({ email, password, company_name }),
+  async put<T>(endpoint: string, data?: T): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, {
+      method: 'PUT',
+      body: data ? JSON.stringify(data) : undefined,
     });
   }
 
-  // Entitlements
-  async getEntitlements(tenantId = 'tenant_demo'): Promise<ApiResponse<Entitlements>> {
-    return this.request<Entitlements>(`/api/v1/entitlements/${tenantId}`);
+  async delete<T>(endpoint: string): Promise<ApiResponse<T>> {
+    return this.request<T>(endpoint, { method: 'DELETE' });
   }
 
-  async checkFeature(feature: string, tenantId = 'tenant_demo'): Promise<ApiResponse<{ enabled: boolean }>> {
-    return this.request<{ enabled: boolean }>(`/api/v1/entitlements/${tenantId}/features/${feature}`);
+  // Usage and billing methods
+  async getTenantUsage(tenantId: string): Promise<ApiResponse<any>> {
+    return this.get(`/api/v1/usage/${tenantId}`);
   }
 
-  // VAT calculation
-  async calculateVat(amount: number, category?: string): Promise<ApiResponse<{
-    net_amount: number;
-    vat_amount: number;
-    gross_amount: number;
-    vat_rate: number;
-  }>> {
-    return this.request('/api/v1/vat/calculate', {
-      method: 'POST',
-      body: JSON.stringify({ amount, category }),
-    });
+  async getUsageTimeseries(tenantId: string, days: number): Promise<ApiResponse<any>> {
+    return this.get(`/api/v1/usage/${tenantId}/timeseries?days=${days}`);
   }
 
-  // Dashboard data
-  async getDashboardData(): Promise<ApiResponse<{
-    total_receipts: number;
-    total_amount: number;
-    monthly_usage: Record<string, number>;
-  }>> {
-    return this.request('/api/v1/dashboard');
-  }
-
-  // Billing usage & pricing
-  async getTenantUsage(tenantId = 'tenant_demo'): Promise<ApiResponse<{
-    tenant_id: string;
-    plan_type: string;
-    usage: { ocr_scans_per_month: number; ai_tokens_per_month: number; ai_chat_queries_per_month?: number };
-    limits: Record<string, number>;
-  }>> {
-    return this.request(`/billing/tenant/${tenantId}/usage`);
-  }
-
-  async getUsageTimeseries(tenantId = 'tenant_demo', days = 30): Promise<ApiResponse<{
-    tenant_id: string;
-    days: number;
-    series: { date: string; ocr_scans: number; ai_tokens: number }[];
-  }>> {
-    return this.request(`/billing/tenant/${tenantId}/usage/timeseries?days=${days}`);
-  }
-
-  async getAdaptivePricing(tenantId = 'tenant_demo'): Promise<ApiResponse<{
-    estimated_monthly_total_eur: number;
-    variable_cost_eur: number;
-    plan_recommendation: { recommended_plan: string; base_price_eur: number; reason: string };
-  }>> {
-    return this.request(`/billing/tenant/${tenantId}/adaptive-pricing`);
-  }
-
-  // Health check
-  async healthCheck(): Promise<ApiResponse<{ status: string }>> {
-    return this.request('/health');
+  async getAdaptivePricing(tenantId: string): Promise<ApiResponse<any>> {
+    return this.get(`/api/v1/pricing/${tenantId}/adaptive`);
   }
 }
 
-// Export singleton instance
 export const apiClient = new ApiClient();
-
-// Export individual functions for convenience
-export const {
-  uploadReceipt,
-  getReceipts,
-  getReceipt,
-  login,
-  register,
-  getEntitlements,
-  checkFeature,
-  calculateVat,
-  getDashboardData,
-  healthCheck,
-} = apiClient;

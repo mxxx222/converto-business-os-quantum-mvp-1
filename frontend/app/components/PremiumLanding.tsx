@@ -3,8 +3,13 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import {
-  Zap, Shield, BarChart3, Plug, Eye,
-  Check, ArrowRight, Globe
+  Zap,
+  Shield,
+  BarChart3,
+  Plug,
+  Eye,
+  Check,
+  ArrowRight,
 } from "lucide-react";
 import landingData from "@/lib/i18n/landing.json";
 import LogosBar from "@/components/marketing/LogosBar";
@@ -13,7 +18,7 @@ import TrustBadges from "@/components/marketing/TrustBadges";
 
 type Language = "fi" | "en" | "ru";
 
-const icons = [Zap, Shield, BarChart3, Plug, Eye];
+const icons: React.ComponentType[] = [Zap, Shield, BarChart3, Plug, Eye];
 
 export default function PremiumLanding() {
   const [lang, setLang] = useState<Language>("fi");
@@ -115,9 +120,7 @@ export default function PremiumLanding() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-gray-600">
-                  {feature.description}
-                </p>
+                <p className="text-gray-600">{feature.description}</p>
               </motion.div>
             );
           })}
@@ -161,7 +164,11 @@ export default function PremiumLanding() {
               >
                 {idx === 1 && (
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-600 text-white text-sm font-bold rounded-full">
-                    {lang === "fi" ? "Suosituin" : lang === "en" ? "Popular" : "Популярный"}
+                    {lang === "fi"
+                      ? "Suosituin"
+                      : lang === "en"
+                      ? "Popular"
+                      : "Популярный"}
                   </div>
                 )}
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">
@@ -193,9 +200,7 @@ export default function PremiumLanding() {
           </div>
 
           <div className="text-center mt-12">
-            <p className="text-gray-600 text-lg">
-              {t.pricing.cta}
-            </p>
+            <p className="text-gray-600 text-lg">{t.pricing.cta}</p>
           </div>
         </div>
       </section>
@@ -205,53 +210,4 @@ export default function PremiumLanding() {
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              {t.cta.title}
-            </h2>
-            <p className="text-xl text-white/90 mb-8">
-              {t.cta.subtitle}
-            </p>
-            <Link
-              href="/auth"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-white text-indigo-600 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all shadow-2xl hover:shadow-3xl active:scale-95"
-            >
-              {t.cta.button}
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <div className="text-center md:text-left">
-              <p className="text-sm text-gray-400">
-                {t.footer.copyright}
-              </p>
-            </div>
-            <div className="flex gap-6">
-              {t.footer.links.map((link, idx) => (
-                <a
-                  key={idx}
-                  href="#"
-                  className="text-sm text-gray-400 hover:text-white transition-colors"
-                >
-                  {link}
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+        <div className="max-w-4xl mx-auto px-4 text-center

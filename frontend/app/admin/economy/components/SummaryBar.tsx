@@ -1,23 +1,23 @@
 "use client";
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, Minus, Zap, Users, Award, Activity } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Zap, Users, Award } from "lucide-react";
+import React from "react";
 
-export default function SummaryBar() {
-  // Stub KPIs – wire to /api/v1/gamify/admin/kpis later
-  const kpi = [
+export default function SummaryBar(): JSX.Element {
+  const kpi: { label: string; value: string; subtext: string; trend: string; color: string; Icon: React.ComponentType }[] = [
     { label: "Token-inflaatio", value: "+2.1%", subtext: "/viikko", trend: "up", color: "emerald", Icon: TrendingUp },
     { label: "Redeem-aste", value: "34%", subtext: "käyttäjistä", trend: "neutral", color: "blue", Icon: Award },
     { label: "Aktiivit (streak ≥3d)", value: "62%", subtext: "päivittäin", trend: "up", color: "purple", Icon: Users },
     { label: "Avg. CT / käyttäjä", value: "128", subtext: "tokenia", trend: "up", color: "fuchsia", Icon: Zap },
   ];
 
-  const trendIcon = (t: string) => {
+  const trendIcon = (t: string): JSX.Element => {
     if (t === "up") return <TrendingUp className="w-3 h-3" />;
     if (t === "down") return <TrendingDown className="w-3 h-3" />;
     return <Minus className="w-3 h-3" />;
   };
 
-  const trendColor = (t: string) => {
+  const trendColor = (t: string): string => {
     if (t === "up") return "text-emerald-600 bg-emerald-50";
     if (t === "down") return "text-red-600 bg-red-50";
     return "text-gray-600 bg-gray-50";
@@ -35,7 +35,6 @@ export default function SummaryBar() {
             transition={{ delay: i * 0.1 }}
             className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
           >
-            {/* Gradient Accent */}
             <div className={`absolute inset-0 bg-gradient-to-br from-${x.color}-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity`} />
 
             <div className="relative p-5">
@@ -53,7 +52,6 @@ export default function SummaryBar() {
               <div className="text-xs text-gray-500">{x.subtext}</div>
             </div>
 
-            {/* Shimmer Effect on Hover */}
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           </motion.div>
         );

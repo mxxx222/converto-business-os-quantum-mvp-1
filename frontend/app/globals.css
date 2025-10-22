@@ -2,90 +2,101 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CONVERTO BLUE THEME - LIGHT MODE (default) */
+/* Theme-specific CSS variables */
 :root {
-  --bg: #FFFFFF;
-  --surface: #F5F6FA;
-  --text-primary: #0F1115;
-  --text-secondary: #444B5A;
-  --accent: #0047FF;
-  --accent-hover: #0032B8;
-  --border: #E0E3EB;
-  --cta-bg: #0047FF;
-  --cta-text: #FFFFFF;
+  /* NeoTech Theme */
+  --neotech-bg: #0D1117;
+  --neotech-accent: #0047FF;
+  --neotech-text: #F0F6FC;
+  --neotech-card: #161B22;
+  --neotech-border: #30363D;
+
+  /* Nordic Theme */
+  --nordic-bg: #F8FAFC;
+  --nordic-accent: #059669;
+  --nordic-text: #1F2937;
+  --nordic-card: #FFFFFF;
+  --nordic-border: #E5E7EB;
 }
 
-/* DARK THEME */
-.dark {
-  --bg: #0D1117;
-  --surface: #161B22;
-  --text-primary: #F5F6FA;
-  --text-secondary: #A0A7B4;
-  --accent: #69B3FF;
-  --accent-hover: #89C8FF;
-  --border: #2B3038;
-  --cta-bg: #0047FF;
-  --cta-text: #FFFFFF;
+/* NeoTech Theme */
+[data-theme="neotech"] {
+  --bg-start: var(--neotech-bg);
+  --accent: var(--neotech-accent);
+  --text: var(--neotech-text);
+  --card: var(--neotech-card);
+  --border: var(--neotech-border);
 }
 
-/* Automaattinen dark mode systeemipreferenssin mukaan */
-@media (prefers-color-scheme: dark) {
-  :root:not(.light):not(.dark) {
-    --bg: #0D1117;
-    --surface: #161B22;
-    --text-primary: #F5F6FA;
-    --text-secondary: #A0A7B4;
-    --accent: #69B3FF;
-    --accent-hover: #89C8FF;
-    --border: #2B3038;
-    --cta-bg: #0047FF;
-    --cta-text: #FFFFFF;
+/* Nordic Theme */
+[data-theme="nordic"] {
+  --bg-start: var(--nordic-bg);
+  --accent: var(--nordic-accent);
+  --text: var(--nordic-text);
+  --card: var(--nordic-card);
+  --border: var(--nordic-border);
+}
+
+/* System Theme (follows OS preference) */
+[data-theme="system"] {
+  --bg-start: var(--neotech-bg);
+  --accent: var(--neotech-accent);
+  --text: var(--neotech-text);
+  --card: var(--neotech-card);
+  --border: var(--neotech-border);
+}
+
+@media (prefers-color-scheme: light) {
+  [data-theme="system"] {
+    --bg-start: var(--nordic-bg);
+    --accent: var(--nordic-accent);
+    --text: var(--nordic-text);
+    --card: var(--nordic-card);
+    --border: var(--nordic-border);
   }
 }
 
-html, body {
-  background: var(--bg);
-  color: var(--text-primary);
-}
-
-/* Glass morphism effect */
-.glass {
-  @apply backdrop-blur-xl bg-white/10 border border-white/15 shadow-xl;
-}
-
-/* Premium card hover effect */
-.premium-card {
-  @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl;
-}
-
-/* Gradient text */
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-sky-400;
-}
-
+/* Apply theme variables */
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
+  background-color: var(--bg-start);
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Focus ring for accessibility */
-*:focus-visible {
-  outline: none;
-  ring: 2px solid #69B3FF;
-  ring-offset: 2px;
+/* Theme-aware components */
+.theme-card {
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
 }
 
-.dark *:focus-visible {
-  ring-offset-color: #0D1117;
+.theme-button {
+  background-color: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
 }
 
-/* Reduced motion support */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+.theme-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Dark mode specific styles */
+[data-theme="neotech"] .theme-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="nordic"] .theme-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth transitions */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

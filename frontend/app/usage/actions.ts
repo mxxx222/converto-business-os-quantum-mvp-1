@@ -1,8 +1,8 @@
 'use server'
 
-import { apiClient } from '@/frontend/lib/api'
+import { apiClient } from '../../lib/api'
 
-export async function fetchUsage(tenantId: string = 'tenant_demo') {
+export async function fetchUsage(tenantId: string = 'tenant_demo'): Promise<{ usage: unknown; series: unknown; pricing: unknown }> {
   const [usage, series, pricing] = await Promise.all([
     apiClient.getTenantUsage(tenantId),
     apiClient.getUsageTimeseries(tenantId, 30),
@@ -10,4 +10,3 @@ export async function fetchUsage(tenantId: string = 'tenant_demo') {
   ])
   return { usage: usage.data, series: series.data, pricing: pricing.data }
 }
-

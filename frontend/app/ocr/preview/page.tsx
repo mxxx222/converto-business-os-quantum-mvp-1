@@ -1,29 +1,29 @@
 "use client"
 
 import React, { useMemo, useState } from 'react'
-import OCRCanvasViewer from '@/frontend/components/OCRCanvasViewer'
+import OCRCanvasViewer from '../../../components/OCRCanvasViewer'
 
 export const runtime = 'edge'
 
 type OCRData = {
   success?: boolean
   message?: string
-  data?: any
+  data?: unknown
   mock?: boolean
-  mock_data?: any
+  mock_data?: unknown
 }
 
 export default function OCRPreviewPage() {
   const [file, setFile] = useState<File | null>(null)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
   const [result, setResult] = useState<OCRData | null>(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState<boolean>(false)
 
   const rawText = useMemo(() => {
     const payload = result?.data || result?.mock_data
     if (!payload) return ''
     if (typeof payload === 'string') return payload
-    if (payload.raw_text) return String(payload.raw_text)
+    if ('raw_text' in payload) return String(payload.raw_text)
     try {
       return JSON.stringify(payload, null, 2)
     } catch {
@@ -32,7 +32,6 @@ export default function OCRPreviewPage() {
   }, [result])
 
   const highlighted = useMemo(() => {
-    // highlight numbers and totals
     const text = rawText || ''
     const withTotals = text.replace(/(total|sum|amount|vat|alv)/gi, '<mark>$1</mark>')
     return withTotals.replace(/([0-9]+[\.,][0-9]{2})/g, '<span style="background:#FEF3C7">$1</span>')
@@ -94,5 +93,3 @@ export default function OCRPreviewPage() {
     </div>
   )
 }
-
-
