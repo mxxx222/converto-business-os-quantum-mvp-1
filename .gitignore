@@ -9,6 +9,11 @@
 !start_backend.sh
 !start_frontend.sh
 !.pre-commit-config.yaml
+!package-mcp.json
+!mcp_*.js
+!mcp_*.json
+!AUTO_DEPLOY_MCP_GUIDE.md
+!test_mcp_*.sh
 
 # allow code dirs
 !app/
