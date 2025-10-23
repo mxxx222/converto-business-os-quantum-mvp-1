@@ -14,6 +14,7 @@
 !app/
 !frontend/
 !scripts/
+!frontend/.nvmrc
 !app/static/
 
 # inside allowed dirs, re-ignore heavy junk
