@@ -22,8 +22,10 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
 
-  // Disable static generation for problematic pages
-  output: 'export',
+  // Server runtime: disable static export to allow Server Actions,
+  // edge runtime features, and native headers/redirects on Render
+  // (keep the rest of the config intact)
+  // output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
