@@ -1,9 +1,8 @@
 const express = require('express');
 const next = require('next');
-const { createServer } = require('http');
 
 const dev = process.env.NODE_ENV !== 'production';
-const hostname = 'localhost';
+const hostname = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
 // Create Next.js app
@@ -27,7 +26,7 @@ app.prepare().then(() => {
     return handle(req, res);
   });
 
-  server.listen(port, (err) => {
+  server.listen(port, hostname, (err) => {
     if (err) throw err;
     console.log(`> Ready on http://${hostname}:${port}`);
   });
