@@ -110,9 +110,25 @@ const nextConfig = {
     ];
   },
 
-  // Redirects (disabled to allow root landing page to render)
+  // Redirects - root to dashboard for stable entry point
   async redirects() {
-    return [];
+    return [
+      {
+        source: '/',
+        destination: '/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/receipts/new',
+        destination: '/dashboard',
+        permanent: false,
+      },
+      {
+        source: '/billing',
+        destination: '/dashboard',
+        permanent: false,
+      },
+    ];
   },
 };
 module.exports = nextConfig;
