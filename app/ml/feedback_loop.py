@@ -4,12 +4,13 @@ Feedback Loop - Collect User Corrections
 Records all user feedback to build training data for ML models.
 """
 
-import json
 from datetime import datetime
-from typing import Dict, Any, Optional
-from sqlalchemy import Column, Integer, String, JSON, DateTime, Boolean, Float
+from typing import Any, Dict, List, Optional, Union
+
+from sqlalchemy import JSON, Boolean, Column, DateTime, Float, Integer, String
 from sqlalchemy.orm import Session
-from shared_core.utils.db import Base, engine
+
+from shared_core.utils.db import Base
 
 
 class FeedbackSample(Base):
@@ -45,10 +46,6 @@ class FeedbackSample(Base):
 
     # Context
     context = Column(JSON, nullable=True)  # Additional context
-
-
-# Create table
-Base.metadata.create_all(bind=engine)
 
 
 def record_feedback(
@@ -138,7 +135,7 @@ def get_feedback_stats(db: Session, action: Optional[str] = None) -> Dict[str, A
     }
 
 
-def _get_action_breakdown(samples: list) -> Dict[str, Dict[str, Any]]:
+def _get_action_breakdown(samples: List[FeedbackSample]) -> Dict[str, Dict[str, Any]]:
     """Group stats by action type"""
     breakdown = {}
 
@@ -160,7 +157,7 @@ def _get_action_breakdown(samples: list) -> Dict[str, Dict[str, Any]]:
     return breakdown
 
 
-def get_recent_corrections(db: Session, action: Optional[str] = None, limit: int = 100) -> list:
+def get_recent_corrections(db: Session, action: Optional[str] = None, limit: int = 100) -> List[FeedbackSample]:
     """
     Get recent user corrections for retraining
 
@@ -178,7 +175,7 @@ def get_recent_corrections(db: Session, action: Optional[str] = None, limit: int
         query = query.filter(FeedbackSample.action == action)
 
     # Only incorrect predictions (need to learn from mistakes)
-    query = query.filter(FeedbackSample.is_correct == False)
+    query = query.filter(FeedbackSample.is_correct.is_(False))
 
     # Most recent first
     query = query.order_by(FeedbackSample.created_at.desc())

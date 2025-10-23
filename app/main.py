@@ -1,6 +1,4 @@
 import os
-
-import sentry_sdk
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import RedirectResponse
@@ -45,16 +43,22 @@ from app.routers import search as search_router
 from shared_core.modules.ai_common.insights import kpis_example
 from shared_core.modules.ocr.router import router as ocr_router
 
-sentry_dsn = os.getenv("SENTRY_DSN")
-if sentry_dsn:
-    sentry_sdk.init(
-        dsn=sentry_dsn,
-        integrations=[FastApiIntegration(), StarletteIntegration()],
-        environment=os.getenv("SENTRY_ENV", "local"),
-        traces_sample_rate=float(os.getenv("SENTRY_SAMPLE_RATE", "0.0")),
-        profiles_sample_rate=0.0,
-        send_default_pii=False,
-    )
+# Light mode support
+LIGHT_MODE = os.getenv("CONVERTO_LIGHT_MODE", "0") == "1"
+
+# Initialize Sentry only if not in light mode
+if not LIGHT_MODE:
+    import sentry_sdk
+    sentry_dsn = os.getenv("SENTRY_DSN")
+    if sentry_dsn:
+        sentry_sdk.init(
+            dsn=sentry_dsn,
+            integrations=[FastApiIntegration(), StarletteIntegration()],
+            environment=os.getenv("SENTRY_ENV", "local"),
+            traces_sample_rate=float(os.getenv("SENTRY_SAMPLE_RATE", "0.0")),
+            profiles_sample_rate=0.0,
+            send_default_pii=False,
+        )
 
 app = FastAPI(title="Converto Business OS – Quantum Edition (MVP+)")
 
@@ -116,7 +120,7 @@ start_scheduler(interval_seconds=60)
 
 
 @app.get("/")
-def root():
+def root() -> RedirectResponse:
     return RedirectResponse(url="https://www.converto.fi/coming-soon", status_code=308)
 
 
@@ -125,7 +129,7 @@ ins = APIRouter(prefix="/api/v1/insights", tags=["insights"])
 
 
 @ins.get("/kpis")
-def kpis():
+def kpis() -> dict:
     return kpis_example()
 
 
