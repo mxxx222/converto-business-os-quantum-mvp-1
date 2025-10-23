@@ -23,10 +23,9 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
 
-  // Server runtime: disable static export to allow Server Actions,
-  // edge runtime features, and native headers/redirects on Render
-  // (keep the rest of the config intact)
-  output: 'export',
+  // Server runtime: enable server-side rendering for Render deployment
+  // (remove static export to allow Next.js server to run)
+  // output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
@@ -43,11 +42,6 @@ const nextConfig = {
   // ESLint configuration
   eslint: {
     ignoreDuringBuilds: true,
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
-    ignoreBuildErrors: true,
   },
 
   // Webpack optimizations
