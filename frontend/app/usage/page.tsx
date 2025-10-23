@@ -15,15 +15,15 @@ export default async function UsagePage(): Promise<JSX.Element> {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="rounded-lg border p-4">
           <div className="text-sm text-gray-500">Plan</div>
-          <div className="text-xl font-semibold">{usage?.plan_type}</div>
+          <div className="text-xl font-semibold">{usage?.plan_type || 'Free'}</div>
         </div>
         <div className="rounded-lg border p-4">
           <div className="text-sm text-gray-500">Estimated Monthly</div>
-          <div className="text-xl font-semibold">€{pricing?.estimated_monthly_total_eur?.toFixed(2)}</div>
+          <div className="text-xl font-semibold">€{pricing?.estimated_monthly_total_eur?.toFixed(2) || '0.00'}</div>
         </div>
         <div className="rounded-lg border p-4">
           <div className="text-sm text-gray-500">Recommendation</div>
-          <div className="text-xl font-semibold">{pricing?.plan_recommendation?.recommended_plan}</div>
+          <div className="text-xl font-semibold">{pricing?.plan_recommendation?.recommended_plan || 'Free'}</div>
         </div>
       </div>
 

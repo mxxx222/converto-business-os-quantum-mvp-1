@@ -8,7 +8,7 @@ import ThemeSwitcher from "./ThemeSwitcher";
 type Language = "fi" | "en" | "ru";
 
 export default function GlobalNavbar() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [lang, setLang] = useState<Language>("fi");
   const t = useTranslations(lang).nav;
 
@@ -39,7 +39,7 @@ export default function GlobalNavbar() {
             {t.features}
           </Link>
           <Link href="/case-studies" className="hover:text-gray-600 transition-colors">
-            {t.caseStudies}
+            Case Studies
           </Link>
           <Link href="/pricing" className="hover:text-gray-600 transition-colors">
             {t.pricing}

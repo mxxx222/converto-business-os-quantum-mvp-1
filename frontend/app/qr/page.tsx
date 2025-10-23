@@ -1,40 +1,48 @@
 "use client";
-import { useState } from "react";
-import { Camera, Receipt, Calculator, FileText, ArrowRight, CheckCircle } from "lucide-react";
+import { Camera, Calculator, FileText, ArrowRight, CheckCircle } from "lucide-react";
 import Link from "next/link";
+import React from "react";
 
 export default function QRLandingPage() {
-  const [scanned, setScanned] = useState(false);
-
-  const quickActions = [
+  const quickActions: Array<{
+    icon: React.ComponentType;
+    label: string;
+    href: string;
+    color: string;
+    description: string;
+  }> = [
     {
       icon: Camera,
       label: "Skannaa kuitti",
       href: "/receipts/new",
       color: "from-blue-500 to-cyan-500",
-      description: "Lataa kuitti ja käsittele automaattisesti"
+      description: "Lataa kuitti ja käsittele automaattisesti",
     },
     {
       icon: Calculator,
       label: "ALV-laskuri",
       href: "/vat",
       color: "from-purple-500 to-pink-500",
-      description: "Laske ALV automaattisesti"
+      description: "Laske ALV automaattisesti",
     },
     {
       icon: FileText,
       label: "Raportit",
       href: "/reports",
       color: "from-emerald-500 to-teal-500",
-      description: "Tarkastele raportteja"
-    }
+      description: "Tarkastele raportteja",
+    },
   ];
 
-  const stats = [
+  const stats: Array<{
+    label: string;
+    value: string;
+    change: string;
+  }> = [
     { label: "Kuitteja käsitelty", value: "1,247", change: "+23%" },
     { label: "Aikaa säästetty", value: "156h", change: "+45%" },
     { label: "ALV-virheet", value: "0", change: "-100%" },
-    { label: "Tyytyväisiä", value: "98%", change: "+12%" }
+    { label: "Tyytyväisiä", value: "98%", change: "+12%" },
   ];
 
   return (
@@ -60,18 +68,15 @@ export default function QRLandingPage() {
           <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl mx-auto mb-4 flex items-center justify-center">
             <Camera className="w-8 h-8 text-white" />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Tervetuloa Convertoon!
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Tervetuloa Convertoon!</h1>
           <p className="text-gray-600 text-sm leading-relaxed">
-            Automaattinen kuittien käsittely ja ALV-laskenta yrittäjille.
-            Säästä aikaa ja vähennä virheitä.
+            Automaattinen kuittien käsittely ja ALV-laskenta yrittäjille. Säästä aikaa ja vähennä virheitä.
           </p>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-3 mb-8">
-          {stats.map((stat, i) => (
+          {stats.map((stat) => (
             <div key={stat.label} className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
               <div className="text-xs text-gray-500 mb-1">{stat.label}</div>
               <div className="text-lg font-bold text-gray-900">{stat.value}</div>
@@ -83,7 +88,7 @@ export default function QRLandingPage() {
         {/* Quick Actions */}
         <div className="space-y-3 mb-8">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Pikatoiminnot</h2>
-          {quickActions.map((action, i) => {
+          {quickActions.map((action) => {
             const Icon = action.icon;
             return (
               <Link key={action.label} href={action.href}>
@@ -110,15 +115,13 @@ export default function QRLandingPage() {
           <p className="text-blue-100 text-sm mb-4">
             {process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true'
               ? 'Rekisteröidy ja käsittele ensimmäinen kuitti ilmaiseksi'
-              : 'Ilmoittautuminen alkaa 5-6 päivän kuluttua'
-            }
+              : 'Ilmoittautuminen alkaa 5-6 päivän kuluttua'}
           </p>
           <Link href="/register">
             <button className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-xl hover:bg-blue-50 transition-colors">
               {process.env.NEXT_PUBLIC_REGISTRATION_OPEN === 'true'
                 ? 'Ilmoittaudu nyt'
-                : 'Ilmoittautuminen alkaa pian'
-              }
+                : 'Ilmoittautuminen alkaa pian'}
             </button>
           </Link>
         </div>
@@ -133,7 +136,7 @@ export default function QRLandingPage() {
               "📱 Mobiilioptimoitu käyttöliittymä",
               "🔒 Turvallinen ja GDPR-yhteensopiva",
               "⚡ Reaaliaikainen käsittely",
-              "📈 Kustannussäästöjen seuranta"
+              "📈 Kustannussäästöjen seuranta",
             ].map((feature, i) => (
               <div key={i} className="flex items-center gap-3 text-sm text-gray-700">
                 <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />

@@ -2,8 +2,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
-type ProviderType = "openai" | "ollama" | "anthropic" | "tesseract";
-
 interface ProviderChipProps {
   aiProvider?: string;
   visionProvider?: string;
@@ -12,8 +10,8 @@ interface ProviderChipProps {
 
 export function ProviderChip({ aiProvider, visionProvider, showLatency = true }: ProviderChipProps) {
   const [latency, setLatency] = useState<number | null>(null);
-  const [aiInfo, setAIInfo] = useState<any>(null);
-  const [visionInfo, setVisionInfo] = useState<any>(null);
+  const [aiInfo, setAIInfo] = useState<Record<string, any> | null>(null);
+  const [visionInfo, setVisionInfo] = useState<Record<string, any> | null>(null);
 
   useEffect(() => {
     // Fetch provider info
@@ -36,7 +34,7 @@ export function ProviderChip({ aiProvider, visionProvider, showLatency = true }:
   const currentAI = aiProvider || aiInfo?.default_provider || "openai";
   const currentVision = visionProvider || visionInfo?.default_provider || "openai";
 
-  const getProviderColor = (provider: string) => {
+  const getProviderColor = (provider: string): string => {
     switch (provider) {
       case "openai": return "bg-emerald-100 text-emerald-800 border-emerald-200";
       case "ollama": return "bg-blue-100 text-blue-800 border-blue-200";
@@ -46,7 +44,7 @@ export function ProviderChip({ aiProvider, visionProvider, showLatency = true }:
     }
   };
 
-  const getProviderIcon = (provider: string) => {
+  const getProviderIcon = (provider: string): string => {
     switch (provider) {
       case "openai": return "🤖";
       case "ollama": return "🦙";
@@ -56,7 +54,7 @@ export function ProviderChip({ aiProvider, visionProvider, showLatency = true }:
     }
   };
 
-  const getCost = (provider: string) => {
+  const getCost = (provider: string): string => {
     switch (provider) {
       case "openai": return "$0.15/1M";
       case "ollama": return "FREE";
@@ -95,7 +93,7 @@ export function ProviderChip({ aiProvider, visionProvider, showLatency = true }:
 }
 
 export function PrivacyChip() {
-  const [isLocal, setIsLocal] = useState(false);
+  const [isLocal, setIsLocal] = useState<boolean>(false);
 
   useEffect(() => {
     // Check if using local providers
@@ -130,7 +128,7 @@ export function LatencyChip({ latencies = [112, 98, 145, 103, 87] }: { latencies
     ? latencies.reduce((a, b) => a + b, 0) / latencies.length
     : 0;
 
-  const getColor = (ms: number) => {
+  const getColor = (ms: number): string => {
     if (ms < 200) return "text-green-600";
     if (ms < 500) return "text-yellow-600";
     return "text-red-600";
@@ -158,13 +156,13 @@ export function LatencyChip({ latencies = [112, 98, 145, 103, 87] }: { latencies
 }
 
 export function ConfidenceChip({ confidence }: { confidence: number }) {
-  const getColor = () => {
+  const getColor = (): string => {
     if (confidence >= 0.8) return "bg-green-100 text-green-800 border-green-200";
     if (confidence >= 0.6) return "bg-yellow-100 text-yellow-800 border-yellow-200";
     return "bg-red-100 text-red-800 border-red-200";
   };
 
-  const getIcon = () => {
+  const getIcon = (): string => {
     if (confidence >= 0.8) return "✓";
     if (confidence >= 0.6) return "⚠";
     return "✗";

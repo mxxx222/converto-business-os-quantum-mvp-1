@@ -4,17 +4,17 @@
  */
 
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function AuthCallback() {
+function AuthCallbackContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [message, setMessage] = useState("🔄 Kirjaudutaan...");
+  const [message, setMessage] = useState<string>("🔄 Kirjaudutaan...");
 
   useEffect(() => {
-    const token = searchParams?.get("token");
-    const next = searchParams?.get("next") || "/dashboard";
+    const token = searchParams.get("token");
+    const next = searchParams.get("next") || "/dashboard";
 
     if (!token) {
       setMessage("❌ Virhe: puuttuva token");
@@ -27,7 +27,7 @@ export default function AuthCallback() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ token })
+      body: JSON.stringify({ token }),
     })
       .then((response) => {
         if (response.ok) {
@@ -54,5 +54,22 @@ export default function AuthCallback() {
         <p className="text-xl font-medium text-gray-800">{message}</p>
       </div>
     </div>
+  );
+}
+
+export default function AuthCallback() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-white">
+          <div className="text-center">
+            <div className="text-6xl mb-4">⏳</div>
+            <p className="text-xl font-medium text-gray-800">🔄 Kirjaudutaan...</p>
+          </div>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

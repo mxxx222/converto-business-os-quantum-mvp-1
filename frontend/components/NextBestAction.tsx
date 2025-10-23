@@ -16,18 +16,16 @@ interface ActionTip {
   priority: number;
 }
 
-export default function NextBestAction() {
+export default function NextBestAction(): JSX.Element | null {
   const [tip, setTip] = useState<ActionTip | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchSuggestion() {
       try {
-        // Fetch impact summary to determine next action
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE || ""}/api/v1/impact/summary`);
-        const summary = await response.json();
+        await response.json();
 
-        // Smart action suggestions based on usage patterns
         const candidates: ActionTip[] = [
           {
             id: "ocr",
@@ -63,9 +61,8 @@ export default function NextBestAction() {
           }
         ];
 
-        // Select highest priority action (in production: use ML/heuristics)
         const selected = candidates.sort((a, b) => b.priority - a.priority)[0];
-        setTip(selected);
+        setTip(selected || null);
       } catch (error) {
         console.error("Failed to fetch action suggestion:", error);
       } finally {
@@ -99,7 +96,6 @@ export default function NextBestAction() {
       </div>
 
       <div className="ml-4 flex items-center gap-3">
-        {/* Confidence Score */}
         <div className="hidden md:flex flex-col items-end">
           <div className="text-xs text-white/60">Luottamus</div>
           <div className="text-sm font-semibold text-white">
@@ -107,7 +103,6 @@ export default function NextBestAction() {
           </div>
         </div>
 
-        {/* Action Button */}
         <button
           onClick={tip.action}
           className="px-5 py-2.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium transition-all flex items-center gap-2"

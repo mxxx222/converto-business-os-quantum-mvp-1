@@ -40,7 +40,7 @@ export default function SummaryBar(): JSX.Element {
             <div className="relative p-5">
               <div className="flex items-start justify-between mb-3">
                 <div className={`p-2 rounded-lg bg-${x.color}-50 text-${x.color}-600`}>
-                  <Icon className="w-5 h-5" />
+                  <Icon />
                 </div>
                 <div className={`px-2 py-0.5 rounded-full text-xs font-medium flex items-center gap-1 ${trendColor(x.trend)}`}>
                   {trendIcon(x.trend)}

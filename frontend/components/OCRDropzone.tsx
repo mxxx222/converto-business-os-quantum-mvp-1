@@ -1,13 +1,23 @@
 "use client";
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { api } from "@/lib/api";
 
 type ScanResult = {
   status: string;
-  data?: any;
+  data?: {
+    merchant?: string;
+    total?: number;
+    currency?: string;
+    category?: string;
+    vat_rate?: number;
+  };
   entry_id?: string;
-  classification?: any;
+  classification?: {
+    category?: string;
+    vat_class?: number;
+    budget_line?: string;
+    suggestions?: string[];
+  };
   points_awarded?: number;
 };
 
@@ -133,20 +143,15 @@ export default function OCRDropzone({ onScanComplete }: { onScanComplete?: (resu
             )}
           </div>
           <div className="space-y-2 text-sm">
-            {/* @ts-ignore */}
-            <p><strong>Kauppa:</strong> {result.data?.merchant || result.merchant || "—"}</p>
-            {/* @ts-ignore */}
-            <p><strong>Summa:</strong> {result.data?.total || result.total || "—"} {result.data?.currency || "EUR"}</p>
-            {/* @ts-ignore */}
-            <p><strong>Kategoria:</strong> {result.classification?.category || result.data?.category || result.category || "—"}</p>
-            {/* @ts-ignore */}
-            <p><strong>ALV:</strong> {result.classification?.vat_class || result.data?.vat_rate || result.vat_rate || "24"}%</p>
-            {/* @ts-ignore */}
-            <p><strong>Budjettirivi:</strong> {result.classification?.budget_line || result.budget_line || "—"}</p>
+            <p><strong>Kauppa:</strong> {result.data?.merchant || "—"}</p>
+            <p><strong>Summa:</strong> {result.data?.total || "—"} {result.data?.currency || "EUR"}</p>
+            <p><strong>Kategoria:</strong> {result.classification?.category || result.data?.category || "—"}</p>
+            <p><strong>ALV:</strong> {result.classification?.vat_class || result.data?.vat_rate || "24"}%</p>
+            <p><strong>Budjettirivi:</strong> {result.classification?.budget_line || "—"}</p>
           </div>
           {result.classification?.suggestions && result.classification.suggestions.length > 0 && (
             <div className="mt-3 space-y-1">
-              {result.classification.suggestions.map((s: string, i: number) => (
+              {result.classification.suggestions.map((s, i) => (
                 <div key={i} className="text-xs text-gray-600">{s}</div>
               ))}
             </div>

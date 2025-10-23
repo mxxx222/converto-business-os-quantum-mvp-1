@@ -1,13 +1,12 @@
 "use client";
 import { useState } from "react";
-import { UnifiedHeader } from "@/components/UnifiedHeader";
 import { motion } from "framer-motion";
-import { Calculator, TrendingDown, TrendingUp } from "lucide-react";
+import { Calculator } from "lucide-react";
 import { ProviderChip, PrivacyChip, LatencyChip, ConfidenceChip } from "@/components/StatusChips";
 import { QuickReplies } from "@/components/QuickReplies";
 
-export default function VATPage() {
-  const [month, setMonth] = useState(new Date().toISOString().slice(0, 7));
+export default function VATPage(): JSX.Element {
+  const [month, setMonth] = useState<string>(new Date().toISOString().slice(0, 7));
 
   // Mock data - wire to API
   const vat = {
@@ -45,7 +44,7 @@ export default function VATPage() {
             <PrivacyChip />
             <LatencyChip />
           </div>
-          <ConfidenceChip value={97} />
+          <ConfidenceChip confidence={97} />
         </div>
         {/* Month Selector */}
         <div className="bg-white rounded-xl shadow-lg p-4 mb-6 border border-gray-100">

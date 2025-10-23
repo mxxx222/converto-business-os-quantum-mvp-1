@@ -23,7 +23,7 @@ export default function OCRPreviewPage() {
     const payload = result?.data || result?.mock_data
     if (!payload) return ''
     if (typeof payload === 'string') return payload
-    if ('raw_text' in payload) return String(payload.raw_text)
+    if (payload && typeof payload === 'object' && 'raw_text' in payload) return String((payload as any).raw_text)
     try {
       return JSON.stringify(payload, null, 2)
     } catch {

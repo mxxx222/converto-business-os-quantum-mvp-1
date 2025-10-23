@@ -1,11 +1,11 @@
 "use client";
 import { useState, useRef } from "react";
-import { Camera, Upload, FileText, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
+import { Camera, Upload, ArrowLeft, CheckCircle, AlertCircle } from "lucide-react";
 import Link from "next/link";
 
 export default function NewReceiptPage() {
-  const [uploading, setUploading] = useState(false);
-  const [processing, setProcessing] = useState(false);
+  const [uploading, setUploading] = useState<boolean>(false);
+  const [processing, setProcessing] = useState<boolean>(false);
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -47,13 +47,11 @@ export default function NewReceiptPage() {
   };
 
   const handleCameraCapture = () => {
-    // Simulate camera capture
     fileInputRef.current?.click();
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-      {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
@@ -71,7 +69,6 @@ export default function NewReceiptPage() {
       <div className="max-w-md mx-auto px-4 py-6">
         {!result && !error && (
           <>
-            {/* Upload Options */}
             <div className="space-y-4 mb-8">
               <div className="text-center">
                 <h2 className="text-xl font-bold text-gray-900 mb-2">
@@ -111,7 +108,6 @@ export default function NewReceiptPage() {
               />
             </div>
 
-            {/* Processing State */}
             {(uploading || processing) && (
               <div className="bg-white rounded-2xl p-6 text-center shadow-sm border border-gray-100">
                 <div className="w-12 h-12 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center">
@@ -128,7 +124,6 @@ export default function NewReceiptPage() {
           </>
         )}
 
-        {/* Error State */}
         {error && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-6 text-center mb-6">
             <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
@@ -146,7 +141,6 @@ export default function NewReceiptPage() {
           </div>
         )}
 
-        {/* Success State */}
         {result && (
           <div className="space-y-6">
             <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
@@ -157,7 +151,6 @@ export default function NewReceiptPage() {
               </p>
             </div>
 
-            {/* Results */}
             <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               <h3 className="font-semibold text-gray-900 mb-4">Kuitin tiedot</h3>
               <div className="space-y-3">
@@ -180,7 +173,6 @@ export default function NewReceiptPage() {
               </div>
             </div>
 
-            {/* Actions */}
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => {
@@ -200,7 +192,6 @@ export default function NewReceiptPage() {
           </div>
         )}
 
-        {/* Tips */}
         <div className="mt-8 bg-blue-50 rounded-2xl p-4">
           <h4 className="font-semibold text-blue-900 mb-2">💡 Vinkkejä parhaaseen tulokseen</h4>
           <ul className="text-sm text-blue-800 space-y-1">
@@ -208,9 +199,4 @@ export default function NewReceiptPage() {
             <li>• Kuvassa ei saa olla varjoja tai heijastuksia</li>
             <li>• Teksti tulee olla lukukelpoista</li>
             <li>• Tuki: JPG, PNG, PDF-muodoille</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  );
-}
+          </ul

@@ -6,7 +6,7 @@ import { QuickReplies } from "@/components/QuickReplies";
 
 export default function OCRPage() {
   const [open, setOpen] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<Record<string, any> | null>(null);
 
   return (
     <div className="mx-auto max-w-6xl p-6 space-y-6">
@@ -17,7 +17,7 @@ export default function OCRPage() {
           <PrivacyChip />
           <LatencyChip />
         </div>
-        <ConfidenceChip value={94} />
+        <ConfidenceChip confidence={94} />
       </div>
 
       {/* Hero */}
@@ -51,7 +51,7 @@ export default function OCRPage() {
 
           {result && (
             <OCRPreview
-              data={result?.data || {}}
+              data={result.data || {}}
               onConfirm={(d) => {
                 alert("✅ Tallennettu (TODO: persist to DB)");
                 console.log("Confirmed:", d);

@@ -43,7 +43,7 @@ export default async function CostDashboard({ tenantId = 'tenant_demo' }: { tena
       </div>
 
       <div className="rounded-lg border p-4">
-        <UsageChart data={series.map((s: { date: string; ocr_scans: number; ai_tokens: number }) => ({ date: s.date, ocr_scans: s.ocr_scans, ai_tokens: s.ai_tokens }))} />
+        <UsageChart data={series.map((s) => ({ date: s.date, ocr_scans: s.ocr_scans, ai_tokens: s.ai_tokens }))} />
       </div>
     </div>
   )

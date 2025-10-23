@@ -2,17 +2,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Copy, Check } from "lucide-react";
+import { Zap, Award, Copy, Check } from "lucide-react";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import LangSwitcher from "@/components/LangSwitcher";
-import { useTheme } from "some-theme-provider";
 
 type Language = "fi" | "en" | "ru";
 
 export default function UIShowcase() {
   const [lang, setLang] = useState<Language>("fi");
   const [copied, setCopied] = useState<string | null>(null);
-  const { theme } = useTheme();
 
   const copy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -153,4 +151,5 @@ export default function UIShowcase() {
             <div className="max-w-md mx-auto">
               <div className="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-2xl p-6 border border-emerald-200 dark:border-emerald-700">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold text-lg">Gamify Panel</h3>
+                  <h3 className="text-lg font-bold flex items-center gap-2">
+                    <Award className="w-5 h-5 text-emerald-600 dark

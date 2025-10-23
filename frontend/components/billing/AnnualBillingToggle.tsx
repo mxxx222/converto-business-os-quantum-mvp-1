@@ -1,18 +1,12 @@
 "use client";
 import { useState } from "react";
 
-export default function AnnualBillingToggle({
-  onChange,
-}: {
+interface AnnualBillingToggleProps {
   onChange: (annual: boolean) => void;
-}) {
-  const [annual, setAnnual] = useState(true);
+}
 
-  const toggle = () => {
-    const newValue = !annual;
-    setAnnual(newValue);
-    onChange(newValue);
-  };
+export default function AnnualBillingToggle({ onChange }: AnnualBillingToggleProps) {
+  const [annual, setAnnual] = useState<boolean>(true);
 
   return (
     <div className="inline-flex items-center gap-3 bg-gray-100 dark:bg-gray-800 rounded-full p-1">
@@ -22,9 +16,7 @@ export default function AnnualBillingToggle({
           onChange(false);
         }}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-          !annual
-            ? "bg-white dark:bg-gray-700 shadow-sm"
-            : "text-gray-600 dark:text-gray-400"
+          !annual ? "bg-white dark:bg-gray-700 shadow-sm" : "text-gray-600 dark:text-gray-400"
         }`}
       >
         Kuukausittain
@@ -35,9 +27,7 @@ export default function AnnualBillingToggle({
           onChange(true);
         }}
         className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-          annual
-            ? "bg-white dark:bg-gray-700 shadow-sm"
-            : "text-gray-600 dark:text-gray-400"
+          annual ? "bg-white dark:bg-gray-700 shadow-sm" : "text-gray-600 dark:text-gray-400"
         }`}
       >
         Vuosittain

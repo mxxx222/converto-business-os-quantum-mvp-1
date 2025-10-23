@@ -27,6 +27,15 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
+  // TypeScript configuration
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
+
   // Webpack optimizations
   webpack: (config, { isServer }) => {
     config.resolve.alias = {

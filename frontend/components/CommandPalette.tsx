@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 
@@ -13,9 +13,9 @@ interface Command {
 }
 
 export function CommandPalette() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const [selectedIndex, setSelectedIndex] = useState<number>(0);
   const router = useRouter();
 
   // Define commands
@@ -86,7 +86,7 @@ export function CommandPalette() {
     }
   ];
 
-  const switchProvider = (provider: string) => {
+  const switchProvider = (provider: string): void => {
     // This would need backend support to change provider
     alert(`Vaihtaminen ${provider}:iin tulossa pian!`);
     setIsOpen(false);
@@ -101,7 +101,7 @@ export function CommandPalette() {
   // Group by category
   const groupedCommands = filteredCommands.reduce((acc, cmd) => {
     if (!acc[cmd.category]) acc[cmd.category] = [];
-    acc[cmd.category].push(cmd);
+    acc[cmd.category]!.push(cmd);
     return acc;
   }, {} as Record<string, Command[]>);
 
@@ -199,7 +199,7 @@ export function CommandPalette() {
                     <div className="px-4 py-2 text-xs font-semibold text-gray-500 bg-gray-50">
                       {category}
                     </div>
-                    {cmds.map((cmd, idx) => {
+                    {cmds.map((cmd) => {
                       const globalIndex = filteredCommands.indexOf(cmd);
                       const isSelected = globalIndex === selectedIndex;
 
@@ -249,45 +249,4 @@ export function CommandPalette() {
                 </div>
                 <div className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-300">↵</kbd>
-                  <span>Valitse</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-300">ESC</kbd>
-                  <span>Sulje</span>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
-  );
-}
-
-export function QuickReplies() {
-  const router = useRouter();
-
-  const quickActions = [
-    { icon: "📸", label: "Kuitti", action: () => router.push("/selko/ocr") },
-    { icon: "🧾", label: "ALV", action: () => router.push("/vat") },
-    { icon: "💾", label: "Backup", action: () => fetch("/api/v1/standalone/backup/run", { method: "POST" }) },
-    { icon: "⚙️", label: "Asetukset", action: () => router.push("/settings") }
-  ];
-
-  return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-      {quickActions.map((action, i) => (
-        <motion.button
-          key={i}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={action.action}
-          className="flex-shrink-0 px-4 py-2 rounded-xl bg-white border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all flex items-center gap-2 text-sm font-medium"
-        >
-          <span className="text-lg">{action.icon}</span>
-          <span className="hidden sm:inline">{action.label}</span>
-        </motion.button>
-      ))}
-    </div>
-  );
-}
+                  <span>
