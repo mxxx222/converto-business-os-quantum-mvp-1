@@ -6,6 +6,9 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
 
+  // Enable API routes in production (Render/Vercel container)
+  output: 'standalone',
+
   // Image optimization
   images: {
     formats: ['image/avif', 'image/webp'],
@@ -21,11 +24,10 @@ const nextConfig = {
     serverComponentsExternalPackages: ['d3'],
     optimizeCss: true,
     optimizePackageImports: ['lucide-react'],
+    forceSwcTransforms: true,
   },
 
   // Server runtime: enable server-side rendering for Render deployment
-  // (remove static export to allow Next.js server to run)
-  // output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   skipMiddlewareUrlNormalize: true,
@@ -94,7 +96,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=60, s-maxage=60',
+            value: 'public, max-age=0, s-maxage=0', // No cache for API routes
           },
         ],
       },
