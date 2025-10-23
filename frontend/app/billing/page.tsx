@@ -24,7 +24,7 @@ export const dynamic = 'force-dynamic';
 export const fetchCache = 'force-no-store';
 
 export default function BillingPage() {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   async function handleCheckout(planId: string) {
     setLoading(true);
@@ -61,7 +61,7 @@ export default function BillingPage() {
         </div>
 
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-3 mb-12">
-          {(Array.isArray(plans) ? plans : []).map((p) => (
+          {plans.map((p) => (
             <motion.div
               key={p.id}
               whileHover={{ y: -8, scale: 1.02 }}
