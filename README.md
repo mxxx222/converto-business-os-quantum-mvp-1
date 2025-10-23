@@ -179,3 +179,12 @@ MIT License - See [LICENSE](LICENSE) for details
 ---
 
 **Made with ❤️ in Finland 🇫🇮**
+
+---
+
+## 🧱 Technical Debt / TODO
+
+- [ ] mypy cleanup across workspace
+  - Scope: fix typing errors flagged by pre-commit mypy across `app/core`, `app/api`, `app/modules`, and related packages.
+  - Approach: add missing return/type hints, install stubs for third-party libs (e.g., `types-PyYAML`), reduce `Any` usage; consider relaxing mypy per-module temporarily and tighten iteratively.
+  - Note: non-blocking for deploys; address in a follow-up sprint.
