@@ -199,4 +199,9 @@ export default function NewReceiptPage() {
             <li>• Kuvassa ei saa olla varjoja tai heijastuksia</li>
             <li>• Teksti tulee olla lukukelpoista</li>
             <li>• Tuki: JPG, PNG, PDF-muodoille</li>
-          </ul
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
