@@ -6,7 +6,7 @@
     "prebuild": "node ../scripts/check-env-file.mjs && node ../scripts/check-debug-env.mjs",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start -p ${PORT:-3000}"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.20.0",
