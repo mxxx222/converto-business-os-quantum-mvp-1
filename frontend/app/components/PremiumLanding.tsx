@@ -9,7 +9,6 @@ import {
   Plug,
   Eye,
   Check,
-  ArrowRight,
 } from "lucide-react";
 import landingData from "@/lib/i18n/landing.json";
 import LogosBar from "@/components/marketing/LogosBar";
@@ -104,7 +103,7 @@ export default function PremiumLanding() {
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {t.features.items.map((feature, idx) => {
-            const Icon = icons[idx % icons.length];
+            const IconComponent = icons[idx % icons.length];
             return (
               <motion.div
                 key={idx}
@@ -115,7 +114,7 @@ export default function PremiumLanding() {
                 className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow"
               >
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center mb-4">
-                  <Icon className="w-6 h-6 text-white" />
+                  {IconComponent && <IconComponent className="w-6 h-6 text-white" />}
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   {feature.title}
@@ -210,4 +209,4 @@ export default function PremiumLanding() {
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-20">
-        <div className="max-w-4xl mx-auto px-4 text-center
+        <div className="max-w-4xl mx-auto px-4

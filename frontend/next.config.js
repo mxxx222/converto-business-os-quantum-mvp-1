@@ -22,6 +22,12 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react'],
   },
 
+  // Disable static generation for problematic pages
+  output: 'export',
+  trailingSlash: true,
+  skipTrailingSlashRedirect: true,
+  skipMiddlewareUrlNormalize: true,
+
   // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',

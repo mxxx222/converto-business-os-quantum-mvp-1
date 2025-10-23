@@ -113,7 +113,11 @@ export default function Dashboard() {
 
       {/* Quick Actions - Mobile */}
       <div className="md:hidden bg-white border-b border-gray-200 px-4 py-3">
-        <QuickReplies />
+        <QuickReplies items={[
+          { label: "OCR Kuitti", href: "/selko/ocr" },
+          { label: "ALV-laskuri", href: "/selko/vat" },
+          { label: "Dashboard", href: "/dashboard" }
+        ]} />
       </div>
 
       {/* Hero Section */}
@@ -183,7 +187,7 @@ export default function Dashboard() {
             animate="show"
             className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16"
           >
-            {stats.map((stat) => (
+            {(stats || []).map((stat) => (
               <motion.div
                 key={stat.label}
                 variants={item}
@@ -205,8 +209,3 @@ export default function Dashboard() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="text-center mb-12"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Kaikki mitä tarvitset yhdessä paikassa
-          </h2>
-          <p className="text-lg text-gray-600 max-w-
