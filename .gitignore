@@ -13,6 +13,7 @@
 # allow code dirs
 !app/
 !frontend/
+!frontend/app/
 !scripts/
 !frontend/.nvmrc
 !app/static/
