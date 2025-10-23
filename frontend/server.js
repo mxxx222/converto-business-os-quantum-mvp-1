@@ -6,28 +6,36 @@ const hostname = '0.0.0.0';
 const port = process.env.PORT || 3000;
 
 // Create Next.js app
-const app = next({ dev, hostname, port });
+const app = next({ dev: false, hostname, port });
 const handle = app.getRequestHandler();
 
-app.prepare().then(() => {
-  const server = express();
+console.log('Starting Next.js app...');
 
-  // Health check endpoint
-  server.get('/api/health', (req, res) => {
-    res.status(200).json({
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      service: 'converto-frontend'
+app.prepare()
+  .then(() => {
+    console.log('Next.js app prepared!');
+    const server = express();
+
+    // Health check endpoint
+    server.get('/api/health', (req, res) => {
+      res.status(200).json({
+        status: 'ok',
+        timestamp: new Date().toISOString(),
+        service: 'converto-frontend'
+      });
     });
-  });
 
-  // Handle all other requests with Next.js
-  server.all('*', (req, res) => {
-    return handle(req, res);
-  });
+    // Handle all other requests with Next.js
+    server.all('*', (req, res) => {
+      return handle(req, res);
+    });
 
-  server.listen(port, hostname, (err) => {
-    if (err) throw err;
-    console.log(`> Ready on http://${hostname}:${port}`);
+    server.listen(port, hostname, (err) => {
+      if (err) throw err;
+      console.log(`> Ready on http://${hostname}:${port}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error starting Next.js:', err);
+    process.exit(1);
   });
-});
