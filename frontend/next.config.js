@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const path = require('path');
-const { withSentryConfig } = require('@sentry/nextjs');
+// Sentry disabled for now
+// const { withSentryConfig } = require('@sentry/nextjs');
 
 const nextConfig = {
   reactStrictMode: true,
@@ -114,8 +115,4 @@ const nextConfig = {
     return [];
   },
 };
-module.exports = withSentryConfig(nextConfig, {
-  silent: true,
-  org: 'viking-labs',
-  project: 'javascript-nextjs',
-});
+module.exports = nextConfig;
