@@ -110,14 +110,15 @@ const nextConfig = {
     ];
   },
 
-  // Redirects - root to dashboard for stable entry point
+  // Redirects - keep dashboard accessible but don't redirect root
   async redirects() {
     return [
-      {
-        source: '/',
-        destination: '/dashboard',
-        permanent: true,
-      },
+      // Removed root redirect to show landing page
+      // {
+      //   source: '/',
+      //   destination: '/dashboard',
+      //   permanent: true,
+      // },
       {
         source: '/receipts/new',
         destination: '/dashboard',
