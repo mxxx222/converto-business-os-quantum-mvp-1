@@ -51,3 +51,5 @@ services:
         value: "true"
       - key: ENABLE_HEALTHCHECK
         value: "true"
+      - key: NEXT_PUBLIC_API_BASE
+        value: "https://converto-business-os-quantum-mvp-1.onrender.com"
