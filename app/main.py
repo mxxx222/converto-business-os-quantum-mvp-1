@@ -1,9 +1,13 @@
+import base64
+import contextlib
 import os
-from fastapi import APIRouter, FastAPI
+
+from fastapi import APIRouter, FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.starlette import StarletteIntegration
+from starlette.staticfiles import StaticFiles
 
 from app.api import economy_admin as economy_admin_api
 from app.api import gamify as gamify_api
@@ -49,6 +53,7 @@ LIGHT_MODE = os.getenv("CONVERTO_LIGHT_MODE", "0") == "1"
 # Initialize Sentry only if not in light mode
 if not LIGHT_MODE:
     import sentry_sdk
+
     sentry_dsn = os.getenv("SENTRY_DSN")
     if sentry_dsn:
         sentry_sdk.init(
@@ -61,6 +66,10 @@ if not LIGHT_MODE:
         )
 
 app = FastAPI(title="Converto Business OS – Quantum Edition (MVP+)")
+
+# Optional static mount (safe even if directory missing)
+with contextlib.suppress(Exception):
+    app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
 app.add_middleware(
     CORSMiddleware,
@@ -119,9 +128,58 @@ from app.modules.reminders.scheduler import start_scheduler
 start_scheduler(interval_seconds=60)
 
 
-@app.get("/")
+@app.get("/", include_in_schema=False)
 def root() -> RedirectResponse:
-    return RedirectResponse(url="https://www.converto.fi/coming-soon", status_code=308)
+    # Keep 308 but ensure target exists within backend
+    return RedirectResponse(url="/coming-soon", status_code=308)
+
+
+@app.get("/coming-soon", response_class=HTMLResponse, include_in_schema=False)
+def coming_soon() -> str:
+    return """
+<!doctype html>
+<html lang=\"en\">
+<head>
+  <meta charset=\"utf-8\">
+  <title>Converto — Coming soon</title>
+  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
+  <link rel=\"icon\" href=\"/favicon.ico\">
+  <style>
+    html,body {height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;background:#0B0B0C;color:#EDEDED;}
+    .wrap {min-height:100%;display:flex;align-items:center;justify-content:center;padding:48px;}
+    .card {max-width:720px;width:100%;background:#141415;border:1px solid #2A2A2C;border-radius:12px;padding:28px;box-shadow:0 10px 24px rgba(0,0,0,.25);}
+    h1 {margin:0 0 8px;font-size:28px}
+    p {opacity:.85;line-height:1.6}
+    code {background:#1b1b1d;padding:2px 6px;border-radius:6px}
+  </style>
+  </head>
+<body>
+  <div class=\"wrap\">
+    <div class=\"card\">
+      <h1>Converto — Coming soon</h1>
+      <p>Backend on käynnissä ja valmiina palvelemaan. Frontend julkaistaan pian.</p>
+      <p><code>/health</code> palauttaa {\"status\":\"ok\"} ja redirect <code>/ → /coming-soon</code> on käytössä.</p>
+    </div>
+  </div>
+</body>
+</html>
+"""
+
+
+# Tiny 16x16 ICO to avoid 404 noise if no static/favicon exists
+FAVICON_B64 = (
+    "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    "AAAAAAAAAAAAAP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////"
+    "AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+)
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon() -> Response:
+    raw = base64.b64decode(FAVICON_B64)
+    return Response(content=raw, media_type="image/x-icon")
 
 
 # simple insights demo endpoint
