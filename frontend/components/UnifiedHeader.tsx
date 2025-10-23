@@ -1,6 +1,6 @@
 "use client";
 import { ProviderChip, PrivacyChip, ConfidenceChip } from "./StatusChips";
-import { QuickReplies } from "./CommandPalette";
+import { QuickReplies } from "./QuickReplies";
 
 interface UnifiedHeaderProps {
   title?: string;
@@ -12,7 +12,7 @@ export function UnifiedHeader({
   title,
   confidence = 0.92,
   showQuickReplies = true
-}: UnifiedHeaderProps) {
+}: UnifiedHeaderProps): JSX.Element {
   return (
     <>
       {/* Status Chips - Desktop */}

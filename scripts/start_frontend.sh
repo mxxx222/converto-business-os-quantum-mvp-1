@@ -15,4 +15,4 @@ fi
 echo "🌟 Starting Next.js server on http://localhost:3000"
 echo "🎨 Frontend ready for development"
 
-npm run dev
+npm run dev || { echo "❌ Failed to start Next.js server"; exit 1; }

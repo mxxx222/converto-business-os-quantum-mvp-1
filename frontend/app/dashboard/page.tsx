@@ -15,7 +15,7 @@ import GamifyCard from "@/components/GamifyCard";
 import WalletWidget from "@/components/WalletWidget";
 import RewardsList from "@/components/RewardsList";
 import { ProviderChip, PrivacyChip, ConfidenceChip } from "@/components/StatusChips";
-import { QuickReplies } from "@/components/CommandPalette";
+import { QuickReplies } from "@/components/QuickReplies";
 
 const container = {
   hidden: { opacity: 0 },
