@@ -2,6 +2,7 @@
 import HealthStatus from "./components/HealthStatus";
 import SignupStatsTile from "../../components/SignupStatsTile";
 import HealthTile from "../../components/HealthTile";
+import DeliverabilityTile from "../../components/DeliverabilityTile";
 
 export default function DashboardPage() {
   return (
@@ -18,6 +19,7 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 text-left mb-8">
             <SignupStatsTile />
             <HealthTile />
+            <DeliverabilityTile />
 
             <a href="/receipts/new" className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">🧾 Receipts</h3>
