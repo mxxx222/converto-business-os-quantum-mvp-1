@@ -1,70 +1,310 @@
+"use client";
+
+import { useState } from "react";
+
 export default function HomePage() {
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(null);
+  const [form, setForm] = useState({
+    email: "",
+    name: "",
+    company: "",
+    phone: "",
+    note: "",
+    hp: "" // honeypot
+  });
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      const utm = typeof window !== "undefined" ? window.location.search : "";
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, utm }),
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        setMessage("Varaus vastaanotettu. Tarkista sähköposti.");
+        setForm({ email: "", name: "", company: "", phone: "", note: "", hp: "" });
+      } else {
+        setMessage("Virhe. Yritä uudelleen.");
+      }
+    } catch (error) {
+      setMessage("Virhe. Yritä uudelleen.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
-      <div className="text-center max-w-4xl mx-auto px-4">
-        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-100 text-indigo-800 text-sm font-medium mb-8">
-          🚀 Coming Soon
-        </div>
-
-        <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-          Converto Business OS
-          <br />
-          <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-            Quantum Edition
-          </span>
-        </h1>
-
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          The future of business automation is coming. AI-powered receipt scanning,
-          VAT automation, and intelligent business insights - all in one platform.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-12">
-          <a
-            href="mailto:hello@converto.fi?subject=Early Access Request"
-            className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl font-semibold text-lg hover:from-indigo-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl inline-block text-center"
-          >
-            Get Early Access
-          </a>
-          <a
-            href="/api/health"
-            className="px-8 py-4 bg-white text-indigo-600 rounded-xl font-semibold text-lg border-2 border-indigo-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all inline-block text-center"
-          >
-            System Status
-          </a>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-3xl mx-auto">
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
-              📄
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">AI Receipt Scanning</h3>
-            <p className="text-gray-600">Automatic data extraction from receipts using advanced AI vision</p>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-              💰
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">VAT Automation</h3>
-            <p className="text-gray-600">Regulatory compliant VAT calculations and automated reporting</p>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
-              🧠
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Business Intelligence</h3>
-            <p className="text-gray-600">AI-powered insights and predictive analytics for your business</p>
+    <main style={{
+      fontFamily: "ui-sans-serif, system-ui",
+      background: "linear-gradient(180deg,#F8FAFF 0%,#FFFFFF 100%)",
+      minHeight: "100vh"
+    }}>
+      {/* Header */}
+      <header style={{
+        background: "rgba(255,255,255,0.8)",
+        backdropFilter: "blur(8px)",
+        borderBottom: "1px solid #E5E7EB",
+        padding: "1rem 0"
+      }}>
+        <div style={{ maxWidth: "1040px", margin: "0 auto", padding: "0 2rem" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h1 style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#0B1220", margin: 0 }}>
+              Converto™ Business OS
+            </h1>
+            <nav style={{ display: "flex", gap: "1.5rem" }}>
+              <a href="/dashboard" style={{ color: "#6B7280", textDecoration: "none", transition: "color 0.2s" }}>Dashboard</a>
+              <a href="/api/health" style={{ color: "#10B981", textDecoration: "none", transition: "color 0.2s" }}>Status</a>
+            </nav>
           </div>
         </div>
+      </header>
 
-        <div className="mt-16 text-center">
-          <p className="text-gray-500 mb-4">Built with ❤️ in Finland 🇫🇮</p>
-          <p className="text-sm text-gray-400">© 2025 Converto Solutions Oy. All rights reserved.</p>
+      {/* Hero Section */}
+      <section style={{ padding: "4rem 1rem" }}>
+        <div style={{ maxWidth: "1040px", margin: "0 auto" }}>
+          {/* Coming Soon Badge */}
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.5rem 1rem",
+            borderRadius: "2rem",
+            background: "linear-gradient(135deg, #0A5FFF, #8B5CF6)",
+            color: "white",
+            fontSize: "0.825rem",
+            fontWeight: "600",
+            marginBottom: "2rem"
+          }}>
+            🚀 Pilotointi • 3–7 arkipäivässä
+          </div>
+
+          {/* Main Title */}
+          <h1 style={{
+            fontSize: "clamp(1.8rem, 2.5vw, 3rem)",
+            fontWeight: "bold",
+            color: "#0B1220",
+            margin: "0 0 0.75rem 0",
+            textAlign: "center"
+          }}>
+            Converto™ Business OS 2.0
+          </h1>
+
+          {/* Subtitle */}
+          <p style={{
+            color: "#4B5563",
+            fontSize: "1.125rem",
+            margin: "0.25rem 0 1rem 0",
+            textAlign: "center",
+            maxWidth: "600px",
+            marginLeft: "auto",
+            marginRight: "auto"
+          }}>
+            Automatisoi kirjanpito, maksut ja varastonhallinta yhdessä näkymässä
+          </p>
+
+          {/* Registration Form */}
+          <form onSubmit={handleSubmit} style={{
+            background: "white",
+            border: "1px solid #E5E7EB",
+            borderRadius: "1rem",
+            padding: "2rem",
+            margin: "2rem auto",
+            maxWidth: "760px",
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gap: "0.75rem",
+            alignItems: "end"
+          }}>
+            <input
+              type="email"
+              placeholder="Sähköposti *"
+              required
+              value={form.email}
+              onChange={(e) => setForm(f => ({ ...f, email: e.target.value }))}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                border: "1px solid #E5E7EB",
+                borderRadius: "0.75rem",
+                fontFamily: "inherit",
+                fontSize: "1rem"
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Nimi"
+              value={form.name}
+              onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                border: "1px solid #E5E7EB",
+                borderRadius: "0.75rem",
+                fontFamily: "inherit",
+                fontSize: "1rem"
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Yritys"
+              value={form.company}
+              onChange={(e) => setForm(f => ({ ...f, company: e.target.value }))}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                border: "1px solid #E5E7EB",
+                borderRadius: "0.75rem",
+                fontFamily: "inherit",
+                fontSize: "1rem"
+              }}
+            />
+            <input
+              type="tel"
+              placeholder="Puhelin"
+              value={form.phone}
+              onChange={(e) => setForm(f => ({ ...f, phone: e.target.value }))}
+              style={{
+                width: "100%",
+                padding: "0.75rem",
+                border: "1px solid #E5E7EB",
+                borderRadius: "0.75rem",
+                fontFamily: "inherit",
+                fontSize: "1rem"
+              }}
+            />
+            <textarea
+              placeholder="Lisätiedot (valinnainen)"
+              rows={3}
+              value={form.note}
+              onChange={(e) => setForm(f => ({ ...f, note: e.target.value }))}
+              style={{
+                gridColumn: "1 / -1",
+                width: "100%",
+                padding: "0.75rem",
+                border: "1px solid #E5E7EB",
+                borderRadius: "0.75rem",
+                fontFamily: "inherit",
+                fontSize: "1rem",
+                resize: "vertical"
+              }}
+            />
+            {/* Honeypot */}
+            <input
+              name="website"
+              autoComplete="off"
+              tabIndex={-1}
+              value={form.hp}
+              onChange={(e) => setForm(f => ({ ...f, hp: e.target.value }))}
+              style={{ display: "none" }}
+            />
+            <button
+              type="submit"
+              disabled={loading}
+              style={{
+                padding: "0.875rem 1.25rem",
+                borderRadius: "0.75rem",
+                border: "none",
+                cursor: loading ? "not-allowed" : "pointer",
+                fontWeight: "600",
+                background: "#0A5FFF",
+                color: "white",
+                fontSize: "1rem",
+                opacity: loading ? 0.6 : 1
+              }}
+            >
+              {loading ? "Lähetetään..." : "Lähetä ilmoittautuminen"}
+            </button>
+            {message && (
+              <div style={{
+                gridColumn: "1 / -1",
+                padding: "0.75rem",
+                color: message.includes("Virhe") ? "#DC2626" : "#059669",
+                fontSize: "0.9rem"
+              }}>
+                {message}
+              </div>
+            )}
+          </form>
+
+          {/* USP Grid */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+            gap: "1rem",
+            marginTop: "2rem"
+          }}>
+            <div style={{
+              border: "1px solid #E5E7EB",
+              borderRadius: "1rem",
+              padding: "1rem"
+            }}>
+              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+                <b style={{ color: "#0B1220" }}>Kirjanpito ilman manuaalia</b>
+              </div>
+              <p style={{ color: "#4B5563", margin: "0.25rem 0 1rem 0", fontSize: "0.9rem" }}>
+                Ostolaskut, kuitit ja ALV automaattisesti. Vähemmän virheitä. Nopeampi kuukausi.
+              </p>
+            </div>
+
+            <div style={{
+              border: "1px solid #E5E7EB",
+              borderRadius: "1rem",
+              padding: "1rem"
+            }}>
+              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+                <b style={{ color: "#0B1220" }}>Maksut ja kassa yhtenä virrana</b>
+              </div>
+              <p style={{ color: "#4B5563", margin: "0.25rem 0 1rem 0", fontSize: "0.9rem" }}>
+                Stripe, verkkokauppa ja POS samaan näkymään. Päivän kate selkeästi.
+              </p>
+            </div>
+
+            <div style={{
+              border: "1px solid #E5E7EB",
+              borderRadius: "1rem",
+              padding: "1rem"
+            }}>
+              <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start", marginBottom: "0.5rem" }}>
+                <b style={{ color: "#0B1220" }}>Varasto ja automaatiot</b>
+              </div>
+              <p style={{ color: "#4B5563", margin: "0.25rem 0 1rem 0", fontSize: "0.9rem" }}>
+                Tuotteet, saldo ja hälytykset. N8n-reitit ja webhookit valmiina.
+              </p>
+            </div>
+          </div>
+
+          {/* Support Info */}
+          <div style={{
+            marginTop: "1.25rem",
+            color: "#6B7280",
+            textAlign: "center",
+            fontSize: "0.9rem"
+          }}>
+            Tuki +358 40 123 4567 • Pilotit 3–7 arkipäivässä
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* Footer */}
+      <footer style={{
+        background: "#111827",
+        color: "#6B7280",
+        fontSize: "0.9rem",
+        padding: "2rem 0"
+      }}>
+        <div style={{ maxWidth: "1040px", margin: "0 auto", padding: "0 2rem", textAlign: "center" }}>
+          © {new Date().getFullYear()} Converto Solutions Oy
+        </div>
+      </footer>
+    </main>
   );
 }
