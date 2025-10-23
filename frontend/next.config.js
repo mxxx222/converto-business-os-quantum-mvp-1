@@ -114,7 +114,6 @@ const nextConfig = {
     return [];
   },
 };
-
 module.exports = withSentryConfig(nextConfig, {
   silent: true,
   org: 'viking-labs',
