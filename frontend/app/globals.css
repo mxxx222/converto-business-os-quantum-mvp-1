@@ -2,101 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Theme-specific CSS variables */
-:root {
-  /* NeoTech Theme */
-  --neotech-bg: #0D1117;
-  --neotech-accent: #0047FF;
-  --neotech-text: #F0F6FC;
-  --neotech-card: #161B22;
-  --neotech-border: #30363D;
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap');
 
-  /* Nordic Theme */
-  --nordic-bg: #F8FAFC;
-  --nordic-accent: #059669;
-  --nordic-text: #1F2937;
-  --nordic-card: #FFFFFF;
-  --nordic-border: #E5E7EB;
+:root{
+  --bg:#FFFFFF;
+  --surface:#F8F9FA;
+  --border:#E6E8EC;
+  --text-primary:#0F1115;
+  --text-secondary:#343A40;
+  --cta-bg:#1565EA; /* brändisininen */
+  --cta-text:#FFFFFF;
 }
-
-/* NeoTech Theme */
-[data-theme="neotech"] {
-  --bg-start: var(--neotech-bg);
-  --accent: var(--neotech-accent);
-  --text: var(--neotech-text);
-  --card: var(--neotech-card);
-  --border: var(--neotech-border);
+.dark{
+  --bg:#0F1115;
+  --surface:#171A1F;
+  --border:#2A2F36;
+  --text-primary:#F3F4F6;
+  --text-secondary:#C5CAD3;
+  --cta-bg:#1565EA;
+  --cta-text:#FFFFFF;
 }
-
-/* Nordic Theme */
-[data-theme="nordic"] {
-  --bg-start: var(--nordic-bg);
-  --accent: var(--nordic-accent);
-  --text: var(--nordic-text);
-  --card: var(--nordic-card);
-  --border: var(--nordic-border);
-}
-
-/* System Theme (follows OS preference) */
-[data-theme="system"] {
-  --bg-start: var(--neotech-bg);
-  --accent: var(--neotech-accent);
-  --text: var(--neotech-text);
-  --card: var(--neotech-card);
-  --border: var(--neotech-border);
-}
-
-@media (prefers-color-scheme: light) {
-  [data-theme="system"] {
-    --bg-start: var(--nordic-bg);
-    --accent: var(--nordic-accent);
-    --text: var(--nordic-text);
-    --card: var(--nordic-card);
-    --border: var(--nordic-border);
+@media (prefers-color-scheme: dark){
+  :root:not(.light):not(.dark){
+    --bg:#0F1115; --surface:#171A1F; --border:#2A2F36;
+    --text-primary:#F3F4F6; --text-secondary:#C5CAD3;
+    --cta-bg:#1565EA; --cta-text:#FFFFFF;
   }
 }
-
-/* Apply theme variables */
-body {
-  background-color: var(--bg-start);
-  color: var(--text);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Theme-aware components */
-.theme-card {
-  background-color: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
-}
-
-.theme-button {
-  background-color: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  transition: all 0.3s ease;
-}
-
-.theme-button:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
-}
-
-/* Dark mode specific styles */
-[data-theme="neotech"] .theme-card {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-}
-
-[data-theme="nordic"] .theme-card {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-/* Smooth transitions */
-* {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-}
+html,body{background:var(--bg);color:var(--text-primary)}
+h1,h2,h3{font-family:"Poppins",system-ui,sans-serif}
+body{font-family:"Open Sans",ui-sans-serif,system-ui}

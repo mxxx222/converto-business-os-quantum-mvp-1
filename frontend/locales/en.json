@@ -1,15 +1,11 @@
 {
-  "nav": {
-    "home": "Home",
-    "features": "Features",
-    "pricing": "Pricing",
-    "docs": "Docs",
-    "about": "About",
-    "contact": "Contact",
-    "start": "Start"
+  "nav": { "home":"Home","features":"Solutions","pricing":"Pricing","docs":"Docs","case":"Case Studies","about":"About","contact":"Contact","start":"Start" },
+  "home": {
+    "h1":"Remove busywork. Get invoices out on time.",
+    "p":"Converto brings billing, clients and workflows into one dashboard. Save time and money — without long projects.",
+    "bullets": ["Time saved +12 h/week","Cost saved −35 %/month","Invoices 2× faster"],
+    "cta1":"Book a 20‑min demo",
+    "cta2":"See how it works"
   },
-  "pricing": {
-    "title": "Transparent pricing — built for teams of any size",
-    "cta": "Start for free"
-  }
+  "pricing": { "title":"Transparent pricing", "sub":"14‑day free pilot · 30‑day money‑back guarantee", "cta":"Start for free" }
 }
