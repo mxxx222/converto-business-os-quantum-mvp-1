@@ -151,7 +151,7 @@ export default function OCRDropzone({ onScanComplete }: { onScanComplete?: (resu
           </div>
           {result.classification?.suggestions && result.classification.suggestions.length > 0 && (
             <div className="mt-3 space-y-1">
-              {result.classification.suggestions.map((s: string, i: number) => (
+              {result.classification.suggestions.map((s, i) => (
                 <div key={i} className="text-xs text-gray-600">{s}</div>
               ))}
             </div>

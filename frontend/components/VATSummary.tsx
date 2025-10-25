@@ -40,14 +40,23 @@ export default function VATSummary(): JSX.Element {
           <h2 className="font-semibold">Siirtymävirheet</h2>
           <button className="rounded-xl border px-3 py-2 text-sm" onClick={() => setFixed(true)} disabled={fixed || mismatches.length === 0}>Massakorjaus</button>
         </div>
-        {mismatches.length === 0 ? <p className="text-sm text-neutral-500 mt-2">Ei havaittuja virheitä</p> : (
+        {mismatches.length === 0 ? (
+          <p className="text-sm text-neutral-500 mt-2">Ei havaittuja virheitä</p>
+        ) : (
           <ul className="mt-2 space-y-1 text-sm">
             {mismatches.map(m => (
-              <li key={m.id} className="flex justify-between"><span>{m.id} • {m.date} • {m.vatRate}%</span><span>→ 24%/25.5% sääntö</span></li>
+              <li key={m.id} className="flex justify-between">
+                <span>{m.id} • {m.date} • {m.vatRate}%</span>
+                <span>→ 24%/25.5% sääntö</span>
+              </li>
             ))}
           </ul>
         )}
-        {fixed && <div className="mt-2 rounded-lg bg-emerald-50 text-emerald-900 p-2 text-sm" role="status" aria-live="polite">Korjattu! (demo-tila – sovella reducerilla oikeasti)</div>}
+        {fixed && (
+          <div className="mt-2 rounded-lg bg-emerald-50 text-emerald-900 p-2 text-sm" role="status" aria-live="polite">
+            Korjattu! (demo-tila – sovella reducerilla oikeasti)
+          </div>
+        )}
       </div>
     </div>
   );

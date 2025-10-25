@@ -8,7 +8,7 @@ export default function PWARegister(): null {
     const register = async (): Promise<void> => {
       try {
         await navigator.serviceWorker.register('/sw.js')
-      } catch (e) {
+      } catch (e: unknown) {
         console.warn('SW registration failed', e)
       }
     }

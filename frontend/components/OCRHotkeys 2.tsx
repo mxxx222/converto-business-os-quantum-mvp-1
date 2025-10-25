@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect } from "react";
 
 type HotkeyAction = "scan" | "show_last" | "rescan" | "export" | "report" | "analyze";

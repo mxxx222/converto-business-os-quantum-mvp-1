@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, APIRequestContext } from '@playwright/test';
 
 test.describe('Receipts API', () => {
-  test('API endpoints respond', async ({ request }: { request: any }) => {
+  test('API endpoints respond', async ({ request }: { request: APIRequestContext }) => {
     // Test GET /api/receipts
     const listResponse = await request.get('/api/receipts');
     expect(listResponse.ok()).toBeTruthy();
@@ -11,7 +11,7 @@ test.describe('Receipts API', () => {
     expect(Array.isArray(listData.receipts)).toBe(true);
   });
 
-  test('Receipt status endpoint works', async ({ request }: { request: any }) => {
+  test('Receipt status endpoint works', async ({ request }: { request: APIRequestContext }) => {
     // Create a mock receipt ID
     const mockReceiptId = '550e8400-e29b-41d4-a716-446655440000';
 

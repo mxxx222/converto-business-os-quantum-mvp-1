@@ -12,13 +12,13 @@ export async function POST(req: Request): Promise<Response> {
   const file = form.get("file");
   if (!(file instanceof File)) return NextResponse.json({ error: "file required" }, { status: 400 });
 
-  const size = file.size ?? 0;
-  const type = file.type ?? "";
+  const size: number = file.size ?? 0;
+  const type: string = file.type ?? "";
   if (size === 0 || size > MAX_SIZE) return NextResponse.json({ error: "invalid size" }, { status: 413 });
   if (!ALLOWED.some(p => type.startsWith(p))) return NextResponse.json({ error: "invalid type" }, { status: 415 });
 
-  const buf = Buffer.from(await file.arrayBuffer());
-  const sha256 = crypto.createHash("sha256").update(buf).digest("hex");
+  const buf: Buffer = Buffer.from(await file.arrayBuffer());
+  const sha256: string = crypto.createHash("sha256").update(buf).digest("hex");
   const existing = findByHash(sha256);
   if (existing) return NextResponse.json({ ok: true, meta: existing, duplicate: true });
 

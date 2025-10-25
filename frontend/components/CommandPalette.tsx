@@ -87,7 +87,6 @@ export function CommandPalette() {
   ];
 
   const switchProvider = (provider: string): void => {
-    // This would need backend support to change provider
     alert(`Vaihtaminen ${provider}:iin tulossa pian!`);
     setIsOpen(false);
   };
@@ -108,7 +107,6 @@ export function CommandPalette() {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // ⌘K or Ctrl+K
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault();
         setIsOpen(prev => !prev);
@@ -116,14 +114,12 @@ export function CommandPalette() {
 
       if (!isOpen) return;
 
-      // Escape
       if (e.key === "Escape") {
         setIsOpen(false);
         setSearch("");
         setSelectedIndex(0);
       }
 
-      // Arrow navigation
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setSelectedIndex(prev => Math.min(prev + 1, filteredCommands.length - 1));
@@ -133,7 +129,6 @@ export function CommandPalette() {
         setSelectedIndex(prev => Math.max(prev - 1, 0));
       }
 
-      // Enter
       if (e.key === "Enter") {
         e.preventDefault();
         const cmd = filteredCommands[selectedIndex];
@@ -154,7 +149,6 @@ export function CommandPalette() {
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -163,7 +157,6 @@ export function CommandPalette() {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
           />
 
-          {/* Palette */}
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -171,7 +164,6 @@ export function CommandPalette() {
             className="fixed top-20 left-1/2 -translate-x-1/2 w-full max-w-2xl z-50 px-4"
           >
             <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
-              {/* Search Input */}
               <div className="p-4 border-b border-gray-100">
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">🔍</span>
@@ -192,7 +184,6 @@ export function CommandPalette() {
                 </div>
               </div>
 
-              {/* Commands List */}
               <div className="max-h-96 overflow-y-auto">
                 {Object.entries(groupedCommands).map(([category, cmds]) => (
                   <div key={category}>
@@ -241,7 +232,6 @@ export function CommandPalette() {
                 )}
               </div>
 
-              {/* Footer */}
               <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 flex items-center gap-4 text-xs text-gray-500">
                 <div className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-300">↑↓</kbd>
@@ -249,4 +239,13 @@ export function CommandPalette() {
                 </div>
                 <div className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-300">↵</kbd>
-                  <span
+                  <span>Valitse</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}

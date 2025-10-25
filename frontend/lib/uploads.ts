@@ -4,11 +4,11 @@ import type { ReceiptMeta, ParsedReceipt, ProcessingMeta } from "./types";
 const store: ReceiptMeta[] = [];
 const trash = new Map<string, { meta: ReceiptMeta; buf?: Buffer; ts: number }>();
 
-export function listReceipts() {
+export function listReceipts(): ReceiptMeta[] {
   return store.slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }
 
-export function findByHash(sha256: string) {
+export function findByHash(sha256: string): ReceiptMeta | null {
   return store.find(s => s.sha256 === sha256) ?? null;
 }
 
@@ -32,7 +32,7 @@ export async function addReceipt(file: File): Promise<ReceiptMeta> {
   return meta;
 }
 
-export function removeReceipt(id: string) {
+export function removeReceipt(id: string): ReceiptMeta | null {
   const idx = store.findIndex(s => s.id === id);
   if (idx === -1) return null;
   const [meta] = store.splice(idx, 1);
@@ -42,7 +42,7 @@ export function removeReceipt(id: string) {
   return meta;
 }
 
-export function restoreReceipt(id: string) {
+export function restoreReceipt(id: string): ReceiptMeta | null {
   const rec = trash.get(id);
   if (!rec) return null;
   trash.delete(id);
@@ -52,7 +52,7 @@ export function restoreReceipt(id: string) {
   return rec.meta;
 }
 
-export function setParsed(id: string, parsed: ParsedReceipt, meta?: any) {
+export function setParsed(id: string, parsed: ParsedReceipt, meta?: unknown): void {
   const it = store.find(s => s.id === id);
   if (!it) return;
   it.status = "parsed";
@@ -61,17 +61,17 @@ export function setParsed(id: string, parsed: ParsedReceipt, meta?: any) {
   it.meta = meta ?? it.meta;
 }
 
-export function setStatus(id: string, status: ReceiptMeta["status"]) {
+export function setStatus(id: string, status: ReceiptMeta["status"]): void {
   const it = store.find(s => s.id === id);
   if (it) it.status = status;
 }
 
-export function setProcessingMeta(id: string, meta: ProcessingMeta) {
+export function setProcessingMeta(id: string, meta: ProcessingMeta): void {
   const it = store.find(s => s.id === id);
   if (it) it.processing = meta;
 }
 
-export function approveReceipt(id: string, parsed: ParsedReceipt) {
+export function approveReceipt(id: string, parsed: ParsedReceipt): boolean {
   const it = store.find(s => s.id === id);
   if (!it) return false;
   it.parsed = parsed;
@@ -84,7 +84,7 @@ export function getBuffer(id: string): Buffer | null {
   return it?.__buf ?? null;
 }
 
-export function purgeTrash(olderThanMs = 10 * 60 * 1000) {
+export function purgeTrash(olderThanMs = 10 * 60 * 1000): void {
   const now = Date.now();
   for (const [id, v] of trash.entries())
     if (now - v.ts > olderThanMs) trash.delete(id);

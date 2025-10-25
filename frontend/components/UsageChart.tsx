@@ -25,7 +25,6 @@ export default function UsageChart({ data = [] }: UsageChartProps): JSX.Element 
   return (
     <div className="p-4 bg-white border border-gray-200 rounded-lg">
       <h3 className="font-semibold text-gray-900 mb-4">Usage Chart</h3>
-
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData}>
@@ -33,20 +32,8 @@ export default function UsageChart({ data = [] }: UsageChartProps): JSX.Element 
             <XAxis dataKey="date" />
             <YAxis />
             <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="usage"
-              stroke="#0047FF"
-              strokeWidth={2}
-              name="Usage"
-            />
-            <Line
-              type="monotone"
-              dataKey="cost"
-              stroke="#059669"
-              strokeWidth={2}
-              name="Cost"
-            />
+            <Line type="monotone" dataKey="usage" stroke="#0047FF" strokeWidth={2} name="Usage" />
+            <Line type="monotone" dataKey="cost" stroke="#059669" strokeWidth={2} name="Cost" />
           </LineChart>
         </ResponsiveContainer>
       </div>

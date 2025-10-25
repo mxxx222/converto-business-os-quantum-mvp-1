@@ -59,7 +59,7 @@ export async function POST(
       retryCount: result.retryCount,
     }, { status: result.httpStatus });
 
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Processing error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }

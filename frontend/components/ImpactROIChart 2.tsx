@@ -11,7 +11,7 @@ interface ImpactROIChartProps {
 }
 
 export default function ImpactROIChart({ data }: ImpactROIChartProps) {
-  const chartData = data || [
+  const chartData: Array<{ date: string; hours: number; euros: number }> = data || [
     { date: "Vko 1", hours: 2.5, euros: 62 },
     { date: "Vko 2", hours: 3.2, euros: 80 },
     { date: "Vko 3", hours: 2.8, euros: 70 },

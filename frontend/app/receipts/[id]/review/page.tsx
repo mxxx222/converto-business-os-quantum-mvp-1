@@ -36,8 +36,8 @@ interface ReviewFormData {
 export default function ReceiptReviewPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [receipt, setReceipt] = useState<Receipt | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
   const [formData, setFormData] = useState<ReviewFormData>({
     merchant_name: '',
     receipt_date: '',
@@ -269,4 +269,3 @@ export default function ReceiptReviewPage({ params }: { params: { id: string } }
                     step="0.01"
                     value={formData.total_amount}
                     onChange={(e) => handleInputChange('total_amount', e.target.value)}
-                    className="w

@@ -13,7 +13,7 @@ interface PerformanceMetrics {
 
 export default function PerformanceMonitor() {
   const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState<boolean>(false);
 
   useEffect(() => {
     // Only run in development
@@ -59,7 +59,7 @@ export default function PerformanceMonitor() {
     return null;
   }
 
-  const getScore = (value: number, thresholds: [number, number]) => {
+  const getScore = (value: number, thresholds: [number, number]): string => {
     if (value <= thresholds[0]) return 'good';
     if (value <= thresholds[1]) return 'needs-improvement';
     return 'poor';

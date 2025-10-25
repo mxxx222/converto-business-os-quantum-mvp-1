@@ -52,7 +52,7 @@ function normaliseMetadata(metadata: unknown): Record<string, unknown> {
 
   try {
     return { ...metadata };
-  } catch (error) {
+  } catch {
     console.warn('Failed to clone receipt metadata, resetting to empty object.');
     return {};
   }

@@ -9,8 +9,8 @@ import posthog from 'posthog-js';
 export function initPostHog(): void {
   if (typeof window === 'undefined') return;
 
-  const apiKey = process.env.NEXT_PUBLIC_POSTHOG_API_KEY;
-  const apiHost = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com';
+  const apiKey: string | undefined = process.env.NEXT_PUBLIC_POSTHOG_API_KEY;
+  const apiHost: string = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com';
 
   if (!apiKey) {
     console.warn('PostHog not initialized: NEXT_PUBLIC_POSTHOG_API_KEY missing');

@@ -19,7 +19,7 @@ export default function LeadForm() {
     try {
       const res = await fetch('/api/lead', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, utm }),
       })
 
@@ -34,7 +34,7 @@ export default function LeadForm() {
         setError(errorMessage)
         track('form_error', { error: errorMessage, email_domain: email.split('@')[1], ...utm })
       }
-    } catch (err) {
+    } catch {
       const errorMessage = 'Verkkovirhe. Tarkista yhteys ja yritä uudelleen.'
       setError(errorMessage)
       track('form_error', { error: errorMessage, email_domain: email.split('@')[1], ...utm })

@@ -17,7 +17,7 @@ export async function POST(): Promise<NextResponse> {
     const part = await Promise.allSettled(chunk.map(async (r) => {
       const t0 = Date.now();
       try {
-        const text = await primary.impl.extractText(Buffer.from([])); // adapteri stub/dev – oikeasti käytä bufferia jos tallessa
+        const text = await primary.impl.extractText(Buffer.from([]));
         const parsed = await parseTextToReceipt(text);
         const ms = Date.now() - t0;
         approveReceipt(r.id, parsed);

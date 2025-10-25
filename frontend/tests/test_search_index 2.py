@@ -1,6 +1,7 @@
+from pathlib import Path
+
 from app.routers.search import code
 from app.services.index import build_or_load
-from pathlib import Path
 
 
 def test_index_and_search(tmp_path: Path) -> None:

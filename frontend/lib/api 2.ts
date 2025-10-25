@@ -7,8 +7,8 @@
  */
 
 export async function api(path: string, init: RequestInit = {}): Promise<any> {
-  const base = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
-  const jwt = process.env.NEXT_PUBLIC_DEV_JWT; // dev only - replace with auth provider in production
+  const base: string = process.env.NEXT_PUBLIC_API_BASE || "http://127.0.0.1:8000";
+  const jwt: string | undefined = process.env.NEXT_PUBLIC_DEV_JWT; // dev only - replace with auth provider in production
 
   const headers: Record<string, string> = {
     ...(init.headers as Record<string, string> || {}),
@@ -20,14 +20,14 @@ export async function api(path: string, init: RequestInit = {}): Promise<any> {
   }
 
   // Merge with init
-  const res = await fetch(`${base}${path}`, {
+  const res: Response = await fetch(`${base}${path}`, {
     ...init,
     headers,
     cache: "no-store",
   });
 
   if (!res.ok) {
-    const text = await res.text();
+    const text: string = await res.text();
     throw new Error(`API Error ${res.status}: ${text}`);
   }
 

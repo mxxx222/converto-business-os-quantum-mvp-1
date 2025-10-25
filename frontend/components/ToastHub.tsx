@@ -25,8 +25,8 @@ export default function ToastHub() {
       setToasts((p) => [...p, t]);
       setTimeout(() => setToasts((p) => p.filter((x) => x.id !== t.id)), t.timeout);
     };
-    window.addEventListener("toast", onToast as EventListener);
-    return () => window.removeEventListener("toast", onToast as EventListener);
+    window.addEventListener("toast", onToast);
+    return () => window.removeEventListener("toast", onToast);
   }, []);
 
   if (!toasts.length) return null;
@@ -43,7 +43,7 @@ export default function ToastHub() {
           >
             <span className="truncate">{t.message}</span>
             {t.actionLabel && t.action && (
-              <button className="ml-auto rounded-lg border px-2 py-1 text-xs" onClick={() => t.action?.()}>
+              <button className="ml-auto rounded-lg border px-2 py-1 text-xs" onClick={t.action}>
                 {t.actionLabel}
               </button>
             )}

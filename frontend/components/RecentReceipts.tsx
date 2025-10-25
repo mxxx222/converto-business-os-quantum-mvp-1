@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useCallback, useRef, useState } from "react";
 import { toast } from "@/lib/toast";
-import { timeago } from "@/lib/timeago";
 
 export default function RecentReceipts() {
   const qc = useQueryClient();
@@ -125,7 +124,7 @@ export default function RecentReceipts() {
           <ul className="mt-2 space-y-2 text-sm">
             {filtered.map(r => (
               <li key={r.id} className="flex items-start justify-between gap-3" tabIndex={0}
-                onKeyDown={(e) => { if (e.key === "Enter" && r.status === "queued") proc.mutate(r.id); if (e.key === "Enter" && r.status === "parsed") { /* review approve optional */ } if (e.key === "Backspace") del.mutate(r.id); }}
+                onKeyDown={(e) => { if (e.key === "Enter" && r.status === "queued") proc.mutate(r.id); if (e.key === "Backspace") del.mutate(r.id); }}
                 title={r.parsed ? `${r.parsed.supplier} • ${r.parsed.date} • ${r.parsed.currency} ${r.parsed.grossTotal.toFixed(2)}`
                   : `${new Date(r.createdAt).toLocaleString("fi-FI")} • ${(r.size / 1024).toFixed(1)} kB`}>
                 <div className="min-w-0">
@@ -136,4 +135,15 @@ export default function RecentReceipts() {
                 <div className="shrink-0 flex gap-2 items-center">
                   {r.processing && (
                     <span className={["text-xs rounded-lg border px-2 py-1", r.processing.provider === "tesseract" ? "border-amber-500 text-amber-700" : "border-emerald-500 text-emerald-700"].join(" ")}
-                      title={`Provider: ${r.processing.provider}${r.processing.fallbackUsed ? " (fallback)" : ""} • ${r.processing.ex
+                      title={`Provider: ${r.processing.provider}${r.processing.fallbackUsed ? " (fallback)" : ""}`}>
+                      {r.processing.provider}
+                    </span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );

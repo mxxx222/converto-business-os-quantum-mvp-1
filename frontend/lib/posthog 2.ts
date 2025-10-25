@@ -6,7 +6,7 @@
 import posthog from 'posthog-js';
 
 // Initialize PostHog only in browser and production
-export function initPostHog() {
+export function initPostHog(): void {
   if (typeof window === 'undefined') return;
 
   const apiKey = process.env.NEXT_PUBLIC_POSTHOG_API_KEY;

@@ -6,13 +6,16 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianG
 export default function OcrResults({ tenant }: { tenant?: string }) {
   const { data, isLoading } = useOcrResults(tenant);
 
-  const chartData = useMemo(() => (data ?? []).slice(0, 30).reverse().map((r: { id: string; created_at: string; wh: number; rated_watts: number; confidence?: number }) => ({
-    id: r.id,
-    date: new Date(r.created_at).toLocaleDateString(),
-    wh: r.wh,
-    watts: r.rated_watts,
-    conf: Math.round((r.confidence ?? 0) * 100),
-  })), [data]);
+  const chartData = useMemo(() => 
+    (data ?? []).slice(0, 30).reverse().map((r: { id: string; created_at: string; wh: number; rated_watts: number; confidence?: number }) => ({
+      id: r.id,
+      date: new Date(r.created_at).toLocaleDateString(),
+      wh: r.wh,
+      watts: r.rated_watts,
+      conf: Math.round((r.confidence ?? 0) * 100),
+    })), 
+    [data]
+  );
 
   return (
     <div className="space-y-6">
@@ -63,7 +66,8 @@ export default function OcrResults({ tenant }: { tenant?: string }) {
             </div>
             <a
               href={`${process.env.NEXT_PUBLIC_API_BASE}/api/v1/ocr/results/${r.id}`}
-              target="_blank" rel="noreferrer"
+              target="_blank" 
+              rel="noreferrer"
               className="mt-3 inline-block text-xs underline text-blue-600"
             >
               Näytä raakadata
@@ -92,20 +96,20 @@ function Badge({ label, value }: { label: string; value: number | string | null 
   );
 }
 
-function avg(list: { [key: string]: number }[] = [], key: string) {
+function avg(list: { [key: string]: number }[] = [], key: string): number {
   if (!list.length) return 0;
   const vals = list.map((x) => x[key]).filter((n) => Number.isFinite(n));
   if (!vals.length) return 0;
   return Math.round(vals.reduce((a, b) => a + b, 0) / vals.length);
 }
 
-function avgPct(list: { [key: string]: number }[] = [], key: string) {
+function avgPct(list: { [key: string]: number }[] = [], key: string): number {
   if (!list.length) return 0;
   const vals = list.map((x) => x[key]).filter((n) => Number.isFinite(n));
   if (!vals.length) return 0;
   return Math.round(100 * vals.reduce((a, b) => a + b, 0) / vals.length);
 }
 
-function formatNum(v: any) {
+function formatNum(v: number | string): string {
   return typeof v === "number" ? v.toLocaleString("fi-FI") : v;
 }

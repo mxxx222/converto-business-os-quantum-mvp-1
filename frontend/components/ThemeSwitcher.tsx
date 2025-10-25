@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 
 export default function ThemeSwitcher(): JSX.Element {
@@ -9,9 +10,7 @@ export default function ThemeSwitcher(): JSX.Element {
       <button
         onClick={() => setTheme("light")}
         className={`px-2 py-1 text-xs rounded transition-all ${
-          theme === "light"
-            ? "bg-white shadow-sm font-medium"
-            : "hover:bg-gray-200"
+          theme === "light" ? "bg-white shadow-sm font-medium" : "hover:bg-gray-200"
         }`}
         aria-label="Light mode"
       >
@@ -20,9 +19,7 @@ export default function ThemeSwitcher(): JSX.Element {
       <button
         onClick={() => setTheme("dark")}
         className={`px-2 py-1 text-xs rounded transition-all ${
-          theme === "dark"
-            ? "bg-white shadow-sm font-medium"
-            : "hover:bg-gray-200"
+          theme === "dark" ? "bg-white shadow-sm font-medium" : "hover:bg-gray-200"
         }`}
         aria-label="Dark mode"
       >

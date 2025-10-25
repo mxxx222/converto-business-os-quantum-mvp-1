@@ -51,8 +51,8 @@ export default function SuggestionRow({ suggestions }: SuggestionRowProps) {
     },
   ];
 
-  const items = suggestions || defaultSuggestions;
-  const sorted = items.sort((a, b) => b.priority - a.priority).slice(0, 5);
+  const items: Suggestion[] = suggestions || defaultSuggestions;
+  const sorted: Suggestion[] = items.sort((a, b) => b.priority - a.priority).slice(0, 5);
 
   if (sorted.length === 0) return null;
 

@@ -146,12 +146,12 @@ export default function OCRDropzone({ onScanComplete }: { onScanComplete?: (resu
             <p><strong>Kauppa:</strong> {result.data?.merchant || "—"}</p>
             <p><strong>Summa:</strong> {result.data?.total || "—"} {result.data?.currency || "EUR"}</p>
             <p><strong>Kategoria:</strong> {result.classification?.category || result.data?.category || "—"}</p>
-            <p><strong>ALV:</strong> {result.classification?.vat_class || result.vat_rate || "24"}%</p>
+            <p><strong>ALV:</strong> {result.classification?.vat_class || result.data?.vat_rate || "24"}%</p>
             <p><strong>Budjettirivi:</strong> {result.classification?.budget_line || "—"}</p>
           </div>
           {result.classification?.suggestions && result.classification.suggestions.length > 0 && (
             <div className="mt-3 space-y-1">
-              {result.classification.suggestions.map((s: string, i: number) => (
+              {result.classification.suggestions.map((s, i) => (
                 <div key={i} className="text-xs text-gray-600">{s}</div>
               ))}
             </div>

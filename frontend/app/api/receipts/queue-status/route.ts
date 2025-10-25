@@ -4,7 +4,7 @@ import { getTenantIdFromRequest } from '@/lib/tenant';
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
-    const tenantId = getTenantIdFromRequest(request);
+    const tenantId: string = getTenantIdFromRequest(request);
     const status = await getQueueStatus(tenantId);
 
     if (!status.success) {

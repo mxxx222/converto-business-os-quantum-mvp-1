@@ -16,7 +16,7 @@ export default function ThemeToggle(): JSX.Element {
     return null;
   }
 
-  const themes = [
+  const themes: { name: string; label: string; icon: React.ComponentType }[] = [
     { name: "neotech", label: "NeoTech", icon: Monitor },
     { name: "nordic", label: "Nordic", icon: Sun },
     { name: "system", label: "System", icon: Moon },

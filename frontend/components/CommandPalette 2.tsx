@@ -86,7 +86,7 @@ export function CommandPalette() {
     }
   ];
 
-  const switchProvider = (provider: string) => {
+  const switchProvider = (provider: string): void => {
     // This would need backend support to change provider
     alert(`Vaihtaminen ${provider}:iin tulossa pian!`);
     setIsOpen(false);
@@ -249,4 +249,4 @@ export function CommandPalette() {
                 </div>
                 <div className="flex items-center gap-1">
                   <kbd className="px-1.5 py-0.5 bg-white rounded border border-gray-300">↵</kbd>
-                  <span>
+                  <span

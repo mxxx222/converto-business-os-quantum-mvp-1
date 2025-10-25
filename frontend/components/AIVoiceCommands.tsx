@@ -16,7 +16,6 @@ export default function AIVoiceCommands() {
   const [isMuted, setIsMuted] = useState<boolean>(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
-  // Voice commands
   const commands: VoiceCommand[] = [
     {
       command: 'näytä dashboard',
@@ -46,7 +45,6 @@ export default function AIVoiceCommands() {
   ];
 
   useEffect(() => {
-    // Check if Speech Recognition is supported
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       setIsSupported(true);
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -60,7 +58,6 @@ export default function AIVoiceCommands() {
         const transcript = event.results[0][0].transcript.toLowerCase();
         setTranscript(transcript);
 
-        // Find matching command
         const matchedCommand = commands.find((cmd) =>
           transcript.includes(cmd.command.toLowerCase())
         );

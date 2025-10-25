@@ -95,7 +95,7 @@ export function ProviderChip({ aiProvider, visionProvider, showLatency = true }:
 }
 
 export function PrivacyChip() {
-  const [isLocal, setIsLocal] = useState(false);
+  const [isLocal, setIsLocal] = useState<boolean>(false);
 
   useEffect(() => {
     // Check if using local providers

@@ -23,7 +23,7 @@ export default function HotkeysOverlay() {
   const [show, setShow] = useState<boolean>(false);
 
   useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
+    function handleKeyDown(event: KeyboardEvent): void {
       // Shift + ? or Shift + /
       if (event.shiftKey && (event.key === "?" || event.key === "/")) {
         event.preventDefault();

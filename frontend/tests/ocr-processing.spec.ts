@@ -1,7 +1,7 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Request } from '@playwright/test';
 
 test.describe('OCR Processing', () => {
-  test('OCR service processes receipt', async ({ request }: { request: any }) => {
+  test('OCR service processes receipt', async ({ request }: { request: Request }) => {
     const mockReceiptId: string = 'test-receipt-' + Date.now();
 
     const processResponse = await request.post(`/api/receipts/${mockReceiptId}/process`);
@@ -16,7 +16,7 @@ test.describe('OCR Processing', () => {
     expect(processData.parsedData.total).toBe(25.99);
   });
 
-  test('OCR parsing extracts receipt data', async ({ request }: { request: any }) => {
+  test('OCR parsing extracts receipt data', async ({ request }: { request: Request }) => {
     const sampleReceiptText: string = `
     SUPERMARKET INC
     123 Main Street

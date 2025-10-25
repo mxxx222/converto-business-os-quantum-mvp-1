@@ -10,4 +10,4 @@ def test_diff_and_apply(tmp_path: Path) -> None:
     assert "---" in diff and "+++" in diff
     out = apply_change(ApplyIn(file_path=str(f), content="new\n"))
     assert out.written == len(b"new\n")
-    assert Path(str(f) + ".bak").exists()
+    assert (f.with_suffix('.bak')).exists()

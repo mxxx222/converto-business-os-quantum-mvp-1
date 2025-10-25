@@ -3,7 +3,7 @@ import { parseReceiptText } from '@/lib/ocr';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const { text } = await request.json();
+    const { text }: { text?: string } = await request.json();
 
     if (!text || typeof text !== 'string') {
       return NextResponse.json({ error: 'Missing receipt text' }, { status: 400 });
