@@ -1,32 +1,5 @@
 services:
-  # Dashboard (Frontend)
-  - type: web
-    name: converto-dashboard
-    env: node
-    plan: starter
-    buildCommand: cd apps/dashboard && pnpm install --frozen-lockfile && pnpm build
-    startCommand: cd apps/dashboard && pnpm start
-    rootDir: apps/dashboard
-    healthCheckPath: /
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: NEXT_PUBLIC_BASE_URL
-        value: https://converto.fi
-      - key: NEXT_PUBLIC_I18N_ENABLED
-        value: true
-      - key: NEXT_PUBLIC_GA_MEASUREMENT_ID
-        value: G-DEMO123
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        value: https://demo.supabase.co
-      - key: SUPABASE_SERVICE_ROLE
-        value: demo
-      - key: RESEND_API_KEY
-        value: demo
-      - key: FROM_EMAIL
-        value: noreply@converto.fi
-
-  # Backend (Business OS)
+  # Backend (Business OS) - Dashboard moved to Vercel
   - type: web
     name: converto-business-os-quantum-mvp-1
     env: python
@@ -43,6 +16,20 @@ services:
       - key: OCR_PROVIDER
         value: tesseract
       - key: ALLOWED_ORIGINS
-        value: https://converto.fi,https://www.converto.fi
+        value: https://app.converto.fi,https://converto.fi
       - key: LOG_LEVEL
         value: info
+      - key: UPLOAD_V2_ENABLED
+        value: false
+      - key: SECURITY_STRICT_HEADERS
+        value: true
+      - key: CSV_EXPORT_ENABLED
+        value: true
+      - key: S3_REGION
+        value: us-east-1
+      - key: S3_BUCKET
+        value: converto-uploads
+      - key: S3_ACCESS_KEY_ID
+        value: demo
+      - key: S3_SECRET_ACCESS_KEY
+        value: demo

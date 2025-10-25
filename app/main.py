@@ -1,14 +1,14 @@
 import base64
 import contextlib
 import os
+from typing import Dict
 
 from fastapi import APIRouter, FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.types import ASGIApp, Scope, Receive, Send
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.starlette import StarletteIntegration
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.staticfiles import StaticFiles
 
 from app.api import economy_admin as economy_admin_api
@@ -25,6 +25,7 @@ from app.api.auto_heal import router as auto_heal_router
 from app.api.debug import router as debug_router
 from app.api.entitlements import router as entitlements_router
 from app.api.guardian import router as guardian_router
+from app.api.health.route import router as health_router
 from app.api.impact import router as impact_router
 from app.api.integrations.notion_api import router as notion_router
 from app.api.integrations.notion_customs import router as notion_customs_router
@@ -90,9 +91,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         resp = await call_next(request)
         resp.headers.setdefault("X-Content-Type-Options", "nosniff")
         resp.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
-        resp.headers.setdefault(
-            "Permissions-Policy", "camera=(), microphone=(), geolocation=()"
-        )
+        resp.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
         resp.headers.setdefault(
             "Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload"
         )
@@ -102,6 +101,7 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
 app.add_middleware(SecurityHeadersMiddleware)
 
 app.include_router(health_api.router)
+app.include_router(health_router, prefix="/api")
 app.include_router(v2_api.router)
 app.include_router(agent_router.router)
 app.include_router(search_router.router)
@@ -160,20 +160,20 @@ def root() -> RedirectResponse:
 def coming_soon() -> str:
     return """
 <!doctype html>
-<html lang=\"en\">
+<html lang="en">
 <head>
-  <meta charset=\"utf-8\">
+  <meta charset="utf-8">
   <title>Converto — Coming soon</title>
-  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />
-  <link rel=\"icon\" href=\"/static/favicon-32.png\" sizes=\"32x32\"> 
-  <link rel=\"apple-touch-icon\" href=\"/static/apple-touch-icon.png\" sizes=\"180x180\"> 
-  <meta name=\"theme-color\" content=\"#0B0B0C\"> 
-  <meta name=\"description\" content=\"Converto — automation platform. Launching soon.\"> 
-  <meta property=\"og:title\" content=\"Converto — Coming soon\"> 
-  <meta property=\"og:description\" content=\"Backend live. Frontend launching shortly.\"> 
-  <meta property=\"og:type\" content=\"website\"> 
-  <meta property=\"og:url\" content=\"https://converto.fi/\"> 
-  <meta property=\"og:image\" content=\"https://converto.fi/static/og-card.png\"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" href="/static/favicon-32.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="/static/apple-touch-icon.png" sizes="180x180">
+  <meta name="theme-color" content="#0B0B0C">
+  <meta name="description" content="Converto — automation platform. Launching soon.">
+  <meta property="og:title" content="Converto — Coming soon">
+  <meta property="og:description" content="Backend live. Frontend launching shortly.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://converto.fi/">
+  <meta property="og:image" content="https://converto.fi/static/og-card.png">
   <style>
     html,body {height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,sans-serif;background:#0B0B0C;color:#EDEDED;}
     .wrap {min-height:100%;display:flex;align-items:center;justify-content:center;padding:48px;}
@@ -184,11 +184,11 @@ def coming_soon() -> str:
   </style>
   </head>
 <body>
-  <div class=\"wrap\">
-    <div class=\"card\">
+  <div class="wrap">
+    <div class="card">
       <h1>Converto — Coming soon</h1>
       <p>Backend on käynnissä ja valmiina palvelemaan. Frontend julkaistaan pian.</p>
-      <p><code>/health</code> palauttaa {\"status\":\"ok\"} ja redirect <code>/ → /coming-soon</code> on käytössä.</p>
+      <p><code>/health</code> palauttaa {"status":"ok"} ja redirect <code>/ → /coming-soon</code> on käytössä.</p>
     </div>
   </div>
 </body>
@@ -200,25 +200,4 @@ def coming_soon() -> str:
 FAVICON_B64 = (
     "AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAGAAAAAAAAAAAAAAAAAAAAAAAAAAA"
     "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-    "AAAAAAAAAAAAAP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////"
-    "AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
-)
-
-
-@app.get("/favicon.ico", include_in_schema=False)
-def favicon() -> Response:
-    raw = base64.b64decode(FAVICON_B64)
-    return Response(content=raw, media_type="image/x-icon")
-
-
-# simple insights demo endpoint
-ins = APIRouter(prefix="/api/v1/insights", tags=["insights"])
-
-
-@ins.get("/kpis")
-def kpis() -> dict:
-    return kpis_example()
-
-
-app.include_router(ins)
+    "AAAAAAAAAAAAAP///wD///8A////AP///wD///8A////AP///wD///8
