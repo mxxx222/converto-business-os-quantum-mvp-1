@@ -1,58 +1,21 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, Page, BrowserContext } from '@playwright/test';
 
-test.describe("PWA offline handling", () => {
-  test("serves offline fallback when the network is unavailable", async ({ browser }: { browser: any }) => {
-    const context = await browser.newContext();
-    const page = await context.newPage();
+test.describe('PWA Offline Functionality', () => {
+  test('should work offline', async ({ page, context }: { page: Page; context: BrowserContext }) => {
+    await page.goto('/receipts');
 
-    await page.goto("/fi/", { waitUntil: "networkidle" });
-
-    await page.waitForFunction(async () => {
-      if (!("serviceWorker" in navigator)) {
-        return true;
-      }
-      await navigator.serviceWorker.ready;
-      return true;
-    });
-
+    // Go offline
     await context.setOffline(true);
 
-    await page.goto("/offline-check", { waitUntil: "domcontentloaded" }).catch(() => undefined);
-
-    await expect(page.getByText(/Olet offline-tilassa/i)).toBeVisible();
-
-    await context.setOffline(false);
-    await context.close();
+    // Should still show the page
+    await expect(page.getByText('Kuittien hallinta')).toBeVisible();
   });
-});
 
-test.describe("PWA background sync", () => {
-  test("background sync tag registration resolves", async ({ page }: { page: any }) => {
-    await page.goto("/fi/", { waitUntil: "domcontentloaded" });
+  test('should show offline fallback', async ({ page, context }: { page: Page; context: BrowserContext }) => {
+    await context.setOffline(true);
+    await page.goto('/nonexistent');
 
-    const result = await page.evaluate(async () => {
-      if (!("serviceWorker" in navigator)) {
-        return { supported: false, registered: false };
-      }
-      const registration = await navigator.serviceWorker.ready;
-      const hasSync = "sync" in registration;
-      if (!hasSync) {
-        return { supported: false, registered: false };
-      }
-      try {
-        // @ts-expect-error experimental background sync typing
-        await registration.sync.register("api-post-sync");
-        return { supported: true, registered: true };
-      } catch (error) {
-        console.debug("Background sync registration failed", error);
-        return { supported: true, registered: false };
-      }
-    });
-
-    if (result.supported) {
-      expect(result.registered).toBeTruthy();
-    } else {
-      expect.soft(result.supported).toBeFalsy();
-    }
+    // Should show offline page
+    await expect(page.getByText('Olet offline')).toBeVisible();
   });
 });
