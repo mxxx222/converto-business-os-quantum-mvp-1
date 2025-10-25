@@ -1,4 +1,49 @@
+Connect through your AI tool
+To connect, search for "Notion MCP" in your tool's MCP directory or use these connection methods:
+
+Streamable HTTP (Recommended)
+URL: https://mcp.notion.com/mcp
+JSON config:
+JSON
+
 {
+  "mcpServers": {
+    "Notion": {
+      "url": "https://mcp.notion.com/mcp"
+    }
+  }
+}
+SSE (Server-Sent Events)
+URL: https://mcp.notion.com/sse
+JSON config:
+JSON
+
+{
+  "mcpServers": {
+    "Notion": {
+      "type": "sse",
+      "url": "https://mcp.notion.com/sse"
+    }
+  }
+}
+
+STDIO (Local Server)
+JSON config
+JSON
+
+{
+  "mcpServers": {
+    "notionMCP": {
+      "command": "npx",
+      "args": ["-y", "mcp-remote", "https://mcp.notion.com/mcp"]
+    }
+  }
+}
+Troubleshooting connection issues
+If you're experiencing issues connecting your AI tool to Notion MCP, here are some common solutions:
+
+What’s Next
+Learn what you can{
   "name": "converto-mcp-servers",
   "version": "1.0.0",
   "description": "MCP Servers for Converto Business OS - Render, GitHub, Auto Deploy, and more",

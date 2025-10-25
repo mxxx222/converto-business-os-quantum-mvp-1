@@ -68,7 +68,7 @@ export default function DeliverabilityTile(): JSX.Element {
           <div className="flex items-center">
             <AlertTriangle className="w-4 h-4 text-red-500 mr-2" />
             <span className="text-red-700 text-sm">
-              Bounce-prosentti > 2% — tarkista SPF/DKIM/DMARC
+              Bounce-prosentti &gt; 2% — tarkista SPF/DKIM/DMARC
             </span>
           </div>
         </div>

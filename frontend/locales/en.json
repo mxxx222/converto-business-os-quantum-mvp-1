@@ -7,5 +7,9 @@
     "cta1":"Book a 20‑min demo",
     "cta2":"See how it works"
   },
-  "pricing": { "title":"Transparent pricing", "sub":"14‑day free pilot · 30‑day money‑back guarantee", "cta":"Start for free" }
+  "pricing": { "title":"Transparent pricing","sub":"14‑day free pilot · 30‑day money‑back guarantee","cta":"Start for free" },
+  "meta": {
+    "title": "Converto — Smart automation",
+    "description": "Remove busywork and get invoices out on time. Converto brings billing into one dashboard — save time and money without long projects."
+  }
 }
