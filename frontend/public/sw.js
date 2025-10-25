@@ -30,18 +30,17 @@ try {
 const CACHE_NAME = 'converto-v1.0.0';
 const STATIC_CACHE = 'converto-static-v1';
 const DYNAMIC_CACHE = 'converto-dynamic-v1';
+const OFFLINE_URL = '/offline.html';
 
 // Files to cache for offline functionality
 const STATIC_FILES = [
   '/',
   '/dashboard',
-  '/invoices',
-  '/expenses',
-  '/reports',
+  '/site.webmanifest',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
-  '/offline.html'
+  '/favicon-32x32.png',
+  '/apple-touch-icon.png',
+  OFFLINE_URL
 ];
 
 // API endpoints to cache
@@ -129,7 +128,7 @@ self.addEventListener('fetch', (event) => {
 
   // Handle different types of requests
   if (request.destination === 'document') {
-    event.respondWith(handleDocumentRequest(request));
+  event.respondWith(handleDocumentRequest(request));
   } else if (request.destination === 'image' || request.destination === 'style' || request.destination === 'script') {
     event.respondWith(handleStaticAssetRequest(request));
   } else if (url.pathname.startsWith('/api/')) {
@@ -138,6 +137,55 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(fetch(request));
   }
 });
+
+// Handle document requests - network first, fall back to cache/offline page
+async function handleDocumentRequest(request) {
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse && networkResponse.ok) {
+      const cache = await caches.open(DYNAMIC_CACHE);
+      cache.put(request, networkResponse.clone());
+      return networkResponse;
+    }
+  } catch (error) {
+    // Intentionally swallow errors to fall back to cache
+  }
+
+  const cachedResponse = await caches.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  const offlineResponse = await caches.match(OFFLINE_URL);
+  if (offlineResponse) {
+    return offlineResponse;
+  }
+
+  return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
+}
+
+// Handle static assets - cache first, update in background when online
+async function handleStaticAssetRequest(request) {
+  const cache = await caches.open(STATIC_CACHE);
+  const cachedResponse = await cache.match(request);
+  if (cachedResponse) {
+    return cachedResponse;
+  }
+
+  try {
+    const networkResponse = await fetch(request);
+    if (networkResponse && networkResponse.ok) {
+      cache.put(request, networkResponse.clone());
+    }
+    return networkResponse;
+  } catch (error) {
+    const fallback = await caches.match(OFFLINE_URL);
+    if (fallback) {
+      return fallback;
+    }
+    throw error;
+  }
+}
 
 // Handle API requests - network first, cache fallback
 async function handleApiRequest(request) {
