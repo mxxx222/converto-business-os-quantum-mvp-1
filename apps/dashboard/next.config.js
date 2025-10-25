@@ -9,7 +9,6 @@ const securityHeaders = [
 
 const nextConfig = {
   experimental: {
-    runtime: 'edge',
     // Enable React Server Components
     serverComponentsExternalPackages: ['d3', 'framer-motion']
   },

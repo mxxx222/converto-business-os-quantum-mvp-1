@@ -47,9 +47,11 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.5",
-    "@types/react": "19.2.2"
+    "@types/react": "19.2.2",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
   },
   "engines": {
-    "node": ">=18 <20"
+    "node": ">=18 <21"
   }
 }

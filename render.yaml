@@ -1,55 +1,48 @@
 services:
+  # Dashboard (Frontend)
   - type: web
     name: converto-dashboard
     env: node
-    region: oregon
-    plan: free
-    branch: main
-    autoDeploy: true
-    buildCommand: npm install && npm run build
-    startCommand: npm run start
-    rootDir: frontend
-    healthCheckPath: /api/health
+    plan: starter
+    buildCommand: cd apps/dashboard && pnpm install --frozen-lockfile && pnpm build
+    startCommand: cd apps/dashboard && pnpm start
+    rootDir: apps/dashboard
+    healthCheckPath: /
     envVars:
       - key: NODE_ENV
         value: production
-      - key: NEXT_RUNTIME
-        value: nodejs
-      - key: NEXT_PUBLIC_SUPABASE_URL
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE
-        sync: false
-      - key: RESEND_API_KEY
-        sync: false
-      - key: FROM_EMAIL
-        value: "no-reply@converto.fi"
+      - key: NEXT_PUBLIC_BASE_URL
+        value: https://converto.fi
       - key: NEXT_PUBLIC_I18N_ENABLED
-        value: "true"
-      - key: SITE_URL
-        value: "https://converto.fi"
-      - key: NEXT_PUBLIC_THEME
-        value: "emerald"
-      - key: NEXT_PUBLIC_PLAUSIBLE_DOMAIN
-        value: "converto.fi"
-      - key: SENTRY_DSN
-        value: ""
-      - key: SENTRY_ENVIRONMENT
-        value: production
-      - key: RATE_LIMIT_MAX
-        value: "10"
-      - key: RATE_LIMIT_WINDOW
-        value: "60000"
-      - key: NEXT_PUBLIC_PWA_ENABLED
-        value: "true"
-      - key: NEXT_PUBLIC_PWA_NAME
-        value: "Converto Business OS"
-      - key: NEXT_PUBLIC_PWA_THEME_COLOR
-        value: "#10B981"
+        value: true
+      - key: NEXT_PUBLIC_GA_MEASUREMENT_ID
+        value: G-DEMO123
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        value: https://demo.supabase.co
+      - key: SUPABASE_SERVICE_ROLE
+        value: demo
+      - key: RESEND_API_KEY
+        value: demo
+      - key: FROM_EMAIL
+        value: noreply@converto.fi
+
+  # Backend (Business OS)
+  - type: web
+    name: converto-business-os-quantum-mvp-1
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    rootDir: .
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11
+      - key: DATABASE_URL
+        value: postgresql://demo:demo@demo.supabase.co:5432/demo
+      - key: OCR_PROVIDER
+        value: tesseract
       - key: ALLOWED_ORIGINS
-        value: "https://converto.fi,https://app.converto.fi"
-      - key: TRUST_PROXY_HEADERS
-        value: "true"
-      - key: ENABLE_HEALTHCHECK
-        value: "true"
-      - key: NEXT_PUBLIC_API_BASE
-        value: "https://converto-business-os-quantum-mvp-1.onrender.com"
+        value: https://converto.fi,https://www.converto.fi
+      - key: LOG_LEVEL
+        value: info
