@@ -7,9 +7,9 @@ export default function FeaturesGrid(): JSX.Element {
       <div>
         <h2>Ominaisuudet</h2>
         <div>
-          {feats.map((f: { title?: string }) => (
-            <div key={f.title || f}>
-              {f.title || f}
+          {feats.map((f: { title?: string }, index: number) => (
+            <div key={f.title || `feature-${index}`}>
+              {f.title || String(f)}
             </div>
           ))}
         </div>
