@@ -1,5 +1,5 @@
 # Backend (Python)
-app/
+backend/
 requirements.txt
 requirements-dev.txt
 alembic/
@@ -34,7 +34,6 @@ data/
 *.sql
 
 # Other frontends
-frontend/
 frontend-vite/
 
 # Config

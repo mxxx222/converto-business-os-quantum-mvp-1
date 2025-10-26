@@ -9,6 +9,10 @@
 
 ---
 
+## 📦 Current Git Deployment Status
+
+The local repository currently has no Git remotes configured, so the latest work-in-progress commit (`Add cron task modules for Render automation`) has not been pushed to GitHub. Configure a remote (for example, with `git remote add origin <repository-url>`) and run `git push -u origin work` to publish the branch.
+
 ## ✨ Features
 
 ### 🧾 OCR AI Receipt Scanning
@@ -60,6 +64,15 @@ docker-compose up
 
 # Open browser
 open http://localhost:3000
+```
+
+### Frontend-only Development (Next.js)
+```bash
+# Start the Next.js dashboard in watch mode
+npm run dev
+
+# The command proxies to ./frontend so you can keep using the repository root
+# Visit http://localhost:3000 once the server reports "Ready"
 ```
 
 ### Production Deployment (Render)
