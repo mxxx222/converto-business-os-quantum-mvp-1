@@ -17,11 +17,15 @@
 
 # allow code dirs
 !app/
+!app/**
 !frontend/
 !frontend/app/
 !frontend/app/dashboard/
 !frontend/app/dashboard/components/
 !scripts/
+!next.config.js
+!tsconfig.json
+!next-env.d.ts
 !frontend/.nvmrc
 !app/static/
 
