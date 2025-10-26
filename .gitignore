@@ -16,13 +16,16 @@
 !test_mcp_*.sh
 
 # allow code dirs
-!app/
+!backend/
+!backend/**
 !frontend/
 !frontend/app/
-!frontend/app/dashboard/
-!frontend/app/dashboard/components/
+!frontend/app/**
 !scripts/
 !frontend/.nvmrc
+!frontend/next.config.js
+!frontend/Dockerfile
+!frontend/tsconfig.json
 !app/static/
 
 # inside allowed dirs, re-ignore heavy junk
