@@ -28,6 +28,24 @@
 !frontend/Dockerfile
 !frontend/tsconfig.json
 !app/static/
+!ai_gateway/
+!ai_gateway/**
+!ai_automation/
+!ai_automation/**
+!api_gateway/
+!api_gateway/**
+!infrastructure/
+!infrastructure/**
+!services/
+!services/**
+!compliance/
+!compliance/**
+!security/
+!security/**
+!alembic/
+!alembic/**
+!tests/
+!tests/**
 
 # inside allowed dirs, re-ignore heavy junk
 app/**/node_modules/
