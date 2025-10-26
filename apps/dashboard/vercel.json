@@ -1,5 +1,4 @@
 {
   "version": 2,
-  "framework": "nextjs",
-  "functions": { "runtime": "nodejs20.x" }
+  "framework": "nextjs"
 }
