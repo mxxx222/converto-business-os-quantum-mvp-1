@@ -13,6 +13,8 @@
 
 The local repository currently has no Git remotes configured, so the latest work-in-progress commit (`Add cron task modules for Render automation`) has not been pushed to GitHub. Configure a remote (for example, with `git remote add origin <repository-url>`) and run `git push -u origin work` to publish the branch.
 
+To streamline the process, you can also execute `./scripts/push_to_github.sh` (optionally passing a different remote name as the first argument). The helper script verifies that a remote exists before attempting the push and reuses the current branch automatically.
+
 ## ✨ Features
 
 ### 🧾 OCR AI Receipt Scanning

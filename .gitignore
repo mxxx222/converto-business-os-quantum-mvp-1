@@ -8,6 +8,7 @@
 !pyproject.toml
 !start_backend.sh
 !start_frontend.sh
+!scripts/push_to_github.sh
 !.pre-commit-config.yaml
 !package-mcp.json
 !mcp_*.js
