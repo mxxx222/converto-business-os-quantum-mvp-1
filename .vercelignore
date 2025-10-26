@@ -1,5 +1,5 @@
-# Backend (Python)
-app/
+# Backend (Python) – leave server-only files out of the Vercel build
+# (Do not list the Next.js app/ directory here so the App Router is deployed)
 requirements.txt
 requirements-dev.txt
 alembic/
