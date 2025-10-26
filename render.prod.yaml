@@ -15,7 +15,7 @@ services:
     region: frankfurt
     plan: starter  # $7/mo, no cold starts
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT --workers 2
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT --workers 2
     healthCheckPath: /health
     autoDeploy: false
     envVars:
@@ -29,8 +29,10 @@ services:
         value: "3.11"
       - key: ENVIRONMENT
         value: production
-      - key: ALLOWED_HOSTS
-        value: api.converto.fi,converto-api.onrender.com
+      - key: LOG_LEVEL
+        value: info
+      - key: ALLOWED_ORIGINS
+        value: https://converto.fi,https://app.converto.fi,https://converto-dashboard.vercel.app
       - key: AI_PROVIDER
         value: openai
       - key: VISION_PROVIDER
@@ -89,7 +91,7 @@ services:
     region: frankfurt
     schedule: "10 2 * * *"
     buildCommand: pip install -r requirements.txt
-    startCommand: bash scripts/cron_backup.sh
+    startCommand: python -m backend.tasks.backup
     envVars:
       - key: DATABASE_URL
         fromDatabase:
@@ -107,7 +109,7 @@ services:
     region: frankfurt
     schedule: "0 3 * * *"
     buildCommand: pip install -r requirements.txt
-    startCommand: python -m app.ml.retrain
+    startCommand: python -m backend.tasks.ml_retrain
     envVars:
       - key: DATABASE_URL
         fromDatabase:

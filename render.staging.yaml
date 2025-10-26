@@ -15,7 +15,7 @@ services:
     region: frankfurt
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     autoDeploy: false
     envVars:
@@ -29,6 +29,8 @@ services:
         value: "3.11"
       - key: ENVIRONMENT
         value: staging
+      - key: ALLOWED_ORIGINS
+        value: https://staging.converto.fi,https://converto-api-staging.onrender.com
       - key: AI_PROVIDER
         value: openai
       - key: VISION_PROVIDER
