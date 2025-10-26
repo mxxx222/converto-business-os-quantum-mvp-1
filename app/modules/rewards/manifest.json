@@ -1,7 +1,0 @@
-{
-  "id": "rewards",
-  "name": "Rewards & Gamification",
-  "version": "0.1.0",
-  "apis": ["/api/v1/rewards/*"],
-  "permissions": ["protected"]
-}

@@ -1,7 +1,0 @@
-{
-  "id": "ocr",
-  "name": "OCR Module",
-  "version": "0.1.0",
-  "apis": ["/api/v1/ocr/*"],
-  "permissions": ["protected"]
-}
