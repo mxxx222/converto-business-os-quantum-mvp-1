@@ -1,11 +1,10 @@
 {
   "mcpServers": {
-    "vercel": {
+    "vercel-tools": {
       "command": "node",
       "args": ["mcp_vercel_server.js"],
       "env": {
-        "VERCEL_TOKEN": "your_vercel_token_here",
-        "VERCEL_TEAM_ID": "your_team_id_here"
+        "VERCEL_TOKEN": "YaaoCZFUojVq4ay15lLzm6Co"
       }
     }
   }
