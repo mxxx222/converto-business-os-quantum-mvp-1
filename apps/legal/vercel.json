@@ -1,8 +1,0 @@
-{
-  "framework": "nextjs",
-  "edge": false,
-  "regions": ["fra1"],
-  "buildCommand": "npx turbo run build --filter=@converto/legal",
-  "outputDirectory": ".next"
-}
-
