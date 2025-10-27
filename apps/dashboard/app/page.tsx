@@ -1,4 +1,4 @@
-export default function Page(): JSX.Element {
+export default function Page() {
   return (
     <main>
       <h1>CONVERTO — Dashboard (Coming Soon)</h1>
