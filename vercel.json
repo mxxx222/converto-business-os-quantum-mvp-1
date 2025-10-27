@@ -4,6 +4,5 @@
   "builds": [
     { "src": "frontend/package.json", "use": "@vercel/next" }
   ],
-  "ignoreCommand": "",
-  "functions": { "runtime": "nodejs20.x" }
+  "ignoreCommand": ""
 }
