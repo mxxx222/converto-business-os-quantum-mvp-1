@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 export const defaultSEO: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://converto.fi'),
   title: 'CONVERTO™ — Business OS',
   description: 'Nopea, modulaarinen ja näyttävä markkinointisivu.',
   openGraph: {
