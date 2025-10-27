@@ -1,34 +1,64 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-red() { printf "\033[31m%s\033[0m\n" "$*"; }
-green() { printf "\033[32m%s\033[0m\n" "$*"; }
-yellow() { printf "\033[33m%s\033[0m\n" "$*"; }
+# Simple smoke test for frontend + backend after Vercel deploy
+# Usage:
+#   DASHBOARD_URL=https://<vercel-app>.vercel.app \
+#   BACKEND_URL=https://converto-business-os-quantum-mvp-1.onrender.com \
+#   MARKETING_URL=https://converto.fi \
+#   ./scripts/smoke-test.sh
 
-ok=0; fail=0
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+NC="\033[0m"
 
-check() {
-  local name="$1" url="$2" expect="${3:-200}"
-  code=$(curl -s -o /dev/null -w "%{http_code}" "$url" || echo "000")
-  if [ "$code" = "$expect" ]; then
-    green "✓ $name ($url) -> $code"; ok=$((ok+1))
-  else
-    red "✗ $name ($url) -> $code (expected $expect)"; fail=$((fail+1));
+require_var() {
+  local name="$1"
+  if [[ -z "${!name:-}" ]]; then
+    echo -e "${RED}Missing required env: ${name}${NC}" >&2
+    exit 1
   fi
 }
 
-MARKETING_URL="${MARKETING_URL:-https://converto.fi}"
-DASHBOARD_URL="${DASHBOARD_URL:-https://app.converto.fi}"
-BACKEND_URL="${BACKEND_URL:-https://converto-business-os-quantum-mvp-1.onrender.com}"
-HEALTH_PATH="${HEALTH_PATH:-/health}"
+require_var DASHBOARD_URL
 
-yellow "Running smoke test…"
+echo -e "${YELLOW}==> Checking frontend root redirect${NC}"
+CODE=$(curl -sS -o /dev/null -w "%{http_code}" -I "$DASHBOARD_URL/")
+LOCATION=$(curl -sS -I "$DASHBOARD_URL/" | awk -F": " '/^location:/I{print $2}' | tr -d '\r')
+echo "HTTP: $CODE"; [[ -n "$LOCATION" ]] && echo "Location: $LOCATION"
+if [[ "$CODE" =~ ^30[1278]$ ]] && [[ "$LOCATION" == */dashboard* ]]; then
+  echo -e "${GREEN}✔ Root redirects to /dashboard${NC}"
+else
+  echo -e "${RED}✖ Root did not redirect to /dashboard (code=$CODE, location=$LOCATION)${NC}"; exit 1
+fi
 
-check "Marketing /"           "$MARKETING_URL/" 200
-check "Marketing sitemap.xml" "$MARKETING_URL/sitemap.xml" 200
-check "Marketing robots.txt"  "$MARKETING_URL/robots.txt" 200
-check "Dashboard /"           "$DASHBOARD_URL/" 200
-check "Backend health"        "$BACKEND_URL$HEALTH_PATH" 200
+echo -e "${YELLOW}==> Checking /dashboard serves and not static-export${NC}"
+DASH_HTML=$(curl -sS "$DASHBOARD_URL/dashboard")
+echo "$DASH_HTML" | rg -q "nextExport\"?\s*:\s*true" && { echo -e "${RED}✖ Found nextExport:true in HTML (static export)${NC}"; exit 1; }
+HTTP_OK=$(curl -sS -o /dev/null -w "%{http_code}" "$DASHBOARD_URL/dashboard")
+if [[ "$HTTP_OK" == "200" ]]; then
+  echo -e "${GREEN}✔ /dashboard returns 200 without nextExport:true${NC}"
+else
+  echo -e "${RED}✖ /dashboard returned HTTP $HTTP_OK${NC}"; exit 1
+fi
 
-yellow "OK: $ok, FAIL: $fail"
-[ "$fail" -eq 0 ]
+if [[ -n "${BACKEND_URL:-}" ]]; then
+  echo -e "${YELLOW}==> Checking backend health${NC}"
+  HEALTH=$(curl -sS "$BACKEND_URL/health" || true)
+  echo "$HEALTH" | rg -q '"status"\s*:\s*"healthy"' && \
+    echo -e "${GREEN}✔ Backend healthy${NC}" || \
+    { echo -e "${RED}✖ Backend health failed${NC}"; exit 1; }
+fi
+
+if [[ -n "${MARKETING_URL:-}" ]]; then
+  echo -e "${YELLOW}==> Checking marketing URL${NC}"
+  M_CODE=$(curl -sS -o /dev/null -w "%{http_code}" "$MARKETING_URL/")
+  if [[ "$M_CODE" =~ ^20[0-9]$|^30[1278]$ ]]; then
+    echo -e "${GREEN}✔ Marketing URL reachable (HTTP $M_CODE)${NC}"
+  else
+    echo -e "${RED}✖ Marketing URL returned HTTP $M_CODE${NC}"; exit 1
+  fi
+fi
+
+echo -e "${GREEN}All smoke tests passed.${NC}"

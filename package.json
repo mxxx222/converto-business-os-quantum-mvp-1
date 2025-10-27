@@ -1,24 +1,21 @@
 {
-  "name": "converto-dashboard",
-  "version": "0.1.0",
+  "name": "converto-business-os",
+  "version": "1.0.0",
   "private": true,
+  "packageManager": "yarn@1.22.22",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix frontend run start",
+    "dev": "npm --prefix frontend run dev"
   },
-  "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.20.2",
-    "next": "14.2.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+  "devDependencies": {
+    "turbo": "^2.5.8"
   },
   "engines": {
     "node": ">=18"
-  },
-  "devDependencies": {
-    "@types/node": "24.9.1",
-    "@types/react": "19.2.2",
-    "typescript": "5.9.3"
   }
 }

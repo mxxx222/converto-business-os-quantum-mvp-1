@@ -12,6 +12,11 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
+  trailingSlash: false,
+  skipTrailingSlashRedirect: true,
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 86_400,
@@ -38,7 +43,7 @@ const nextConfig = {
     ];
   },
   async redirects() {
-    return [{ source: '/', destination: '/coming-soon', permanent: false }];
+    return [{ source: '/', destination: '/dashboard', permanent: false }];
   },
 };
 

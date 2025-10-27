@@ -1,13 +1,14 @@
-from sqlalchemy import Column, String, Integer, DateTime, Index
-from sqlalchemy.sql import func
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
+
+from sqlalchemy import Column, DateTime, Index, Integer, String
+from sqlalchemy.sql import func
+
 from ...utils.db import Base
 
 
 class P2EWallet(Base):
     __tablename__ = "p2e_wallet"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = Column(String(64), index=True, nullable=False)
     user_id = Column(String(64), index=True, nullable=False)
     balance = Column(Integer, nullable=False, default=0)
@@ -17,7 +18,7 @@ class P2EWallet(Base):
 
 class P2ETokenLedger(Base):
     __tablename__ = "p2e_token_ledger"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = Column(String(64), index=True, nullable=False)
     user_id = Column(String(64), index=True, nullable=False)
     delta = Column(Integer, nullable=False)  # +mint / -burn
@@ -28,7 +29,7 @@ class P2ETokenLedger(Base):
 
 class P2EQuest(Base):
     __tablename__ = "p2e_quest"
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id = Column(String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     tenant_id = Column(String(64), index=True, nullable=False)
     code = Column(String(64), index=True, nullable=False)
     title = Column(String(256), nullable=False)

@@ -39,23 +39,23 @@ export default function Hero(): JSX.Element {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <motion.a
-              href={hero.primaryCta.href}
-              className="btn-primary text-lg px-8 py-4"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {hero.primaryCta.label}
-            </motion.a>
+                 <motion.a
+                   href="/pilot"
+                   className="btn-primary text-lg px-8 py-4"
+                   whileHover={{ scale: 1.05 }}
+                   whileTap={{ scale: 0.95 }}
+                 >
+                   🚀 Liity Pilot-Ohjelmaan
+                 </motion.a>
 
-            <motion.a
-              href={hero.secondaryCta.href}
-              className="btn-secondary text-lg px-8 py-4"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {hero.secondaryCta.label}
-            </motion.a>
+                 <motion.a
+                   href="/pricing"
+                   className="btn-secondary text-lg px-8 py-4"
+                   whileHover={{ scale: 1.05 }}
+                   whileTap={{ scale: 0.95 }}
+                 >
+                   Hinnoittelu
+                 </motion.a>
           </motion.div>
         </motion.div>
 
