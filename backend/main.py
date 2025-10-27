@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 import logging
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from typing import AsyncIterator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import get_settings
+from shared_core.middleware.auth import dev_auth
+from shared_core.modules.linear.router import router as linear_router
+from shared_core.modules.notion.router import router as notion_router
 from shared_core.modules.ocr.router import router as ocr_router
+from shared_core.modules.supabase.router import router as supabase_router
 from shared_core.utils.db import Base, engine
 
 settings = get_settings()
@@ -60,6 +64,9 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # Add dev auth middleware
+    app.middleware("http")(dev_auth)
+
     @app.get("/", tags=["system"])
     async def root() -> dict[str, str]:
         """Simple index route for health probes."""
@@ -77,6 +84,9 @@ def create_app() -> FastAPI:
         return {"status": "healthy"}
 
     app.include_router(ocr_router)
+    app.include_router(supabase_router)
+    app.include_router(notion_router)
+    app.include_router(linear_router)
     return app
 
 

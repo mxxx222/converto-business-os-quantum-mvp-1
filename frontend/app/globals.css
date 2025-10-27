@@ -1,55 +1,42 @@
-:root {
-  color-scheme: dark;
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617 65%);
-  color: #e2e8f0;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-body {
-  min-height: 100vh;
+html, body {
   margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  padding: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Helvetica Neue', Arial, 'Noto Sans', 'Liberation Sans', sans-serif;
+  color: #111;
+  scroll-behavior: smooth;
 }
 
-main.comingSoon {
-  padding: 32px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
+main {
+  display: block;
 }
 
-.panel {
-  max-width: 460px;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 24px;
-  padding: 36px;
-  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.45);
-  backdrop-filter: blur(16px);
+h1, h2, h3 {
+  line-height: 1.2;
 }
 
-.panel h1 {
-  font-size: clamp(2rem, 3vw, 2.75rem);
-  margin-bottom: 16px;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-.panel p {
-  line-height: 1.6;
-  margin-bottom: 20px;
+.btn-primary {
+  @apply bg-primary-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-primary-700 transition-colors duration-300;
 }
 
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.8rem;
-  color: #38bdf8;
-  margin-bottom: 12px;
+.btn-secondary {
+  @apply bg-white text-primary-600 border border-primary-300 font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-primary-50 transition-colors duration-300;
 }
 
-.status {
-  font-weight: 600;
-  color: #a5b4fc;
-  letter-spacing: 0.05em;
+.card {
+  @apply bg-white rounded-xl shadow-lg p-8 border border-slate-200;
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #0057FF, #8A2BE2);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
