@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.config import get_settings
+from backend.routes.csp import router as csp_router
 from shared_core.middleware.auth import dev_auth
 from shared_core.modules.linear.router import router as linear_router
 from shared_core.modules.notion.router import router as notion_router
@@ -87,6 +88,7 @@ def create_app() -> FastAPI:
     app.include_router(supabase_router)
     app.include_router(notion_router)
     app.include_router(linear_router)
+    app.include_router(csp_router)
     return app
 
 
