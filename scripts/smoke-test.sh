@@ -46,7 +46,7 @@ fi
 if [[ -n "${BACKEND_URL:-}" ]]; then
   echo -e "${YELLOW}==> Checking backend health${NC}"
   HEALTH=$(curl -sS "$BACKEND_URL/health" || true)
-  echo "$HEALTH" | rg -q '"status"\s*:\s*"healthy"' && \
+  echo "$HEALTH" | rg -q '"status"\s*:\s*"ok"' && \
     echo -e "${GREEN}✔ Backend healthy${NC}" || \
     { echo -e "${RED}✖ Backend health failed${NC}"; exit 1; }
 fi
