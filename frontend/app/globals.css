@@ -1,5 +1,8 @@
 /* Tailwind CSS temporarily disabled for deployment */
 
+/* Import Premium Styles */
+@import url('./premium/styles/premium.css');
+
 html, body {
   margin: 0;
   padding: 0;
