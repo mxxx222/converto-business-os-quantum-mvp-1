@@ -15,6 +15,12 @@ class Settings:
     environment: str = field(default_factory=lambda: os.getenv("ENVIRONMENT", "development"))
     database_url: str = field(default_factory=lambda: os.getenv("DATABASE_URL", "sqlite:///./local.db"))
     allowed_origins: str = field(default_factory=lambda: os.getenv("ALLOWED_ORIGINS", "*"))
+    allowed_origin_regex: str | None = field(
+        default_factory=lambda: os.getenv(
+            "ALLOWED_ORIGIN_REGEX",
+            r"https://[A-Za-z0-9-]+\.vercel\.app$",
+        )
+    )
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "info"))
 
     def cors_origins(self) -> List[str]:
