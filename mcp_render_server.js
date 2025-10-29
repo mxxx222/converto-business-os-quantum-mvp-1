@@ -163,12 +163,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 });
 
 // Helper functions
-async function makeRenderRequest(endpoint) {
+async function makeRenderRequest(endpoint, init = {}) {
   const response = await fetch(`${RENDER_API_BASE}${endpoint}`, {
+    method: init.method || 'GET',
     headers: {
       'Authorization': `Bearer ${RENDER_API_KEY}`,
       'Content-Type': 'application/json',
+      ...(init.headers || {}),
     },
+    body: init.body,
   });
 
   if (!response.ok) {
@@ -260,6 +263,7 @@ async function getSSLStatus(serviceId) {
 async function triggerDeploy(serviceId) {
   const data = await makeRenderRequest(`/services/${serviceId}/deploys`, {
     method: 'POST',
+    body: JSON.stringify({ clearCache: false }),
   });
 
   return {
