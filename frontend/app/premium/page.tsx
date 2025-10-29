@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from 'react'
+import PremiumNavbar from './_components/PremiumNavbar'
 import PremiumHero from './_components/PremiumHero'
 import PremiumLogos from './_components/PremiumLogos'
 import PremiumProblem from './_components/PremiumProblem'
@@ -31,6 +32,7 @@ export default function PremiumPage(): JSX.Element {
 
   return (
     <div className="premium-landing">
+      <PremiumNavbar />
       <PremiumHero />
       <PremiumLogos />
       <PremiumProblem />

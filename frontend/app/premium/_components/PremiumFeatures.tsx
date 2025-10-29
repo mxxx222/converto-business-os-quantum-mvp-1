@@ -41,7 +41,7 @@ export default function PremiumFeatures(): JSX.Element {
   ]
 
   return (
-    <section className="premium-features">
+    <section className="premium-features" id="features">
       <div className="container">
         <div className="features-header">
           <h2 className="features-title">
