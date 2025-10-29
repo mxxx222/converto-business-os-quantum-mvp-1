@@ -1,4 +1,14 @@
 services:
+  # Frontend (Marketing Site) - Premium Landing Page
+  - type: web
+    name: converto-marketing
+    env: node
+    plan: starter
+    buildCommand: cd frontend && npm ci && npm run build
+    startCommand: cd frontend && npm start
+    rootDir: frontend
+    healthCheckPath: /premium
+    
   # Backend (Business OS) - Dashboard moved to Vercel
   - type: web
     name: converto-business-os-quantum-mvp-1
