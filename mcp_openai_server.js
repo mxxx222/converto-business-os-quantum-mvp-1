@@ -13,7 +13,9 @@ import {
 } from '@modelcontextprotocol/sdk/types.js';
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const OPENAI_API_BASE = 'https://api.openai.com/v1';
+const OPENAI_API_BASE = process.env.OPENAI_API_BASE || 'https://api.openai.com/v1';
+const OPENAI_ORG = process.env.OPENAI_ORG || process.env.OPENAI_ORGANIZATION || undefined;
+const OPENAI_PROJECT = process.env.OPENAI_PROJECT || undefined;
 
 if (!OPENAI_API_KEY) {
   console.error('Error: OPENAI_API_KEY environment variable is required');
@@ -48,8 +50,8 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
             model: {
               type: 'string',
-              description: 'Model to use (gpt-4, gpt-4-turbo, gpt-3.5-turbo)',
-              default: 'gpt-4-turbo',
+              description: 'Model to use (gpt-4o, gpt-4o-mini, gpt-3.5-turbo)',
+              default: 'gpt-4o-mini',
             },
             max_tokens: {
               type: 'number',
@@ -63,6 +65,16 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ['message'],
+        },
+      },
+      {
+        name: 'openai_health',
+        description: 'Check OpenAI API connectivity and model availability',
+        inputSchema: {
+          type: 'object',
+          properties: {
+            model: { type: 'string', default: 'gpt-4o-mini' },
+          },
         },
       },
       {
@@ -243,6 +255,8 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     switch (name) {
       case 'openai_chat_completion':
         return await chatCompletion(args.message, args.model, args.max_tokens, args.temperature);
+      case 'openai_health':
+        return await openaiHealth(args?.model);
 
       case 'openai_code_analysis':
         return await analyzeCode(args.code, args.language, args.focus);
@@ -280,6 +294,28 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   }
 });
 
+async function openaiHealth(model = 'gpt-4o-mini') {
+  try {
+    const data = await makeOpenAIRequest('/chat/completions', {
+      model,
+      messages: [{ role: 'user', content: 'ping' }],
+      max_tokens: 1,
+      temperature: 0,
+    });
+    return {
+      content: [
+        { type: 'text', text: `ok model=${model}, id=${data.id || 'n/a'}` },
+      ],
+    };
+  } catch (e) {
+    return {
+      content: [
+        { type: 'text', text: `health_failed: ${e.message}` },
+      ],
+    };
+  }
+}
+
 // Helper functions
 async function makeOpenAIRequest(endpoint, data) {
   const response = await fetch(`${OPENAI_API_BASE}${endpoint}`, {
@@ -287,18 +323,25 @@ async function makeOpenAIRequest(endpoint, data) {
     headers: {
       'Authorization': `Bearer ${OPENAI_API_KEY}`,
       'Content-Type': 'application/json',
+      ...(OPENAI_ORG ? { 'OpenAI-Organization': OPENAI_ORG } : {}),
+      ...(OPENAI_PROJECT ? { 'OpenAI-Project': OPENAI_PROJECT } : {}),
     },
     body: JSON.stringify(data),
   });
 
   if (!response.ok) {
-    throw new Error(`OpenAI API error: ${response.status} ${response.statusText}`);
+    let errText = `${response.status} ${response.statusText}`;
+    try {
+      const j = await response.json();
+      errText += `: ${j.error?.message || JSON.stringify(j)}`;
+    } catch {}
+    throw new Error(`OpenAI API error: ${errText}`);
   }
 
   return await response.json();
 }
 
-async function chatCompletion(message, model = 'gpt-4-turbo', maxTokens = 2000, temperature = 0.7) {
+async function chatCompletion(message, model = 'gpt-4o-mini', maxTokens = 2000, temperature = 0.7) {
   const data = await makeOpenAIRequest('/chat/completions', {
     model,
     messages: [
@@ -338,7 +381,7 @@ Provide:
 3. Best practices recommendations
 4. Potential issues or bugs`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 3000, 0.3);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 3000, 0.3);
 }
 
 async function explainCode(code, language = 'javascript', detailLevel = 'intermediate') {
@@ -350,7 +393,7 @@ ${code}
 
 Provide a clear, step-by-step explanation that a ${detailLevel} developer can understand.`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 2500, 0.5);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 2500, 0.5);
 }
 
 async function generateTests(code, language = 'javascript', testFramework = 'jest') {
@@ -366,7 +409,7 @@ Include:
 3. Error handling tests
 4. Integration tests if applicable`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 4000, 0.3);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 4000, 0.3);
 }
 
 async function optimizeCode(code, language = 'javascript', optimizationType = 'performance') {
@@ -382,7 +425,7 @@ Provide:
 3. Performance improvements
 4. Trade-offs if any`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 3500, 0.3);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 3500, 0.3);
 }
 
 async function generateDocumentation(topic, format = 'markdown', audience = 'intermediate') {
@@ -398,7 +441,7 @@ Include:
 5. Troubleshooting section
 6. Best practices`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 5000, 0.4);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 5000, 0.4);
 }
 
 async function troubleshoot(errorMessage, context = '', language = 'javascript') {
@@ -413,7 +456,7 @@ Provide:
 3. Prevention strategies
 4. Related common issues`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 2500, 0.3);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 2500, 0.3);
 }
 
 async function architectureAdvice(description, constraints = '', scale = 'medium') {
@@ -430,7 +473,7 @@ Include:
 4. Implementation roadmap
 5. Potential challenges`;
 
-  return await chatCompletion(prompt, 'gpt-4-turbo', 4000, 0.5);
+  return await chatCompletion(prompt, 'gpt-4o-mini', 4000, 0.5);
 }
 
 // Start server
