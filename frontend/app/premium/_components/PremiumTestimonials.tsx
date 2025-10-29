@@ -53,7 +53,7 @@ export default function PremiumTestimonials(): JSX.Element {
   ]
 
   return (
-    <section className="premium-testimonials">
+    <section className="premium-testimonials" id="testimonials">
       <div className="container">
         <div className="testimonials-header">
           <h2 className="testimonials-title">
