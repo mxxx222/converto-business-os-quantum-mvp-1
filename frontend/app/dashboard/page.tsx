@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import { useState, useCallback } from 'react';
 import { Upload, Receipt, Calculator, Scale, Trophy, Zap, FileText, Download, Eye, Trash2 } from 'lucide-react';
+import { useEffect } from 'react';
+import { getSupabaseClient } from '@/lib/supabase';
 
 interface ReceiptData {
   id: string;
@@ -113,6 +115,8 @@ export default function Dashboard(): JSX.Element {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+      {/* Realtime subscription (Supabase) */}
+      <RealtimeHook />
       {/* Header */}
       <motion.header
         initial={{ opacity: 0, y: -20 }}
@@ -373,4 +377,20 @@ export default function Dashboard(): JSX.Element {
       </div>
     </div>
   );
+}
+
+function RealtimeHook() {
+  useEffect(() => {
+    const supa = getSupabaseClient();
+    if (!supa) return;
+    const channel = supa
+      .channel('ocr-results')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'ocr_results' }, (payload) => {
+        // Minimal: log, could add toast or update state
+        // console.log('OCR change', payload);
+      })
+      .subscribe();
+    return () => { supa.removeChannel(channel); };
+  }, []);
+  return null;
 }

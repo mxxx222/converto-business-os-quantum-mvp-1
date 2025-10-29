@@ -13,12 +13,14 @@ from fastapi.responses import RedirectResponse
 from backend.config import get_settings
 from backend.routes.csp import router as csp_router
 from shared_core.middleware.auth import dev_auth
+from shared_core.middleware.supabase_auth import supabase_auth
 from shared_core.utils.db import Base, engine
 from shared_core.modules.ai.router import router as ai_router
 from shared_core.modules.linear.router import router as linear_router
 from shared_core.modules.notion.router import router as notion_router
 from shared_core.modules.ocr.router import router as ocr_router
 from shared_core.modules.receipts.router import router as receipts_router
+from shared_core.modules.clients.router import router as clients_router
 from shared_core.modules.supabase.router import router as supabase_router
 
 settings = get_settings()
@@ -69,8 +71,11 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
-    # Add dev auth middleware
-    app.middleware("http")(dev_auth)
+    # Auth middleware chain: Supabase JWT (if enabled) then dev fallback
+    if settings.supabase_auth_enabled:
+        app.middleware("http")(supabase_auth)
+    else:
+        app.middleware("http")(dev_auth)
 
     @app.get("/", tags=["system"])
     async def root() -> dict[str, str]:
@@ -95,6 +100,7 @@ def create_app() -> FastAPI:
     app.include_router(notion_router)
     app.include_router(linear_router)
     app.include_router(csp_router)
+    app.include_router(clients_router)
 
     # Back-compat alias: preserve body via 307 redirect
     @app.api_route("/api/v1/ocr-ai/scan", methods=["POST", "OPTIONS"], include_in_schema=False)

@@ -22,6 +22,11 @@ class Settings:
         )
     )
     log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "info"))
+    # Supabase
+    supabase_url: str = field(default_factory=lambda: os.getenv("SUPABASE_URL", ""))
+    supabase_jwt_iss: str = field(default_factory=lambda: os.getenv("SUPABASE_JWT_ISS", ""))
+    supabase_jwt_aud: str = field(default_factory=lambda: os.getenv("SUPABASE_JWT_AUD", "authenticated"))
+    supabase_auth_enabled: bool = field(default_factory=lambda: os.getenv("SUPABASE_AUTH_ENABLED", "false").lower() in {"1", "true", "yes"})
 
     def cors_origins(self) -> List[str]:
         """Return the configured CORS origins as a list."""

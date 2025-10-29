@@ -12,9 +12,6 @@ const securityHeaders = [
 
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: true,
-  },
   trailingSlash: false,
   skipTrailingSlashRedirect: true,
   images: {

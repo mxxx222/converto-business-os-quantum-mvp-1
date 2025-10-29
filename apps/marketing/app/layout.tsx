@@ -2,6 +2,7 @@ import '../styles/globals.css';
 import type { Metadata } from 'next';
 import { defaultSEO } from '../lib/seo';
 import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = defaultSEO;
 
@@ -23,6 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
