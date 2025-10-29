@@ -9,12 +9,12 @@ services:
     rootDir: frontend
     healthCheckPath: /premium
     
-  # Backend (Business OS) - Dashboard moved to Vercel
+  # Backend (Business OS) - FastAPI Backend
   - type: web
     name: converto-business-os-quantum-mvp-1
     env: python
     plan: starter
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && pip install -e .
     startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
     rootDir: .
     healthCheckPath: /health
