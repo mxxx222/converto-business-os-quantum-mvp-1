@@ -8,15 +8,18 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 
 from backend.config import get_settings
 from backend.routes.csp import router as csp_router
 from shared_core.middleware.auth import dev_auth
+from shared_core.utils.db import Base, engine
+from shared_core.modules.ai.router import router as ai_router
 from shared_core.modules.linear.router import router as linear_router
 from shared_core.modules.notion.router import router as notion_router
 from shared_core.modules.ocr.router import router as ocr_router
+from shared_core.modules.receipts.router import router as receipts_router
 from shared_core.modules.supabase.router import router as supabase_router
-from shared_core.utils.db import Base, engine
 
 settings = get_settings()
 logger = logging.getLogger("converto.backend")
@@ -60,6 +63,7 @@ def create_app() -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
+        allow_origin_regex=settings.allowed_origin_regex,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
@@ -84,11 +88,18 @@ def create_app() -> FastAPI:
 
         return {"status": "healthy"}
 
+    app.include_router(ai_router)
     app.include_router(ocr_router)
+    app.include_router(receipts_router)
     app.include_router(supabase_router)
     app.include_router(notion_router)
     app.include_router(linear_router)
     app.include_router(csp_router)
+
+    # Back-compat alias: preserve body via 307 redirect
+    @app.api_route("/api/v1/ocr-ai/scan", methods=["POST", "OPTIONS"], include_in_schema=False)
+    async def ocr_ai_scan_alias() -> RedirectResponse:
+        return RedirectResponse(url="/api/v1/ocr/power", status_code=307)
     return app
 
 
