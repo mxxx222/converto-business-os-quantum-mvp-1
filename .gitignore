@@ -44,3 +44,23 @@ scripts/**/__pycache__/
 *.log
 .DS_Store
 .vercel
+
+# Security: Ignore all environment files and secrets
+.env
+.env.*
+*.env
+secrets.*
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.p8
+*.rsa
+*.dsa
+*.ec
+*.ed25519
+*.ed448
+*.x509
