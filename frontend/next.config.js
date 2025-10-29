@@ -14,7 +14,10 @@ const nextConfig = {
   reactStrictMode: true,
   trailingSlash: false,
   skipTrailingSlashRedirect: true,
+  output: 'export',
+  distDir: 'out',
   images: {
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 86_400,
     domains: ['cdn.converto.app', 'assets.stripe.com', 'images.unsplash.com', 'via.placeholder.com'],
@@ -38,9 +41,6 @@ const nextConfig = {
         headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
       },
     ];
-  },
-  async redirects() {
-    return [{ source: '/', destination: '/dashboard', permanent: false }];
   },
 };
 
