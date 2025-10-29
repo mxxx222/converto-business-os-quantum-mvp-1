@@ -22,6 +22,7 @@ from shared_core.modules.ocr.router import router as ocr_router
 from shared_core.modules.receipts.router import router as receipts_router
 from shared_core.modules.clients.router import router as clients_router
 from shared_core.modules.supabase.router import router as supabase_router
+from backend.app.routes.metrics import router as metrics_router
 
 settings = get_settings()
 logger = logging.getLogger("converto.backend")
@@ -101,6 +102,7 @@ def create_app() -> FastAPI:
     app.include_router(linear_router)
     app.include_router(csp_router)
     app.include_router(clients_router)
+    app.include_router(metrics_router)
 
     # Back-compat alias: preserve body via 307 redirect
     @app.api_route("/api/v1/ocr-ai/scan", methods=["POST", "OPTIONS"], include_in_schema=False)

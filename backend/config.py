@@ -1,46 +1,41 @@
-"""Runtime configuration helpers for the backend service."""
+"""Backend configuration settings."""
 
 from __future__ import annotations
 
 import os
-from dataclasses import dataclass, field
-from functools import lru_cache
-from typing import List
+from typing import Any
+
+from pydantic_settings import BaseSettings
 
 
-@dataclass(slots=True)
-class Settings:
-    """Container for backend configuration values."""
+class Settings(BaseSettings):
+    """Application settings loaded from environment variables."""
 
-    environment: str = field(default_factory=lambda: os.getenv("ENVIRONMENT", "development"))
-    database_url: str = field(default_factory=lambda: os.getenv("DATABASE_URL", "sqlite:///./local.db"))
-    allowed_origins: str = field(default_factory=lambda: os.getenv("ALLOWED_ORIGINS", "*"))
-    allowed_origin_regex: str | None = field(
-        default_factory=lambda: os.getenv(
-            "ALLOWED_ORIGIN_REGEX",
-            r"https://[A-Za-z0-9-]+\.vercel\.app$",
-        )
-    )
-    log_level: str = field(default_factory=lambda: os.getenv("LOG_LEVEL", "info"))
-    # Supabase
-    supabase_url: str = field(default_factory=lambda: os.getenv("SUPABASE_URL", ""))
-    supabase_jwt_iss: str = field(default_factory=lambda: os.getenv("SUPABASE_JWT_ISS", ""))
-    supabase_jwt_aud: str = field(default_factory=lambda: os.getenv("SUPABASE_JWT_AUD", "authenticated"))
-    supabase_auth_enabled: bool = field(default_factory=lambda: os.getenv("SUPABASE_AUTH_ENABLED", "false").lower() in {"1", "true", "yes"})
+    # Environment
+    environment: str = "development"
+    log_level: str = "info"
+    
+    # Database
+    database_url: str = "postgresql://demo:demo@demo.supabase.co:5432/demo"
+    
+    # CORS
+    cors_origins_str: str = "http://localhost:3000,http://localhost:8080"
+    allowed_origin_regex: str = r".*"
+    
+    # Auth
+    supabase_auth_enabled: bool = False
+    
+    class Config:
+        """Pydantic config."""
+        env_file = ".env"
+        case_sensitive = False
+        extra = "ignore"  # Ignore extra environment variables
 
-    def cors_origins(self) -> List[str]:
-        """Return the configured CORS origins as a list."""
-        raw = self.allowed_origins.strip()
-        if not raw or raw == "*":
-            return ["*"]
-        return [origin.strip() for origin in raw.split(",") if origin.strip()]
+    def cors_origins(self) -> list[str]:
+        """Parse CORS origins from comma-separated string."""
+        return [origin.strip() for origin in self.cors_origins_str.split(",")]
 
 
-@lru_cache(maxsize=1)
 def get_settings() -> Settings:
-    """Return a cached settings instance."""
-
+    """Get application settings."""
     return Settings()
-
-
-__all__ = ["Settings", "get_settings"]
