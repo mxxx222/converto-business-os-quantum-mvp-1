@@ -7,7 +7,7 @@ setup(
     version="1.0.0",
     description="Converto Business OS - Intelligent automation platform",
     packages=find_packages(include=["backend", "shared_core"]),
-    python_requires=">=3.11",
+    python_requires=">=3.10",
     install_requires=[
         "fastapi>=0.115.0",
         "uvicorn>=0.32.0",
