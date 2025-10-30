@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect } from 'react'
-import { analytics } from '@/lib/analytics'
 import PremiumNavbar from './_components/PremiumNavbar'
 import PremiumHero from './_components/PremiumHero'
 import PremiumLogos from './_components/PremiumLogos'
@@ -10,19 +9,22 @@ import PremiumSolution from './_components/PremiumSolution'
 import PremiumFeatures from './_components/PremiumFeatures'
 import PremiumTestimonials from './_components/PremiumTestimonials'
 import PremiumPricing from './_components/PremiumPricing'
-import PremiumPricingComparison from './_components/PremiumPricingComparison'
-import PremiumVerifiedProof from './_components/PremiumVerifiedProof'
 import PremiumGuarantee from './_components/PremiumGuarantee'
 import PremiumFAQ from './_components/PremiumFAQ'
 import PremiumCTA from './_components/PremiumCTA'
 
 export default function PremiumPage(): JSX.Element {
   useEffect(() => {
-    // Track premium page view
-    analytics.trackPremiumView()
+    // Analytics tracking
+    fetch('/api/event', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: 'page_view', where: 'premium_landing' })
+    }).catch(() => {})
 
     const onUnload = () => {
-      analytics.track('page_exit', { page: '/premium' })
+      const data = JSON.stringify({ name: 'page_close', where: 'premium_landing' })
+      navigator.sendBeacon?.('/api/event', new Blob([data], { type: 'application/json' }))
     }
     window.addEventListener('pagehide', onUnload)
     return () => window.removeEventListener('pagehide', onUnload)
@@ -38,19 +40,13 @@ export default function PremiumPage(): JSX.Element {
       <PremiumFeatures />
       <PremiumTestimonials />
       <PremiumPricing />
-      <PremiumPricingComparison />
-      <PremiumVerifiedProof />
       <PremiumGuarantee />
       <PremiumFAQ />
       <PremiumCTA />
       
       {/* Sticky CTA */}
       <div className="sticky-cta">
-        <a 
-          href="#pilot" 
-          className="btn btn-primary btn-lg"
-          onClick={() => analytics.trackCTAClick('sticky', 'bottom')}
-        >
+        <a href="#pilot" className="btn btn-primary btn-lg">
           Aloita ilmaiseksi
         </a>
       </div>

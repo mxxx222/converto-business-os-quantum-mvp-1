@@ -1,0 +1,221 @@
+{
+  "name": "auto-deploy-tools",
+  "version": "1.0.0",
+  "description": "Comprehensive auto deployment tools for Converto Business OS - handles git, builds, tests, and cloud deployments",
+  "tools": [
+    {
+      "name": "git_status_check",
+      "description": "Check current git status and pending changes",
+      "parameters": {
+        "repo_path": {
+          "type": "string",
+          "description": "Path to the git repository",
+          "required": false,
+          "default": "."
+        }
+      }
+    },
+    {
+      "name": "git_commit_and_push",
+      "description": "Stage, commit, and push changes to git",
+      "parameters": {
+        "message": {
+          "type": "string",
+          "description": "Commit message",
+          "required": true
+        },
+        "repo_path": {
+          "type": "string",
+          "description": "Path to the git repository",
+          "required": false,
+          "default": "."
+        },
+        "branch": {
+          "type": "string",
+          "description": "Branch to push to",
+          "required": false,
+          "default": "main"
+        }
+      }
+    },
+    {
+      "name": "build_frontend",
+      "description": "Build the Next.js frontend application",
+      "parameters": {
+        "frontend_path": {
+          "type": "string",
+          "description": "Path to the frontend directory",
+          "required": false,
+          "default": "./frontend"
+        },
+        "build_command": {
+          "type": "string",
+          "description": "Build command to run",
+          "required": false,
+          "default": "npm run build"
+        }
+      }
+    },
+    {
+      "name": "run_tests",
+      "description": "Run test suites for the application",
+      "parameters": {
+        "test_command": {
+          "type": "string",
+          "description": "Test command to run",
+          "required": false,
+          "default": "npm test"
+        },
+        "frontend_path": {
+          "type": "string",
+          "description": "Path to run tests from",
+          "required": false,
+          "default": "./frontend"
+        }
+      }
+    },
+    {
+      "name": "render_deploy_status",
+      "description": "Check deployment status on Render",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "render_trigger_deploy",
+      "description": "Trigger a new deployment on Render",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID",
+          "required": true
+        }
+      }
+    },
+    {
+      "name": "vercel_deploy",
+      "description": "Deploy to Vercel (alternative to Render)",
+      "parameters": {
+        "project_name": {
+          "type": "string",
+          "description": "Vercel project name",
+          "required": true
+        },
+        "frontend_path": {
+          "type": "string",
+          "description": "Path to frontend directory",
+          "required": false,
+          "default": "./frontend"
+        }
+      }
+    },
+    {
+      "name": "full_deployment_pipeline",
+      "description": "Run complete deployment pipeline: git push → build → test → deploy",
+      "parameters": {
+        "commit_message": {
+          "type": "string",
+          "description": "Commit message for changes",
+          "required": true
+        },
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID for deployment",
+          "required": true
+        },
+        "skip_tests": {
+          "type": "boolean",
+          "description": "Skip running tests",
+          "required": false,
+          "default": false
+        },
+        "frontend_path": {
+          "type": "string",
+          "description": "Path to frontend directory",
+          "required": false,
+          "default": "./frontend"
+        }
+      }
+    },
+    {
+      "name": "check_deployment_health",
+      "description": "Check if deployment is healthy and responding",
+      "parameters": {
+        "url": {
+          "type": "string",
+          "description": "URL to check for deployment health",
+          "required": true
+        },
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID (optional, for status check)",
+          "required": false
+        }
+      }
+    }
+  ],
+  "authentication": {
+    "type": "multiple",
+    "tokens": {
+      "RENDER_API_KEY": {
+        "description": "Render API key for deployment management",
+        "source": "https://dashboard.render.com/account/settings",
+        "required": true
+      },
+      "GITHUB_TOKEN": {
+        "description": "GitHub token for repository operations",
+        "source": "https://github.com/settings/tokens",
+        "required": false
+      },
+      "VERCEL_TOKEN": {
+        "description": "Vercel token for alternative deployments",
+        "source": "https://vercel.com/account/tokens",
+        "required": false
+      }
+    }
+  },
+  "configuration": {
+    "default_service_id": {
+      "description": "Default Render service ID for deployments",
+      "type": "string",
+      "required": false
+    },
+    "default_frontend_path": {
+      "description": "Default path to frontend directory",
+      "type": "string",
+      "default": "./frontend",
+      "required": false
+    },
+    "health_check_timeout": {
+      "description": "Timeout for health checks in seconds",
+      "type": "number",
+      "default": 30,
+      "required": false
+    }
+  },
+  "workflows": {
+    "production_deploy": {
+      "description": "Complete production deployment workflow",
+      "steps": [
+        "git_status_check",
+        "run_tests",
+        "build_frontend",
+        "git_commit_and_push",
+        "render_trigger_deploy",
+        "check_deployment_health"
+      ]
+    },
+    "quick_deploy": {
+      "description": "Fast deployment without tests",
+      "steps": [
+        "git_commit_and_push",
+        "build_frontend",
+        "render_trigger_deploy"
+      ]
+    }
+  }
+}

@@ -1,0 +1,234 @@
+{
+  "tools": [
+    {
+      "type": "function",
+      "function": {
+        "name": "github_create_issue",
+        "description": "Create a new GitHub issue",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "Repository owner (username or organization)"
+            },
+            "repo": {
+              "type": "string",
+              "description": "Repository name"
+            },
+            "title": {
+              "type": "string",
+              "description": "Issue title"
+            },
+            "body": {
+              "type": "string",
+              "description": "Issue body/description"
+            },
+            "labels": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Issue labels"
+            },
+            "assignees": {
+              "type": "array",
+              "items": { "type": "string" },
+              "description": "Issue assignees (usernames)"
+            },
+            "token": {
+              "type": "string",
+              "description": "GitHub personal access token"
+            }
+          },
+          "required": ["owner", "repo", "title", "token"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "github_create_pr",
+        "description": "Create a new GitHub pull request",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "Repository owner"
+            },
+            "repo": {
+              "type": "string",
+              "description": "Repository name"
+            },
+            "title": {
+              "type": "string",
+              "description": "PR title"
+            },
+            "body": {
+              "type": "string",
+              "description": "PR description"
+            },
+            "head": {
+              "type": "string",
+              "description": "Source branch name"
+            },
+            "base": {
+              "type": "string",
+              "description": "Target branch name (default: main)",
+              "default": "main"
+            },
+            "token": {
+              "type": "string",
+              "description": "GitHub personal access token"
+            }
+          },
+          "required": ["owner", "repo", "title", "head", "token"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "github_list_issues",
+        "description": "List GitHub issues for a repository",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "Repository owner"
+            },
+            "repo": {
+              "type": "string",
+              "description": "Repository name"
+            },
+            "state": {
+              "type": "string",
+              "enum": ["open", "closed", "all"],
+              "description": "Issue state filter",
+              "default": "open"
+            },
+            "labels": {
+              "type": "string",
+              "description": "Comma-separated list of labels to filter by"
+            },
+            "token": {
+              "type": "string",
+              "description": "GitHub personal access token"
+            }
+          },
+          "required": ["owner", "repo", "token"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "github_get_repo",
+        "description": "Get repository information",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "Repository owner"
+            },
+            "repo": {
+              "type": "string",
+              "description": "Repository name"
+            },
+            "token": {
+              "type": "string",
+              "description": "GitHub personal access token"
+            }
+          },
+          "required": ["owner", "repo", "token"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "github_create_release",
+        "description": "Create a new GitHub release",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "Repository owner"
+            },
+            "repo": {
+              "type": "string",
+              "description": "Repository name"
+            },
+            "tag_name": {
+              "type": "string",
+              "description": "Release tag name (e.g., v1.0.0)"
+            },
+            "name": {
+              "type": "string",
+              "description": "Release name"
+            },
+            "body": {
+              "type": "string",
+              "description": "Release description"
+            },
+            "draft": {
+              "type": "boolean",
+              "description": "Whether this is a draft release",
+              "default": false
+            },
+            "prerelease": {
+              "type": "boolean",
+              "description": "Whether this is a prerelease",
+              "default": false
+            },
+            "token": {
+              "type": "string",
+              "description": "GitHub personal access token"
+            }
+          },
+          "required": ["owner", "repo", "tag_name", "token"]
+        }
+      }
+    },
+    {
+      "type": "function",
+      "function": {
+        "name": "github_trigger_workflow",
+        "description": "Trigger a GitHub Actions workflow",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "owner": {
+              "type": "string",
+              "description": "Repository owner"
+            },
+            "repo": {
+              "type": "string",
+              "description": "Repository name"
+            },
+            "workflow_id": {
+              "type": "string",
+              "description": "Workflow ID or filename"
+            },
+            "ref": {
+              "type": "string",
+              "description": "Branch or commit SHA to trigger on",
+              "default": "main"
+            },
+            "inputs": {
+              "type": "object",
+              "description": "Workflow inputs (key-value pairs)"
+            },
+            "token": {
+              "type": "string",
+              "description": "GitHub personal access token"
+            }
+          },
+          "required": ["owner", "repo", "workflow_id", "token"]
+        }
+      }
+    }
+  ]
+}

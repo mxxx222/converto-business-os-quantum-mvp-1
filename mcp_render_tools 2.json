@@ -1,0 +1,90 @@
+{
+  "name": "render-tools",
+  "version": "1.0.0",
+  "description": "Render API integration for Cursor MCP",
+  "tools": [
+    {
+      "name": "render_deployment_status",
+      "description": "Check deployment status for a Render service",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID (e.g., srv-d3r10pjipnbc73asaod0)",
+          "required": true
+        }
+      },
+      "endpoint": "https://api.render.com/v1/services/{service_id}/deploys",
+      "method": "GET"
+    },
+    {
+      "name": "render_get_logs",
+      "description": "Fetch live logs from a Render service",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID",
+          "required": true
+        },
+        "limit": {
+          "type": "number",
+          "description": "Number of log lines to fetch (default: 100)",
+          "required": false,
+          "default": 100
+        }
+      },
+      "endpoint": "https://api.render.com/v1/services/{service_id}/logs",
+      "method": "GET"
+    },
+    {
+      "name": "render_get_env_vars",
+      "description": "List environment variables for a service",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID",
+          "required": true
+        }
+      },
+      "endpoint": "https://api.render.com/v1/services/{service_id}/env-vars",
+      "method": "GET"
+    },
+    {
+      "name": "render_ssl_status",
+      "description": "Check SSL certificate status for custom domains",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID",
+          "required": true
+        }
+      },
+      "endpoint": "https://api.render.com/v1/services/{service_id}/custom-domains",
+      "method": "GET"
+    },
+    {
+      "name": "render_trigger_deploy",
+      "description": "Trigger a manual deployment",
+      "parameters": {
+        "service_id": {
+          "type": "string",
+          "description": "Render service ID",
+          "required": true
+        }
+      },
+      "endpoint": "https://api.render.com/v1/services/{service_id}/deploys",
+      "method": "POST"
+    },
+    {
+      "name": "render_list_services",
+      "description": "List all services in workspace",
+      "parameters": {},
+      "endpoint": "https://api.render.com/v1/services",
+      "method": "GET"
+    }
+  ],
+  "authentication": {
+    "type": "bearer",
+    "token_env_var": "RENDER_API_KEY",
+    "instructions": "Get your API key from: https://dashboard.render.com/account/settings"
+  }
+}

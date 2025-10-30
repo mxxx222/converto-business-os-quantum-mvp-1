@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     # Auth
     supabase_auth_enabled: bool = False
     
+    # Email
+    resend_api_key: str = ""
+    email_from: str = "noreply@converto.fi"
+    email_reply_to: str = "hello@converto.fi"
+    
     class Config:
         """Pydantic config."""
         env_file = ".env"
