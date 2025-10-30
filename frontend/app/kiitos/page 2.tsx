@@ -1,18 +1,15 @@
 "use client"
 
-import { useEffect, useState } from 'react'
-import { analytics } from '@/lib/analytics'
+import { useEffect } from 'react'
 
 export default function KiitosPage(): JSX.Element {
-  const [utmParams, setUtmParams] = useState<Record<string, string>>({})
-
   useEffect(() => {
-    // Track thank you page view
-    analytics.trackThankYouView()
-    
-    // Get UTM parameters
-    const utm = analytics.getUTMParams()
-    setUtmParams(utm)
+    // Analytics tracking
+    fetch('/api/event', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ name: 'page_view', where: 'thank_you' })
+    }).catch(() => {})
   }, [])
 
   return (
@@ -100,41 +97,14 @@ export default function KiitosPage(): JSX.Element {
               ota yhteyttä asiakaspalveluun.
             </p>
             <div className="support-buttons">
-              <a 
-                href="https://calendly.com/converto/demo" 
-                className="btn btn-primary"
-                onClick={() => analytics.trackDemoBooking()}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                📅 Varaa demo-kutsu
-              </a>
-              <a 
-                href="mailto:hello@converto.fi" 
-                className="btn btn-outline"
-                onClick={() => analytics.track('contact_email', { method: 'email' })}
-              >
+              <a href="mailto:hello@converto.fi" className="btn btn-outline">
                 Ota yhteyttä
               </a>
-              <a href="/premium" className="btn btn-secondary">
+              <a href="/premium" className="btn btn-primary">
                 Takaisin sivustolle
               </a>
             </div>
           </div>
-
-          {/* UTM Parameters Display */}
-          {Object.keys(utmParams).length > 0 && (
-            <div className="utm-info">
-              <h3>Kampanja-tiedot:</h3>
-              <ul>
-                {Object.entries(utmParams).map(([key, value]) => (
-                  <li key={key}>
-                    <strong>{key}:</strong> {value}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
 
           {/* Social Proof */}
           <div className="social-proof">

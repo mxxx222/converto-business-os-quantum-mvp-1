@@ -66,6 +66,23 @@ test-smoke: ## Suorita smoke testit
 	@echo "$(BLUE)🧪 Suoritetaan smoke testit...$(NC)"
 	@./scripts/smoke-test.sh
 
+# Premium page testit
+test-premium: ## Suorita premium page smoke testit
+	@echo "$(BLUE)🧪 Suoritetaan premium page smoke testit...$(NC)"
+	@./scripts/smoke-test-premium.sh
+
+# Lighthouse performance testit
+test-lighthouse: ## Suorita Lighthouse performance testit
+	@echo "$(BLUE)🧪 Suoritetaan Lighthouse performance testit...$(NC)"
+	@./scripts/lighthouse-test.sh
+
+# Launch readiness check
+launch-check: ## Täydellinen julkaisuvalmius-tarkistus
+	@echo "$(BLUE)🚀 Suoritetaan täydellinen julkaisuvalmius-tarkistus...$(NC)"
+	@make test-premium
+	@make test-lighthouse
+	@echo "$(GREEN)✅ Julkaisuvalmius-tarkistus valmis!$(NC)"
+
 # Puhdista Docker-resurssit
 clean: ## Puhdista Docker-resurssit
 	@echo "$(YELLOW)🧹 Puhdistetaan Docker-resurssit...$(NC)"
