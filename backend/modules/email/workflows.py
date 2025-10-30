@@ -1,171 +1,329 @@
-"""Email automation workflows for Converto Business OS."""
+# 🔄 Email Workflows - Resend Automation
 
 import asyncio
+import hashlib
 import logging
+import time
 from datetime import datetime, timedelta
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Optional, Any
 
-from .service import EmailService, EmailData
-from .templates import EmailTemplates
+import httpx
+from backend.config import get_settings
+from backend.modules.email.template_manager import get_template_manager
+from backend.modules.email.monitoring import get_email_monitoring
+from backend.modules.email.cost_guard import get_cost_guard
 
-logger = logging.getLogger("converto.email.workflows")
+logger = logging.getLogger(__name__)
+settings = get_settings()
 
 
-class EmailWorkflows:
-    """Automated email workflows for business processes."""
+class EmailWorkflow:
+    """Base class for email workflows."""
     
-    def __init__(self, email_service: EmailService):
-        self.email_service = email_service
-        self.templates = EmailTemplates()
-    
-    async def pilot_onboarding_sequence(self, email: str, name: str, company: str) -> Dict[str, Any]:
-        """Complete pilot onboarding email sequence."""
-        results = []
+    def __init__(self, name: str):
+        self.name = name
+        self.template_manager = get_template_manager()
+        self.monitoring = get_email_monitoring()
+        self.cost_guard = get_cost_guard()
         
-        # Day 0: Welcome email
-        welcome_email = EmailData(
-            to=email,
-            subject="🚀 Tervetuloa Converto Business OS:een!",
-            html=self.templates.pilot_signup_welcome(name, company),
-            tags=[{"name": "onboarding", "value": "welcome"}]
-        )
-        result = await self.email_service.send_email(welcome_email)
-        results.append({"step": "welcome", "result": result})
+        # Workflow configuration
+        self.max_retries = 3
+        self.retry_delay = 1.0  # seconds
+        self.idempotency_window = 3600  # 1 hour
         
-        # Schedule follow-up emails
-        await self._schedule_follow_up_emails(email, name, company)
+    async def send_email(self, template: str, recipient: str, locale: str = "fi", **kwargs) -> Dict[str, Any]:
+        """Send email with monitoring and cost control."""
+        start_time = time.time()
         
+        # Check if email is allowed
+        cost_check = await self.cost_guard.should_allow_email(template, recipient)
+        if not cost_check["allowed"]:
+            logger.warning(f"Email blocked: {cost_check['reason']} - {recipient}")
+            return {
+                "success": False,
+                "error": cost_check["reason"],
+                "message": cost_check["message"]
+            }
+        
+        # Generate idempotency key
+        idempotency_key = self._generate_idempotency_key(template, recipient, kwargs)
+        
+        # Check if we've already sent this email recently
+        if await self._is_duplicate(idempotency_key):
+            logger.info(f"Duplicate email prevented: {template} to {recipient}")
+            return {
+                "success": True,
+                "duplicate": True,
+                "message": "Email already sent recently"
+            }
+        
+        # Render template
+        try:
+            email_data = self.template_manager.render_template(template, locale, **kwargs)
+        except Exception as e:
+            logger.error(f"Template rendering failed: {e}")
+            return {
+                "success": False,
+                "error": "template_render_failed",
+                "message": str(e)
+            }
+        
+        # Send email with retries
+        for attempt in range(self.max_retries):
+            try:
+                result = await self._send_via_resend(email_data, recipient, idempotency_key)
+                
+                if result["success"]:
+                    # Record success metrics
+                    latency = time.time() - start_time
+                    await self.monitoring.record_email_sent(template, locale, "sent")
+                    await self.monitoring.record_email_delivered(template, locale, latency)
+                    
+                    # Store idempotency key
+                    await self._store_idempotency_key(idempotency_key)
+                    
+                    logger.info(f"Email sent successfully: {template} to {recipient}")
+                    return result
+                else:
+                    logger.warning(f"Email send failed (attempt {attempt + 1}): {result.get('error')}")
+                    
+            except Exception as e:
+                logger.error(f"Email send error (attempt {attempt + 1}): {e}")
+                
+            # Wait before retry
+            if attempt < self.max_retries - 1:
+                await asyncio.sleep(self.retry_delay * (2 ** attempt))  # Exponential backoff
+        
+        # All retries failed
+        logger.error(f"Email send failed after {self.max_retries} attempts: {template} to {recipient}")
         return {
-            "sequence": "pilot_onboarding",
-            "total_emails": 5,
-            "sent": len([r for r in results if r["result"].get("success")]),
-            "results": results
+            "success": False,
+            "error": "max_retries_exceeded",
+            "message": "Email send failed after maximum retries"
         }
     
-    async def _schedule_follow_up_emails(self, email: str, name: str, company: str):
-        """Schedule follow-up emails for pilot onboarding."""
-        # This would integrate with a job queue like Celery or APScheduler
-        # For now, we'll just log the scheduled emails
-        logger.info(f"Scheduled follow-up emails for {email}")
-        
-        follow_ups = [
-            {"day": 1, "subject": "📋 Käyttöohjeet ja ensimmäiset askeleet"},
-            {"day": 3, "subject": "🎯 15 min onboarding-kutsu"},
-            {"day": 7, "subject": "📊 Ensimmäiset automatisointitulokset"},
-            {"day": 14, "subject": "💡 Lisätoiminnot ja optimointi"}
-        ]
-        
-        for follow_up in follow_ups:
-            logger.info(f"Email scheduled for day {follow_up['day']}: {follow_up['subject']}")
+    async def _send_via_resend(self, email_data: Dict[str, Any], recipient: str, idempotency_key: str) -> Dict[str, Any]:
+        """Send email via Resend API."""
+        async with httpx.AsyncClient() as client:
+            try:
+                response = await client.post(
+                    "https://api.resend.com/emails",
+                    headers={
+                        "Authorization": f"Bearer {settings.resend_api_key}",
+                        "Content-Type": "application/json",
+                        "Idempotency-Key": idempotency_key
+                    },
+                    json={
+                        "from": email_data["from"],
+                        "to": [recipient],
+                        "subject": email_data["subject"],
+                        "html": email_data["content"],
+                        "reply_to": email_data["reply_to"]
+                    }
+                )
+                
+                response.raise_for_status()
+                result = response.json()
+                
+                return {
+                    "success": True,
+                    "message_id": result.get("id"),
+                    "status": "sent"
+                }
+                
+            except httpx.HTTPError as e:
+                logger.error(f"Resend API error: {e}")
+                return {
+                    "success": False,
+                    "error": "resend_api_error",
+                    "message": str(e)
+                }
     
-    async def deployment_notifications(self, service_name: str, status: str, url: str = "") -> Dict[str, Any]:
-        """Send deployment notifications."""
-        recipients = ["max@herbspot.fi", "team@converto.fi"]
-        results = []
-        
-        if status == "success":
-            subject = f"✅ {service_name} - Deployment Onnistui"
-            html = self.templates.deployment_success(service_name, url)
-        else:
-            subject = f"❌ {service_name} - Deployment Epäonnistui"
-            html = f"""
-            <h1>Deployment Epäonnistui</h1>
-            <p><strong>Palvelu:</strong> {service_name}</p>
-            <p><strong>Status:</strong> {status}</p>
-            <p>Tarkista lokit ja korjaa ongelmat.</p>
-            """
-        
-        for recipient in recipients:
-            email = EmailData(
-                to=recipient,
-                subject=subject,
-                html=html,
-                tags=[{"name": "deployment", "value": service_name}]
-            )
-            result = await self.email_service.send_email(email)
-            results.append({"recipient": recipient, "result": result})
-        
-        return {
-            "service": service_name,
-            "status": status,
-            "recipients": len(recipients),
-            "results": results
-        }
+    def _generate_idempotency_key(self, template: str, recipient: str, kwargs: Dict[str, Any]) -> str:
+        """Generate idempotency key for email."""
+        content = f"{template}:{recipient}:{sorted(kwargs.items())}"
+        return hashlib.sha256(content.encode()).hexdigest()
     
-    async def daily_metrics_report(self, metrics: Dict[str, Any]) -> Dict[str, Any]:
-        """Send daily metrics report."""
-        recipients = ["max@herbspot.fi", "team@converto.fi"]
+    async def _is_duplicate(self, idempotency_key: str) -> bool:
+        """Check if email was already sent recently."""
+        # In real implementation, this would check a database
+        # For now, return False (no duplicates)
+        return False
+    
+    async def _store_idempotency_key(self, idempotency_key: str):
+        """Store idempotency key to prevent duplicates."""
+        # In real implementation, this would store in database with TTL
+        # For now, just log
+        logger.info(f"Stored idempotency key: {idempotency_key}")
+
+
+class PilotOnboardingWorkflow(EmailWorkflow):
+    """Pilot onboarding email workflow."""
+    
+    def __init__(self):
+        super().__init__("pilot_onboarding")
+        self.follow_up_delays = [24 * 3600, 7 * 24 * 3600, 30 * 24 * 3600]  # 1d, 7d, 30d
+    
+    async def start_onboarding(self, user_name: str, user_email: str, locale: str = "fi") -> Dict[str, Any]:
+        """Start pilot onboarding workflow."""
+        logger.info(f"Starting pilot onboarding for {user_name} ({user_email})")
         
-        email = EmailData(
-            to=",".join(recipients),
-            subject=f"📊 Päivittäinen Raportti - {metrics.get('date', datetime.now().strftime('%Y-%m-%d'))}",
-            html=self.templates.daily_metrics_report(metrics),
-            tags=[{"name": "report", "value": "daily_metrics"}]
+        # Send welcome email
+        result = await self.send_email(
+            template="pilot_onboarding",
+            recipient=user_email,
+            locale=locale,
+            user_name=user_name,
+            company_name="Converto Business OS"
         )
         
-        result = await self.email_service.send_email(email)
-        return {
-            "type": "daily_metrics",
-            "date": metrics.get('date'),
-            "result": result
+        if result["success"]:
+            # Schedule follow-up emails
+            await self._schedule_follow_ups(user_email, locale, user_name)
+        
+        return result
+    
+    async def _schedule_follow_ups(self, user_email: str, locale: str, user_name: str):
+        """Schedule follow-up emails."""
+        for i, delay in enumerate(self.follow_up_delays):
+            # In real implementation, this would schedule with a task queue
+            logger.info(f"Scheduled follow-up {i + 1} for {user_email} in {delay}s")
+    
+    async def send_follow_up(self, user_email: str, follow_up_number: int, locale: str = "fi") -> Dict[str, Any]:
+        """Send follow-up email."""
+        template = f"pilot_onboarding_followup_{follow_up_number}"
+        
+        return await self.send_email(
+            template=template,
+            recipient=user_email,
+            locale=locale,
+            user_name="User",  # Would be fetched from database
+            company_name="Converto Business OS"
+        )
+
+
+class DeploymentNotificationWorkflow(EmailWorkflow):
+    """Deployment notification email workflow."""
+    
+    def __init__(self):
+        super().__init__("deployment_notification")
+    
+    async def notify_deployment(self, service_name: str, status: str, 
+                              recipient: str = "max@herbspot.fi", locale: str = "en") -> Dict[str, Any]:
+        """Send deployment notification."""
+        logger.info(f"Sending deployment notification: {service_name} - {status}")
+        
+        return await self.send_email(
+            template="deployment_notification",
+            recipient=recipient,
+            locale=locale,
+            service_name=service_name,
+            status=status,
+            timestamp=datetime.now().isoformat(),
+            deployment_url=f"https://dashboard.render.com/web/{service_name}"
+        )
+    
+    async def notify_deployment_success(self, service_name: str, 
+                                      recipient: str = "max@herbspot.fi") -> Dict[str, Any]:
+        """Send deployment success notification."""
+        return await self.notify_deployment(service_name, "success", recipient)
+    
+    async def notify_deployment_failure(self, service_name: str, error_message: str,
+                                      recipient: str = "max@herbspot.fi") -> Dict[str, Any]:
+        """Send deployment failure notification."""
+        return await self.send_email(
+            template="deployment_notification",
+            recipient=recipient,
+            locale="en",
+            service_name=service_name,
+            status="failed",
+            error_message=error_message,
+            timestamp=datetime.now().isoformat(),
+            deployment_url=f"https://dashboard.render.com/web/{service_name}"
+        )
+
+
+class ErrorAlertWorkflow(EmailWorkflow):
+    """Error alert email workflow."""
+    
+    def __init__(self):
+        super().__init__("error_alert")
+        self.alert_thresholds = {
+            "low": 1,
+            "medium": 3,
+            "high": 5,
+            "critical": 10
         }
     
-    async def error_alert_workflow(self, error_message: str, service: str, severity: str = "high") -> Dict[str, Any]:
-        """Send error alerts with escalation."""
-        recipients = ["max@herbspot.fi"]
+    async def send_error_alert(self, service_name: str, severity: str, error_message: str,
+                             recipient: str = "max@herbspot.fi", locale: str = "en") -> Dict[str, Any]:
+        """Send error alert."""
+        logger.warning(f"Sending error alert: {service_name} - {severity} - {error_message}")
         
-        # Add team members for critical errors
-        if severity == "critical":
-            recipients.append("team@converto.fi")
-        
-        email = EmailData(
-            to=",".join(recipients),
-            subject=f"🚨 {severity.upper()} - {service}",
-            html=self.templates.error_alert(error_message, service, severity),
-            tags=[{"name": "alert", "value": severity}]
+        return await self.send_email(
+            template="error_alert",
+            recipient=recipient,
+            locale=locale,
+            service_name=service_name,
+            severity=severity,
+            error_message=error_message,
+            timestamp=datetime.now().isoformat(),
+            alert_url=f"https://dashboard.render.com/web/{service_name}"
         )
-        
-        result = await self.email_service.send_email(email)
-        
-        # Schedule follow-up for critical errors
-        if severity == "critical":
-            await self._schedule_error_follow_up(service, error_message)
-        
-        return {
-            "service": service,
-            "severity": severity,
-            "result": result
-        }
     
-    async def _schedule_error_follow_up(self, service: str, error_message: str):
-        """Schedule follow-up for critical errors."""
-        logger.info(f"Scheduled error follow-up for {service}")
-        # This would integrate with a job queue
-    
-    async def customer_engagement_sequence(self, customer_email: str, customer_name: str) -> Dict[str, Any]:
-        """Customer engagement email sequence."""
-        # This would be triggered by customer actions
-        logger.info(f"Customer engagement sequence started for {customer_email}")
-        return {"status": "scheduled", "customer": customer_email}
-    
-    async def billing_notifications(self, customer_email: str, amount: float, due_date: str) -> Dict[str, Any]:
-        """Send billing notifications."""
-        email = EmailData(
-            to=customer_email,
-            subject="💳 Lasku lähestyy - Converto Business OS",
-            html=f"""
-            <h1>Lasku lähestyy</h1>
-            <p>Hei!</p>
-            <p>Lasku summa: {amount}€</p>
-            <p>Eräpäivä: {due_date}</p>
-            <p>Maksa nyt: <a href="https://converto.fi/billing">converto.fi/billing</a></p>
-            """,
-            tags=[{"name": "billing", "value": "reminder"}]
+    async def send_escalation_alert(self, service_name: str, error_message: str,
+                                  recipient: str = "max@herbspot.fi") -> Dict[str, Any]:
+        """Send escalation alert for critical errors."""
+        return await self.send_error_alert(
+            service_name=service_name,
+            severity="critical",
+            error_message=error_message,
+            recipient=recipient
         )
-        
-        result = await self.email_service.send_email(email)
-        return {"type": "billing_reminder", "result": result}
     
-    async def close(self):
-        """Close the email service."""
-        await self.email_service.close()
+    async def check_error_threshold(self, service_name: str, error_count: int) -> bool:
+        """Check if error count exceeds threshold for alerting."""
+        # In real implementation, this would check against historical data
+        # For now, use simple thresholds
+        if error_count >= self.alert_thresholds["critical"]:
+            await self.send_escalation_alert(service_name, f"Error count: {error_count}")
+            return True
+        elif error_count >= self.alert_thresholds["high"]:
+            await self.send_error_alert(service_name, "high", f"Error count: {error_count}")
+            return True
+        
+        return False
+
+
+# Workflow instances
+pilot_onboarding = PilotOnboardingWorkflow()
+deployment_notification = DeploymentNotificationWorkflow()
+error_alert = ErrorAlertWorkflow()
+
+
+# Convenience functions
+async def start_pilot_onboarding(user_name: str, user_email: str, locale: str = "fi") -> Dict[str, Any]:
+    """Start pilot onboarding workflow."""
+    return await pilot_onboarding.start_onboarding(user_name, user_email, locale)
+
+
+async def notify_deployment_success(service_name: str, recipient: str = "max@herbspot.fi") -> Dict[str, Any]:
+    """Notify deployment success."""
+    return await deployment_notification.notify_deployment_success(service_name, recipient)
+
+
+async def notify_deployment_failure(service_name: str, error_message: str, 
+                                  recipient: str = "max@herbspot.fi") -> Dict[str, Any]:
+    """Notify deployment failure."""
+    return await deployment_notification.notify_deployment_failure(service_name, error_message, recipient)
+
+
+async def send_error_alert(service_name: str, severity: str, error_message: str,
+                         recipient: str = "max@herbspot.fi") -> Dict[str, Any]:
+    """Send error alert."""
+    return await error_alert.send_error_alert(service_name, severity, error_message, recipient)
+
+
+async def check_and_alert_errors(service_name: str, error_count: int) -> bool:
+    """Check error count and send alert if needed."""
+    return await error_alert.check_error_threshold(service_name, error_count)

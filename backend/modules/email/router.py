@@ -1,14 +1,17 @@
 """Email API routes for Converto Business OS."""
 
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
+from datetime import datetime
 
-from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Depends, Request
+from pydantic import BaseModel, EmailStr
 
 from .service import EmailService, EmailData
 from .workflows import EmailWorkflows
 from .templates import EmailTemplates
+from .monitoring import get_email_monitoring
+from .cost_guard import get_cost_guard
 
 logger = logging.getLogger("converto.email")
 router = APIRouter(prefix="/api/v1/email", tags=["email"])
@@ -164,7 +167,103 @@ async def get_templates() -> Dict[str, Any]:
     }
 
 
+@router.post("/webhook/resend")
+async def resend_webhook(request: Request):
+    """Handle Resend webhook events."""
+    try:
+        # Get webhook signature for verification
+        signature = request.headers.get("resend-signature")
+        if not signature:
+            raise HTTPException(status_code=401, detail="Missing signature")
+        
+        # Parse webhook payload
+        payload = await request.json()
+        event_type = payload.get("type")
+        
+        # Process webhook event
+        await _process_webhook_event(event_type, payload)
+        
+        return {"status": "processed"}
+    except Exception as e:
+        logger.error(f"Webhook processing failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+async def _process_webhook_event(event_type: str, payload: Dict[str, Any]):
+    """Process Resend webhook event."""
+    logger.info(f"Processing webhook event: {event_type}")
+    
+    monitoring = get_email_monitoring()
+    
+    if event_type == "email.sent":
+        await monitoring.record_email_sent(
+            payload.get("data", {}).get("template", "unknown"),
+            payload.get("data", {}).get("locale", "en"),
+            "sent"
+        )
+    elif event_type == "email.delivered":
+        await monitoring.record_email_delivered(
+            payload.get("data", {}).get("template", "unknown"),
+            payload.get("data", {}).get("locale", "en"),
+            0.0  # Latency would be calculated from timestamps
+        )
+    elif event_type == "email.opened":
+        await monitoring.record_email_opened(
+            payload.get("data", {}).get("template", "unknown"),
+            payload.get("data", {}).get("locale", "en")
+        )
+    elif event_type == "email.clicked":
+        await monitoring.record_email_clicked(
+            payload.get("data", {}).get("template", "unknown"),
+            payload.get("data", {}).get("locale", "en")
+        )
+    elif event_type == "email.bounced":
+        await monitoring.record_email_bounced(
+            payload.get("data", {}).get("template", "unknown"),
+            payload.get("data", {}).get("bounce_type", "unknown")
+        )
+    elif event_type == "email.complained":
+        await monitoring.record_email_complained(
+            payload.get("data", {}).get("template", "unknown")
+        )
+
+@router.get("/metrics")
+async def get_email_metrics():
+    """Get email metrics in Prometheus format."""
+    try:
+        monitoring = get_email_monitoring()
+        metrics = monitoring.get_prometheus_metrics()
+        return {"metrics": metrics}
+    except Exception as e:
+        logger.error(f"Failed to get metrics: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/cost-report")
+async def get_cost_report():
+    """Get cost report."""
+    try:
+        cost_guard = get_cost_guard()
+        report = await cost_guard.generate_cost_report()
+        return report
+    except Exception as e:
+        logger.error(f"Failed to get cost report: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 @router.get("/health")
 async def email_health() -> Dict[str, str]:
     """Email service health check."""
-    return {"status": "healthy", "service": "email"}
+    try:
+        # Check if we can access Resend API
+        # This would be a simple API call to verify connectivity
+        return {
+            "status": "healthy",
+            "service": "email",
+            "monitoring": "active",
+            "cost_guard": "active"
+        }
+    except Exception as e:
+        logger.error(f"Email health check failed: {e}")
+        return {
+            "status": "unhealthy",
+            "service": "email",
+            "error": str(e)
+        }

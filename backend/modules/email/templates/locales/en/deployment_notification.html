@@ -1,0 +1,21 @@
+<h1>Deployment {status} - {service_name}</h1>
+
+<p>The deployment for <strong>{service_name}</strong> has <strong>{status}</strong>.</p>
+
+<h2>Deployment Details</h2>
+
+<ul>
+    <li><strong>Service:</strong> {service_name}</li>
+    <li><strong>Status:</strong> {status}</li>
+    <li><strong>Time:</strong> {timestamp}</li>
+    <li><strong>URL:</strong> <a href="{deployment_url}">View in Render Dashboard</a></li>
+</ul>
+
+{error_message}
+
+<h2>Next Steps</h2>
+
+<p>If the deployment failed, please check the logs and retry. If you need assistance, contact the development team.</p>
+
+<p>Best regards,<br>
+<strong>Converto Business OS DevOps Team</strong></p>

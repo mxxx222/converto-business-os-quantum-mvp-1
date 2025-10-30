@@ -1,0 +1,30 @@
+<h1>🚨 {severity} Alert - {service_name}</h1>
+
+<p>A <strong>{severity}</strong> error has occurred in <strong>{service_name}</strong>.</p>
+
+<h2>Error Details</h2>
+
+<ul>
+    <li><strong>Service:</strong> {service_name}</li>
+    <li><strong>Severity:</strong> {severity}</li>
+    <li><strong>Time:</strong> {timestamp}</li>
+    <li><strong>URL:</strong> <a href="{alert_url}">View in Render Dashboard</a></li>
+</ul>
+
+<h2>Error Message</h2>
+
+<pre style="background: #f8f9fa; padding: 15px; border-radius: 4px; overflow-x: auto;">{error_message}</pre>
+
+<h2>Immediate Actions Required</h2>
+
+<ol>
+    <li>Check service status in Render Dashboard</li>
+    <li>Review error logs for more details</li>
+    <li>Restart service if necessary</li>
+    <li>Monitor for additional errors</li>
+</ol>
+
+<p><strong>This is an automated alert. Please investigate immediately.</strong></p>
+
+<p>Best regards,<br>
+<strong>Converto Business OS Monitoring System</strong></p>
