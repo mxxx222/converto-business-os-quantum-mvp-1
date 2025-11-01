@@ -3,8 +3,12 @@
 from __future__ import annotations
 
 import os
+from typing import Any, Optional
 
-from pydantic_settings import BaseSettings
+try:
+    from pydantic_settings import BaseSettings
+except ImportError:
+    from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -34,7 +38,7 @@ class Settings(BaseSettings):
     supabase_jwt_secret: str = os.getenv("SUPABASE_JWT_SECRET", "")
     supabase_auth_enabled: bool = os.getenv("SUPABASE_AUTH_ENABLED", "true").lower() in (
         "true",
-        "1",
+        "1", 
         "yes",
     )
     supabase_project_id: str = os.getenv("SUPABASE_PROJECT_ID", "")

@@ -8,22 +8,32 @@ Kilo Code API -integraatio mahdollistaa kuvanluonnin Converto Business OS -järj
 
 ### Vaiheet:
 
-1. **Kirjaudu sisään Kilo Code -palveluun**
-   - Siirry Kilo Coden verkkosivustolle ja kirjaudu sisään
-   - Vaihtoehtoisesti: käytä Kilo Coden kehittäjäportaalia
+1. **Kirjaudu sisään app.kilocode.ai**
+   - Siirry osoitteeseen: https://app.kilocode.ai/users/sign_in
+   - Kirjaudu sisään käyttämällä:
+     - Google-tiliä
+     - GitHub-tiliä
+     - GitLab-tiliä
+     - LinkedIn-tiliä
+     - Enterprise SSO
 
-2. **Siirry API-asetuksiin**
-   - Etsi käyttäjätilisi asetukset tai hallintapaneeli
-   - Valitse "API-avaimet", "Kehittäjäasetukset" tai "Integraatiot"
+2. **Hae API-avain**
+   
+   **Vaihtoehto A: VS Code -laajennuksen kautta (Suositeltu)**
+   - Kun käytät Kilo Code VS Code -laajennusta ensimmäistä kertaa
+   - Laajennus ohjaa sinut rekisteröintiprosessiin
+   - API-avain kopioidaan automaattisesti laajennukseen
+   - Web-pohjaisille IDE:ille API-avain näytetään ja sen voi kopioida manuaalisesti
 
-3. **Luo uusi API-avain**
-   - Valitse "Luo uusi avain" tai vastaava vaihtoehto
-   - Anna avaimelle kuvaava nimi (esim. "Converto Business OS")
-   - Määritä tarvittavat käyttöoikeudet (kuvanluonti)
+   **Vaihtoehto B: Manuaalinen haku selaimessa**
+   - Kirjaudu sisään osoitteeseen: https://app.kilocode.ai
+   - Etsi profiili/asetukset -sivulta API-avain
+   - Jos et löydä suoraan, tarkista dokumentaatio: https://kilocode.ai/docs/providers/kilocode
 
-4. **Kopioi API-avain**
-   - Tallenna avain ja kopioi se turvalliseen paikkaan
-   - **HUOM:** Avain näytetään vain kerran, kopioi se heti!
+3. **Kopioi API-avain**
+   - Kopioi API-avain heti kun se näytetään
+   - **HUOM:** API-avain näytetään vain kerran web-pohjaisille IDE:ille
+   - Tallenna avain turvalliseen paikkaan ennen käyttöä
 
 ## Konfigurointi
 
@@ -65,9 +75,16 @@ Kun API-avain on konfiguroitu, voit käyttää kuvanluontia:
 ## Tuki
 
 Jos tarvitset apua:
-- Tarkista Kilo Coden virallinen dokumentaatio
-- Ota yhteyttä Kilo Coden asiakastukeen
-- Tarkista `backend/config.py` konfiguraatio
+- **Dokumentaatio:** https://kilocode.ai/docs/providers/kilocode
+- **API Provider -ohjeet:** https://kilocode.ai/docs/getting-started/connecting-api-provider
+- **Yhteystiedot:** hi@kilocode.ai
+- **Tarkista:** `backend/config.py` konfiguraatio
+
+## Nopeat linkit
+
+- **Kirjautuminen:** https://app.kilocode.ai/users/sign_in
+- **Dokumentaatio:** https://kilocode.ai/docs
+- **Kilo Code Provider:** https://kilocode.ai/docs/providers/kilocode
 
 ## Turvallisuus
 

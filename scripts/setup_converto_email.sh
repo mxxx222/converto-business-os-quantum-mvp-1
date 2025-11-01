@@ -14,7 +14,7 @@ REGISTERED_NS="ns1.hostingpalvelu.fi"
 # Function to check DNS status
 check_dns_status() {
     echo "🔍 Tarkistetaan DNS-tilanne..."
-    
+
     # Check MX records
     MX_COUNT=$(dig MX $DOMAIN +short | wc -l)
     if [ "$MX_COUNT" -eq "0" ]; then
@@ -31,10 +31,10 @@ check_dns_status() {
 # Function to create email accounts in cPanel
 setup_email_accounts() {
     echo "📧 Luodaan sähköpostitilejä..."
-    
+
     # Email accounts to create
     EMAILS=("hello@converto.fi" "info@converto.fi" "sales@converto.fi" "support@converto.fi")
-    
+
     for EMAIL in "${EMAILS[@]}"; do
         echo "   📬 Luodaan $EMAIL..."
         echo "   🔑 Salasana: [Anna turvallinen salasana]"
@@ -46,7 +46,7 @@ setup_email_accounts() {
 # Function to configure DNS records
 configure_dns() {
     echo "🌐 Konfiguroidaan DNS-tietueet..."
-    
+
     # MX Records (pointing to cPanel server)
     echo "   📋 Lisättävät MX-tietueet:"
     echo "   1. Host: @ (tai jätä tyhjäksi)"
@@ -55,16 +55,16 @@ configure_dns() {
     echo "      Value: [cPanel-palvelimen MX-tietue]"
     echo ""
     echo "   2. Host: @"
-    echo "      Type: MX" 
+    echo "      Type: MX"
     echo "      Priority: 20"
     echo "      Value: [backup MX-tietue]"
-    
+
     # SPF Record
     echo "   📋 SPF-tietue:"
     echo "   Host: @"
     echo "   Type: TXT"
     echo "   Value: v=spf1 +a +mx +ip4:[SERVER_IP] ~all"
-    
+
     # DKIM (usually auto-configured by cPanel)
     echo "   📋 DKIM (automaattinen cPanelissa):"
     echo "   Host: [Auto-generated]"
@@ -75,16 +75,16 @@ configure_dns() {
 # Function to test email configuration
 test_email_config() {
     echo "🧪 Testataan sähköpostin konfiguraatio..."
-    
+
     # Test DNS
     echo "1. DNS-testaus:"
     echo "   dig MX $DOMAIN"
     echo "   dig TXT $DOMAIN | grep spf"
-    
+
     # Test email sending (would require actual mail server)
     echo "2. Lähetystestaus:"
     echo "   echo 'Test message' | mail -s 'Converto Test' hello@$DOMAIN"
-    
+
     # Test MX lookup
     echo "3. MX-haku:"
     echo "   nslookup $DOMAIN"
@@ -135,7 +135,7 @@ generate_cpanel_instructions() {
 # Function to create email service integration
 create_email_integration() {
     echo "🔗 Luodaan sähköpostipalvelun integraatio..."
-    
+
     # SMTP settings for Converto
     echo "📧 Converto Sähköpostiasetukset:"
     echo "============================"
@@ -162,7 +162,7 @@ create_email_integration() {
 # Function to update environment variables
 update_env_config() {
     echo "🔧 Päivitetään ympäristömuuttujat..."
-    
+
     # This would update .env with email configuration
     echo "# Converto Email Configuration" >> .env.tmp
     echo "CONVERTO_EMAIL_ENABLED=true" >> .env.tmp
@@ -174,7 +174,7 @@ update_env_config() {
     echo "CONVERTO_EMAIL_PASSWORD=[SET_EMAIL_PASSWORD]" >> .env.tmp
     echo "CONVERTO_EMAIL_SMTP_ENABLED=true" >> .env.tmp
     echo "" >> .env.tmp
-    
+
     echo "✅ Luotu .env.tmp - päivitä .env-tiedosto käsin"
 }
 
@@ -184,7 +184,7 @@ main() {
     echo "Domain: $DOMAIN"
     echo "Name Server: $REGISTERED_NS"
     echo ""
-    
+
     # Check current DNS status
     if ! check_dns_status; then
         echo "⚠️  DNS-tietueita ei ole konfiguroitu"
@@ -193,26 +193,26 @@ main() {
     else
         echo "✅ DNS-tietueet löydetty"
     fi
-    
+
     echo ""
     echo "📋 Seuraavat toimet:"
     echo "=================="
-    
+
     # Generate instructions
     generate_cpanel_instructions
     create_email_integration
-    
+
     echo ""
     echo "🧪 Testaamisen jälkeen:"
     test_email_config
-    
+
     echo ""
     echo "💡 Vinkit:"
     echo "  • Odota 15-30 min DNS-propagation muutosten jälkeen"
     echo "  • Testaa sähköpostin lähetys ja vastaanotto"
     echo "  • Varmista että SPF ja DKIM ovat käytössä"
     echo "  • Käytä turvallisia salasanoja"
-    
+
     echo ""
     echo "✅ Setup-valmis! Noudata cPanel-ohjeita ylhäältä."
 }

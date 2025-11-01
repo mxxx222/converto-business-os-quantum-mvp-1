@@ -1,3 +1,8 @@
+/**
+ * Optimized Welcome Email with Scheduled Sequence
+ * Migration from: frontend/app/api/automation/welcome/route.ts
+ */
+
 import { NextResponse } from "next/server"
 import { Resend } from "resend"
 
@@ -28,46 +33,32 @@ export async function POST(req: Request) {
       `,
     })
 
-    // OPTIMIZED: Schedule follow-up sequence (Day 3, 7) via direct API
-    const scheduleEmail = async (to: string, subject: string, html: string, scheduledAt: Date) => {
-      const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "info@converto.fi",
-          to,
-          subject,
-          html,
-          scheduled_at: scheduledAt.toISOString(),
-        }),
-      })
-      return response.json()
-    }
-
+    // OPTIMIZED: Schedule follow-up sequence (Day 1, 3, 7)
     const now = new Date()
+    
+    // Day 1: Immediate (already sent above)
     
     // Day 3: Demo reminder
     const day3 = new Date(now)
     day3.setDate(day3.getDate() + 3)
-    await scheduleEmail(
-      email,
-      `${name}, varataanpa demo-aika Business OS:lle?`,
-      `<p>Hei ${name},<br>Haluaisitko varata demo-ajan? Vastaa tähän sähköpostiin!</p>`,
-      day3
-    )
+    await resend.emails.send({
+      from: "info@converto.fi",
+      to: email,
+      subject: `${name}, varataanpa demo-aika Business OS:lle?`,
+      html: `<p>Hei ${name},<br>Haluaisitko varata demo-ajan? Vastaa tähän sähköpostiin!</p>`,
+      scheduled_at: day3.toISOString(),
+    })
 
     // Day 7: Final follow-up
     const day7 = new Date(now)
     day7.setDate(day7.getDate() + 7)
-    await scheduleEmail(
-      email,
-      `${name}, kuinka voimme auttaa?`,
-      `<p>Hei ${name},<br>Voimme auttaa optimoimaan ${company}:n prosesseja!</p>`,
-      day7
-    )
+    await resend.emails.send({
+      from: "info@converto.fi",
+      to: email,
+      subject: `${name}, kuinka voimme auttaa?`,
+      html: `<p>Hei ${name},<br>Voimme auttaa optimoimaan ${company}:n prosesseja!</p>`,
+      scheduled_at: day7.toISOString(),
+    })
 
     return NextResponse.json({ 
       success: true, 
@@ -81,3 +72,4 @@ export async function POST(req: Request) {
     )
   }
 }
+

@@ -2,8 +2,8 @@ ocs/FIXUWATTI_BROWSER_SETUP_GUIDE.md</path>
 <content">
 # 🎯 FixUatti.fi DNS Setup - Browser Implementation Guide
 
-**Status:** ✅ Browser Ready - hostingpalvelu.fi open in browser  
-**Target:** Configure fixuwatti.fi for Zoho Mail  
+**Status:** ✅ Browser Ready - hostingpalvelu.fi open in browser
+**Target:** Configure fixuwatti.fi for Zoho Mail
 **Time:** 5-10 minutes
 
 ## 🌐 **Current Browser State**
@@ -192,6 +192,6 @@ TXT v=spf1 include:zoho.com ~all
 
 **🚀 Ready to implement! Browser is already open to hostingpalvelu.fi**
 
-**⏰ Expected time:** 5-10 minutes  
-**🧪 Test after:** 15-30 minutes  
+**⏰ Expected time:** 5-10 minutes
+**🧪 Test after:** 15-30 minutes
 **✅ Result:** Professional email via Zoho Mail

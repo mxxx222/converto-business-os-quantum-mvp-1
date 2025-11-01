@@ -1,7 +1,7 @@
 # ✅ Converto.fi Sähköpostin Asennus - Valmis
 
-**Päivämäärä:** 2025-11-01 12:01:10  
-**Domain:** converto.fi  
+**Päivämäärä:** 2025-11-01 12:01:10
+**Domain:** converto.fi
 **Status:** ✅ Setup-ohjeet luotu ja käyttövalmiina
 
 ## 🔍 **Nykyinen Tilanne**
@@ -32,7 +32,7 @@ Luo seuraavat tilit:
 - `sales@converto.fi` (myynti)
 - `support@converto.fi` (tuki)
 
-### 2. 🌐 MX-tietueiden Konfigurointi  
+### 2. 🌐 MX-tietueiden Konfigurointi
 **cPanel → Email → MX Entry + DNS Zone Editor**
 
 Lisää MX-tietueet:
@@ -42,7 +42,7 @@ Type: MX
 Priority: 10
 Value: [cPanel-palvelimen MX-tietue]
 
-Host: @  
+Host: @
 Type: MX
 Priority: 20
 Value: [backup MX-tietue]
@@ -54,7 +54,7 @@ Value: [backup MX-tietue]
 Päivitä SPF-tietue:
 ```
 Host: @
-Type: TXT  
+Type: TXT
 Value: v=spf1 +a +mx +ip4:[SERVER_IP] ~all
 ```
 
@@ -77,7 +77,7 @@ Authentication: Yes
 Username: hello@converto.fi
 ```
 
-### SMTP (Lähetys)  
+### SMTP (Lähetys)
 ```
 Server: mail.converto.fi
 Port: 587
@@ -110,7 +110,7 @@ Security: SSL/TLS
 dig MX converto.fi
 dig TXT converto.fi | grep spf
 
-# Email-testit  
+# Email-testit
 echo 'Test message' | mail -s 'Converto Test' hello@converto.fi
 
 # MX-haku
@@ -138,6 +138,6 @@ nslookup converto.fi
 
 ---
 
-**Luotu:** 2025-11-01  
-**Päivitetty:** 2025-11-01 12:01:10  
+**Luotu:** 2025-11-01
+**Päivitetty:** 2025-11-01 12:01:10
 **Valmis käyttöön:** Kyllä ✅

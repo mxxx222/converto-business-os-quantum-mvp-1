@@ -1,8 +1,8 @@
 # ✅ FixUatti.fi DNS Setup - Zoho Mail Integration
 
-**Päivämäärä:** 2025-11-01 12:09:26  
-**Domain:** fixuwatti.fi  
-**Status:** ✅ Setup-ohjeet luotu ja käyttövalmiina  
+**Päivämäärä:** 2025-11-01 12:09:26
+**Domain:** fixuwatti.fi
+**Status:** ✅ Setup-ohjeet luotu ja käyttövalmiina
 **Tavoite:** Zoho Mail -integraatio
 
 ## 🔍 **Nykyinen DNS-tilanne**
@@ -10,7 +10,7 @@
 ### DNS-tarkistus (2025-11-01 12:09:26)
 ```
 ❌ MX-tietueet: Ei löytynyt (email ei toimi)
-❌ A-tietueet: Ei löytynyt (website ei toimi) 
+❌ A-tietueet: Ei löytynyt (website ei toimi)
 ❌ SPF-tietue: Ei löytynyt (email security puuttuu)
 ✅ Name Server: hostingpalvelu.fi (31.217.192.68, 31.217.192.71, 31.217.196.110)
 ```
@@ -161,6 +161,6 @@ echo 'Test message' | mail -s 'FixUatti Test' hello@fixuwatti.fi
 
 ---
 
-**Luotu:** 2025-11-01  
-**Päivitetty:** 2025-11-01 12:09:26  
+**Luotu:** 2025-11-01
+**Päivitetty:** 2025-11-01 12:09:26
 **Valmis käyttöön:** Kyllä ✅

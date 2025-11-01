@@ -15,7 +15,7 @@ ZOHO_MX_BACKUP="mx2.zoho.com (Priority: 20)"
 # Function to check current DNS status
 check_current_dns() {
     echo "🔍 Tarkistetaan nykyinen DNS-tilanne..."
-    
+
     echo "📋 MX-tietueet:"
     MX_RECORD=$(dig MX $DOMAIN +short 2>/dev/null)
     if [ -z "$MX_RECORD" ]; then
@@ -23,7 +23,7 @@ check_current_dns() {
     else
         echo "$MX_RECORD"
     fi
-    
+
     echo ""
     echo "📋 A-tietueet:"
     A_RECORD=$(dig A $DOMAIN +short 2>/dev/null)
@@ -32,7 +32,7 @@ check_current_dns() {
     else
         echo "$A_RECORD"
     fi
-    
+
     echo ""
     echo "📋 SPF-tietue:"
     SPF_RECORD=$(dig TXT $DOMAIN | grep spf)
@@ -195,30 +195,30 @@ main() {
     echo "Domain: $DOMAIN"
     echo "Tavoite: Zoho Mail -integraatio"
     echo ""
-    
+
     # Check current DNS
     check_current_dns
     echo ""
-    
+
     # Show required changes
     show_required_changes
     echo ""
-    
+
     # Show cPanel instructions
     show_cpanel_instructions
     echo ""
-    
+
     # Show Zoho setup guide
     create_zoho_setup_guide
     echo ""
-    
+
     # Show testing procedures
     test_dns_changes
     echo ""
-    
+
     # Show email templates
     generate_email_templates
-    
+
     echo ""
     echo "💡 Muistutukset:"
     echo "================"

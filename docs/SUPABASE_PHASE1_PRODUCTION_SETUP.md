@@ -60,10 +60,10 @@ supabase_database_url: str = os.getenv("SUPABASE_DATABASE_URL", "")
 ### **Step 2: Get Production Credentials**
 ```
 From Supabase Dashboard → Settings → API:
-- URL: https://[project-id].supabase.co
+- URL: https://your-project-id.supabase.co
 - anon/public key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
 - service_role key: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-- JWT Secret: [Generate new secret]
+- JWT Secret: [Generate new secret in dashboard]
 ```
 
 ### **Step 3: Environment Configuration**
