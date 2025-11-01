@@ -51,56 +51,102 @@ export default function PilotForm() {
 
   if (sent) {
     return (
-      <div className="p-6 bg-green-50 border border-green-200 rounded-lg">
-        <p className="text-green-800 font-semibold text-center">
-          ✓ Kiitos! Olemme sinuun pian yhteydessä.
+      <div className="card-feature max-w-md mx-auto text-center">
+        <div className="success-checkmark mx-auto mb-4">
+          ✓
+        </div>
+        <h3 className="text-display-sm mb-2">Kiitos ilmoittautumisesta!</h3>
+        <p className="text-gray-600 mb-4">
+          Olemme lähettäneet vahvistuksen sähköpostiisi ja otamme yhteyttä 24 tunnin sisällä.
         </p>
+        <div className="flex items-center justify-center gap-4 text-sm text-gray-500">
+          <span>✓ Demo-kutsu tulossa</span>
+          <span>✓ 30pv ilmainen pilotti</span>
+        </div>
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 text-left max-w-md mx-auto">
+    <div className="card-feature max-w-md mx-auto">
+      <div className="text-center mb-6">
+        <h3 className="text-display-sm mb-2">Aloita 30 päivän ilmainen pilotti</h3>
+        <p className="text-gray-600">Ei sitoutumista. Ei luottokorttia. Täysi pääsy kaikkiin ominaisuuksiin.</p>
+      </div>
+
       {error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded text-red-800 text-sm">
+        <div className="p-4 bg-error-50 border border-error-200 rounded-lg text-error-800 text-sm mb-4">
           {error}
         </div>
       )}
 
-      <input
-        type="text"
-        placeholder="Yrityksen nimi"
-        required
-        className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.company}
-        onChange={(e) => setForm({ ...form, company: e.target.value })}
-      />
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Yrityksen nimi
+          </label>
+          <input
+            type="text"
+            placeholder="Esim. Oy Yritys Ab"
+            required
+            className="form-input"
+            value={form.company}
+            onChange={(e) => setForm({ ...form, company: e.target.value })}
+          />
+        </div>
 
-      <input
-        type="text"
-        placeholder="Yhteyshenkilö"
-        required
-        className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.name}
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Yhteyshenkilö
+          </label>
+          <input
+            type="text"
+            placeholder="Etunimi Sukunimi"
+            required
+            className="form-input"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+        </div>
 
-      <input
-        type="email"
-        placeholder="Sähköposti"
-        required
-        className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Työposti
+          </label>
+          <input
+            type="email"
+            placeholder="nimi@yritys.fi"
+            required
+            className="form-input"
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+          />
+        </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="w-full bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50 transition-colors font-semibold"
-      >
-        {loading ? "Lähetetään..." : "Lähetä ilmoittautuminen"}
-      </button>
-    </form>
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn-primary w-full hover-lift"
+        >
+          {loading ? (
+            <div className="flex items-center justify-center gap-2">
+              <div className="loading-skeleton w-4 h-4 rounded-full"></div>
+              Lähetetään...
+            </div>
+          ) : (
+            <>
+              Aloita ilmainen pilotti
+              <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </>
+          )}
+        </button>
+        
+        <p className="text-xs text-gray-500 text-center mt-3">
+          Rekisteröitymällä hyväksyt <a href="/terms" className="text-primary-600 hover:underline">käyttöehdot</a> ja <a href="/privacy" className="text-primary-600 hover:underline">tietosuojakäytännön</a>.
+        </p>
+      </form>
+    </div>
   )
 }
