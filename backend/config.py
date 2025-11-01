@@ -41,6 +41,15 @@ class Settings(BaseSettings):
     email_from: str = os.getenv("RESEND_FROM_EMAIL", "info@converto.fi")
     email_reply_to: str = "info@converto.fi"
 
+    # Image Generation (Kilo Code)
+    kilo_code_api_key: str = os.getenv("KILO_CODE_API_KEY", "")
+    kilo_code_api_base: str = os.getenv("KILO_CODE_API_BASE", "https://api.kilocode.com")
+    image_generation_enabled: bool = os.getenv("IMAGE_GENERATION_ENABLED", "false").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
+
     class Config:
         """Pydantic config."""
 
