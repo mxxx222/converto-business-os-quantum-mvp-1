@@ -1,12 +1,14 @@
 "use client"
 
 import { useState } from "react"
+import { useConversionTracking } from "@/lib/conversion-tracking"
 
 export default function PilotForm() {
   const [form, setForm] = useState({ name: "", email: "", company: "" })
   const [sent, setSent] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
+  const { trackPilot } = useConversionTracking()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -26,6 +28,9 @@ export default function PilotForm() {
 
       setSent(true)
       setForm({ name: "", email: "", company: "" })
+      
+      // Track conversion
+      trackPilot('landing', { company: form.company })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Virhe tapahtui")
     } finally {

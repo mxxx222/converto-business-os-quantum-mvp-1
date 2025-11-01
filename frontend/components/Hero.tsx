@@ -1,4 +1,6 @@
 import Link from "next/link"
+import { useEffect } from "react"
+import { useConversionTracking } from "@/lib/conversion-tracking"
 
 interface HeroProps {
   title: string
@@ -8,6 +10,12 @@ interface HeroProps {
 }
 
 export default function Hero({ title, subtitle, ctaPrimary, image }: HeroProps) {
+  const { trackView } = useConversionTracking()
+
+  useEffect(() => {
+    trackView('landing', { page: 'hero' })
+  }, [trackView])
+
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-6 py-20">
       <div className="max-w-4xl mx-auto text-center space-y-8">
