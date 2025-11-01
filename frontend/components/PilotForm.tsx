@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useConversionTracking } from "@/lib/conversion-tracking"
+import { crmIntegration } from "@/lib/crm-integration"
 
 export default function PilotForm() {
   const [form, setForm] = useState({ name: "", email: "", company: "" })
@@ -27,10 +28,20 @@ export default function PilotForm() {
       }
 
       setSent(true)
-      setForm({ name: "", email: "", company: "" })
+      
+      // Create CRM lead
+      await crmIntegration.createLead({
+        name: form.name,
+        email: form.email,
+        company: form.company,
+        source: 'pilot_form',
+        stage: 'pilot',
+      })
       
       // Track conversion
       trackPilot('landing', { company: form.company })
+      
+      setForm({ name: "", email: "", company: "" })
     } catch (err) {
       setError(err instanceof Error ? err.message : "Virhe tapahtui")
     } finally {
