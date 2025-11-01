@@ -16,6 +16,7 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 
 from backend.app.routes.leads import router as leads_router
 from backend.app.routes.metrics import router as metrics_router
+from backend.app.routes.redis import router as redis_router
 from backend.app.routes.stripe import router as stripe_router
 from backend.config import get_settings
 from backend.modules.email.router import router as email_router
@@ -36,9 +37,15 @@ from shared_core.utils.db import Base, engine
 settings = get_settings()
 logger = logging.getLogger("converto.backend")
 
-# Initialize Sentry for error tracking
+# Initialize Sentry for error tracking (ROI MAXIMIZED)
 sentry_dsn = os.getenv("SENTRY_DSN")
 if sentry_dsn:
+    # Get release version from package or git
+    try:
+        release = os.getenv("SENTRY_RELEASE") or os.getenv("RENDER_GIT_COMMIT") or "unknown"
+    except Exception:
+        release = "unknown"
+
     sentry_sdk.init(
         dsn=sentry_dsn,
         integrations=[
@@ -48,20 +55,31 @@ if sentry_dsn:
                 event_level=logging.ERROR,  # Send errors as events
             ),
         ],
-        traces_sample_rate=0.2,  # 20% of transactions
-        profiles_sample_rate=0.1,  # 10% of transactions
+        # OPTIMIZED: Performance Monitoring (APM)
+        traces_sample_rate=1.0,  # 100% of transactions (maximize ROI)
+        profiles_sample_rate=0.2,  # 20% of transactions (profiling)
+        # OPTIMIZED: Release Tracking
+        release=release,
         environment=settings.environment,
-        # Filter sensitive data
+        # OPTIMIZED: Better error context
+        attach_stacktrace=True,
+        send_default_pii=False,  # Don't send PII
+        # OPTIMIZED: Filter sensitive data
         before_send=lambda event, hint: (
             event
             if not any(
                 secret in str(event).lower()
-                for secret in ["password", "api_key", "token", "secret"]
+                for secret in ["password", "api_key", "token", "secret", "dsn"]
             )
             else None
         ),
+        # OPTIMIZED: Custom tags for better filtering
+        tags={
+            "service": "converto-backend",
+            "component": "fastapi",
+        },
     )
-    logger.info("Sentry initialized for error tracking")
+    logger.info(f"Sentry initialized for error tracking (release: {release})")
 else:
     logger.warning("SENTRY_DSN not configured - error tracking disabled")
 
@@ -110,6 +128,11 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    # OPTIMIZED: Rate limiting middleware (Redis-powered)
+    from backend.middleware.rate_limit import RateLimitMiddleware
+
+    app.add_middleware(RateLimitMiddleware)
+
     # Auth middleware chain: Supabase JWT (if enabled) then dev fallback
     if settings.supabase_auth_enabled:
         app.middleware("http")(supabase_auth)
@@ -146,6 +169,7 @@ def create_app() -> FastAPI:
     app.include_router(email_router)
     app.include_router(leads_router)
     app.include_router(stripe_router)
+    app.include_router(redis_router)  # OPTIMIZED: Redis management endpoints
 
     # Back-compat alias: preserve body via 307 redirect
     @app.api_route("/api/v1/ocr-ai/scan", methods=["POST", "OPTIONS"], include_in_schema=False)
