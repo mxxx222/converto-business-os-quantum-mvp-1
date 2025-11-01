@@ -28,10 +28,24 @@ const nextConfig = {
     distDir: 'out',
   }),
   images: {
-    unoptimized: true,
-    formats: ['image/avif', 'image/webp'],
+    // OPTIMIZED: Use Cloudflare Image Optimization if enabled
+    ...(process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_ENABLED === 'true' && {
+      loader: 'cloudflare',
+      loaderFile: './lib/cloudflare-image-loader.js',
+    }),
+    // Fallback: Next.js default optimization
+    ...(process.env.NEXT_PUBLIC_CLOUDFLARE_IMAGE_ENABLED !== 'true' && {
+      unoptimized: false,
+      formats: ['image/avif', 'image/webp'],
+    }),
     minimumCacheTTL: 86_400,
-    domains: ['cdn.converto.app', 'assets.stripe.com', 'images.unsplash.com', 'via.placeholder.com'],
+    domains: [
+      'cdn.converto.app',
+      'cdn.converto.fi', // Cloudflare R2 custom domain
+      'assets.stripe.com',
+      'images.unsplash.com',
+      'via.placeholder.com',
+    ],
   },
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
