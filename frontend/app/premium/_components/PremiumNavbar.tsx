@@ -36,47 +36,53 @@ export default function PremiumNavbar(): JSX.Element {
 
         {/* Desktop Navigation */}
         <div className="navbar-nav desktop-nav">
-          <a 
-            href="#features" 
+          <a
+            href="#features"
             className="nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('features'); }}
           >
             Ominaisuudet
           </a>
-          <a 
-            href="#pricing" 
+          <a
+            href="#pricing"
             className="nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('pricing'); }}
           >
             Hinnat
           </a>
-          <a 
-            href="#testimonials" 
+          <a
+            href="#testimonials"
             className="nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('testimonials'); }}
           >
             Asiakkaat
           </a>
-          <a 
-            href="#faq" 
+          <a
+            href="#faq"
             className="nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }}
           >
             FAQ
           </a>
+          <a
+            href="/blog"
+            className="nav-link"
+          >
+            Blogi
+          </a>
         </div>
 
         {/* CTA Buttons */}
         <div className="navbar-actions">
-          <a 
-            href="#pricing" 
+          <a
+            href="#pricing"
             className="btn btn-outline btn-sm"
             onClick={(e) => { e.preventDefault(); scrollToSection('pricing'); }}
           >
             Hinnat
           </a>
-          <a 
-            href="#pilot" 
+          <a
+            href="#pilot"
             className="btn btn-primary btn-sm"
             onClick={(e) => { e.preventDefault(); scrollToSection('pilot'); }}
           >
@@ -85,7 +91,7 @@ export default function PremiumNavbar(): JSX.Element {
         </div>
 
         {/* Mobile Menu Button */}
-        <button 
+        <button
           className="mobile-menu-btn"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           aria-label="Toggle mobile menu"
@@ -101,44 +107,50 @@ export default function PremiumNavbar(): JSX.Element {
       {/* Mobile Menu */}
       <div className={`mobile-menu ${isMobileMenuOpen ? 'open' : ''}`}>
         <div className="mobile-menu-content">
-          <a 
-            href="#features" 
+          <a
+            href="#features"
             className="mobile-nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('features'); }}
           >
             Ominaisuudet
           </a>
-          <a 
-            href="#pricing" 
+          <a
+            href="#pricing"
             className="mobile-nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('pricing'); }}
           >
             Hinnat
           </a>
-          <a 
-            href="#testimonials" 
+          <a
+            href="#testimonials"
             className="mobile-nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('testimonials'); }}
           >
             Asiakkaat
           </a>
-          <a 
-            href="#faq" 
+          <a
+            href="#faq"
             className="mobile-nav-link"
             onClick={(e) => { e.preventDefault(); scrollToSection('faq'); }}
           >
             FAQ
           </a>
+          <a
+            href="/blog"
+            className="mobile-nav-link"
+          >
+            Blogi
+          </a>
           <div className="mobile-actions">
-            <a 
-              href="#pricing" 
+            <a
+              href="#pricing"
               className="btn btn-outline btn-sm"
               onClick={(e) => { e.preventDefault(); scrollToSection('pricing'); }}
             >
               Hinnat
             </a>
-            <a 
-              href="#pilot" 
+            <a
+              href="#pilot"
               className="btn btn-primary btn-sm"
               onClick={(e) => { e.preventDefault(); scrollToSection('pilot'); }}
             >

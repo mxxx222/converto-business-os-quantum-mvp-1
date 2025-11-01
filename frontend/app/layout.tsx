@@ -68,16 +68,24 @@ export default function RootLayout({
   return (
     <html lang="fi">
       <head>
+        {/* PWA Meta Tags */}
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#667eea" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content="Converto" />
+        <link rel="apple-touch-icon" href="/icon-192.png" />
+
         {/* Preconnect to external domains for performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://api.converto.fi" />
         <link rel="preconnect" href="https://calendly.com" />
-        
+
         {/* DNS prefetch for performance */}
         <link rel="dns-prefetch" href="//resend.com" />
         <link rel="dns-prefetch" href="//plausible.io" />
-        
+
         {/* Privacy-friendly analytics by Plausible */}
         <script async src="https://plausible.io/js/pa-LIVALOWbQ1Cpkjh1mkLq1.js"></script>
         <script
@@ -85,6 +93,41 @@ export default function RootLayout({
             __html: `
               window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
               plausible.init()
+            `,
+          }}
+        />
+
+        {/* Google Analytics 4 */}
+        {process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID && (
+          <>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}`}></script>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
+
+        {/* Conversion Tracking Helper */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.trackConversion = function(eventName, params) {
+                if (window.gtag) {
+                  gtag('event', eventName, params);
+                }
+                if (window.plausible) {
+                  plausible(eventName, { props: params });
+                }
+              };
             `,
           }}
         />
@@ -131,6 +174,19 @@ export default function RootLayout({
         </nav>
         {children}
         <Analytics />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js')
+                    .then((reg) => console.log('Service Worker registered:', reg))
+                    .catch((err) => console.log('Service Worker registration failed:', err));
+                });
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );

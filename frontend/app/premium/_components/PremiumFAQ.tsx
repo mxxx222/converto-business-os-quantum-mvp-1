@@ -6,8 +6,8 @@ export default function PremiumFAQ(): JSX.Element {
   const [openItems, setOpenItems] = useState<number[]>([])
 
   const toggleItem = (index: number) => {
-    setOpenItems(prev => 
-      prev.includes(index) 
+    setOpenItems(prev =>
+      prev.includes(index)
         ? prev.filter(item => item !== index)
         : [...prev, index]
     )
@@ -93,7 +93,7 @@ export default function PremiumFAQ(): JSX.Element {
             Jos et löytänyt vastausta, ota yhteyttä asiakaspalveluun.
           </p>
           <div className="cta-buttons">
-            <a href="mailto:hello@converto.fi" className="btn btn-outline">
+            <a href="mailto:info@converto.fi" className="btn btn-outline">
               Ota yhteyttä
             </a>
             <a href="#pricing" className="btn btn-primary">

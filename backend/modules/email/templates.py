@@ -1,11 +1,11 @@
 """Email templates for Converto Business OS."""
 
-from typing import Dict, Any
+from typing import Any
 
 
 class EmailTemplates:
     """Email templates for various business scenarios."""
-    
+
     @staticmethod
     def pilot_signup_welcome(name: str, company: str) -> str:
         """Welcome email for pilot signups."""
@@ -33,14 +33,14 @@ class EmailTemplates:
                 <div class="content">
                     <h2>Hei {name}!</h2>
                     <p>Hienoa, että {company} liittyy mukaan Converto Business OS -pilottiin!</p>
-                    
+
                     <h3>🎯 Mitä seuraavaksi?</h3>
                     <ul>
                         <li><strong>Päivä 1:</strong> Saat sähköpostitse käyttöohjeet</li>
                         <li><strong>Päivä 3:</strong> 15 minuutin onboarding-kutsu</li>
                         <li><strong>Päivä 7:</strong> Ensimmäinen automatisointi käynnissä</li>
                     </ul>
-                    
+
                     <p>Converto Business OS automatisoi:</p>
                     <ul>
                         <li>🧾 Kuitin skannaus ja kategorisointi</li>
@@ -48,20 +48,20 @@ class EmailTemplates:
                         <li>⚖️ Lakisäädäntöjen seuranta</li>
                         <li>📊 Raportointi ja analytiikka</li>
                     </ul>
-                    
+
                     <a href="https://converto.fi/dashboard" class="cta">Aloita käyttö</a>
-                    
+
                     <p><strong>Kysymykset?</strong> Vastaa tähän sähköpostiin tai soita +358 40 123 4567</p>
                 </div>
                 <div class="footer">
                     <p>Converto Business OS | Automatisoi yrityksesi tänään</p>
-                    <p>converto.fi | hello@converto.fi</p>
+                    <p>converto.fi | info@converto.fi</p>
                 </div>
             </div>
         </body>
         </html>
         """
-    
+
     @staticmethod
     def deployment_success(service_name: str, url: str) -> str:
         """Deployment success notification."""
@@ -98,9 +98,9 @@ class EmailTemplates:
         </body>
         </html>
         """
-    
+
     @staticmethod
-    def daily_metrics_report(metrics: Dict[str, Any]) -> str:
+    def daily_metrics_report(metrics: dict[str, Any]) -> str:
         """Daily metrics report email."""
         return f"""
         <!DOCTYPE html>
@@ -119,31 +119,31 @@ class EmailTemplates:
             <div class="container">
                 <h1>📊 Päivittäinen Raportti</h1>
                 <p><strong>Päivä:</strong> {metrics.get('date', 'Tänään')}</p>
-                
+
                 <div class="metric">
                     <h3>Pilot Rekisteröinnit</h3>
                     <div class="metric-value">{metrics.get('pilot_signups', 0)}</div>
                     <p>Uudet rekisteröinnit tänään</p>
                 </div>
-                
+
                 <div class="metric">
                     <h3>OCR Käsittelyt</h3>
                     <div class="metric-value">{metrics.get('ocr_processed', 0)}</div>
                     <p>Kuitit käsitelty</p>
                 </div>
-                
+
                 <div class="metric">
                     <h3>API Kutsut</h3>
                     <div class="metric-value">{metrics.get('api_calls', 0)}</div>
                     <p>Yhteensä API-kutsuja</p>
                 </div>
-                
+
                 <div class="metric">
                     <h3>Uptime</h3>
                     <div class="metric-value">{metrics.get('uptime', '99.9%')}</div>
                     <p>Palvelun saatavuus</p>
                 </div>
-                
+
                 <h3>🎯 Tavoitteet</h3>
                 <ul>
                     <li>Pilot rekisteröinnit: {metrics.get('target_signups', 20)} (tavoite)</li>
@@ -154,19 +154,19 @@ class EmailTemplates:
         </body>
         </html>
         """
-    
+
     @staticmethod
     def error_alert(error_message: str, service: str, severity: str) -> str:
         """Error alert email."""
         severity_colors = {
             "low": "#ffc107",
-            "medium": "#fd7e14", 
+            "medium": "#fd7e14",
             "high": "#dc3545",
-            "critical": "#6f42c1"
+            "critical": "#6f42c1",
         }
-        
+
         color = severity_colors.get(severity, "#6c757d")
-        
+
         return f"""
         <!DOCTYPE html>
         <html>

@@ -16,7 +16,7 @@
    - Laita **Enable Realtime** → **ON** ✅
    - Valitse eventit:
      - ✅ **INSERT**
-     - ✅ **UPDATE**  
+     - ✅ **UPDATE**
      - ✅ **DELETE**
 
 4. **Save:**
@@ -70,4 +70,3 @@
 ---
 
 **Aika:** ~5 minuuttia
-

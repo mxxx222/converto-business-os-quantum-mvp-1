@@ -1,4 +1,6 @@
-/* Tailwind CSS temporarily disabled for deployment */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Import Premium Styles */
 @import url('./premium/styles/premium.css');
@@ -197,3 +199,279 @@ a {
 /* Dev link */
 .dev-link { opacity: .6; }
 .dev-link:hover { opacity: 1; }
+
+/* Kiitos (Thank You) Page Styles */
+.kiitos-page {
+  min-height: 100vh;
+  padding: 64px 0;
+  background: linear-gradient(180deg, #F8FBFF 0%, #FFFFFF 100%);
+}
+
+.kiitos-content {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Success Icon Animation */
+.success-icon {
+  margin-bottom: 32px;
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.checkmark-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #10B981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: scaleIn 0.3s ease-out;
+}
+
+.checkmark-stem {
+  width: 4px;
+  height: 24px;
+  background: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+  transform-origin: bottom;
+  animation: drawStem 0.3s ease-out 0.2s both;
+}
+
+.checkmark-kick {
+  width: 4px;
+  height: 12px;
+  background: white;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+  transform-origin: bottom;
+  animation: drawKick 0.3s ease-out 0.4s both;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes drawStem {
+  from { height: 0; }
+  to { height: 24px; }
+}
+
+@keyframes drawKick {
+  from { height: 0; }
+  to { height: 12px; }
+}
+
+.kiitos-title {
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: #111;
+  letter-spacing: -0.02em;
+}
+
+.kiitos-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  color: #596273;
+  margin: 0 0 48px;
+  line-height: 1.6;
+}
+
+/* Next Steps */
+.next-steps {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  margin: 48px 0;
+  border: 1px solid #E5EAF1;
+  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  text-align: left;
+}
+
+.steps-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  text-align: center;
+  color: #111;
+}
+
+.steps-list {
+  display: grid;
+  gap: 24px;
+}
+
+.step-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.step-number {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #2563EB;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.step-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  color: #111;
+}
+
+.step-content p {
+  margin: 0;
+  color: #596273;
+  line-height: 1.6;
+}
+
+/* Benefits Reminder */
+.benefits-reminder {
+  margin: 48px 0;
+}
+
+.benefits-reminder h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 24px;
+  color: #111;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .benefits-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.benefit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #E5EAF1;
+  font-weight: 600;
+  color: #111;
+}
+
+.benefit-icon {
+  font-size: 24px;
+}
+
+/* Support Section */
+.support-section {
+  margin: 48px 0;
+  padding: 32px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E5EAF1;
+}
+
+.support-section h3 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #111;
+}
+
+.support-section p {
+  color: #596273;
+  margin: 0 0 24px;
+  line-height: 1.6;
+}
+
+.support-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-outline {
+  background: white;
+  color: #2563EB;
+  border: 1px solid #BFDBFE;
+}
+
+.btn-outline:hover {
+  background: #F8FBFF;
+}
+
+/* Social Proof */
+.social-proof {
+  margin-top: 48px;
+  padding: 24px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid #E5EAF1;
+}
+
+.proof-text {
+  font-size: 16px;
+  color: #596273;
+  margin: 0 0 16px;
+}
+
+.proof-text strong {
+  color: #111;
+  font-weight: 700;
+}
+
+.proof-avatars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+}
+
+.avatar:last-child {
+  background: #2563EB;
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+}

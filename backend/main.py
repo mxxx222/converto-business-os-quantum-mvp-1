@@ -16,11 +16,13 @@ from sentry_sdk.integrations.logging import LoggingIntegration
 
 from backend.app.routes.leads import router as leads_router
 from backend.app.routes.metrics import router as metrics_router
+from backend.app.routes.stripe import router as stripe_router
 from backend.config import get_settings
 from backend.modules.email.router import router as email_router
 from backend.routes.csp import router as csp_router
 from shared_core.middleware.auth import dev_auth
 from shared_core.middleware.supabase_auth import supabase_auth
+from shared_core.modules.agent_orchestrator.router import router as agent_orchestrator_router
 from shared_core.modules.ai.router import router as ai_router
 from shared_core.modules.clients.router import router as clients_router
 from shared_core.modules.finance_agent.router import router as finance_agent_router
@@ -50,10 +52,14 @@ if sentry_dsn:
         profiles_sample_rate=0.1,  # 10% of transactions
         environment=settings.environment,
         # Filter sensitive data
-        before_send=lambda event, hint: event if not any(
-            secret in str(event).lower()
-            for secret in ["password", "api_key", "token", "secret"]
-        ) else None,
+        before_send=lambda event, hint: (
+            event
+            if not any(
+                secret in str(event).lower()
+                for secret in ["password", "api_key", "token", "secret"]
+            )
+            else None
+        ),
     )
     logger.info("Sentry initialized for error tracking")
 else:
@@ -127,6 +133,7 @@ def create_app() -> FastAPI:
         return {"status": "healthy"}
 
     app.include_router(ai_router)
+    app.include_router(agent_orchestrator_router)
     app.include_router(finance_agent_router)
     app.include_router(ocr_router)
     app.include_router(receipts_router)
@@ -138,6 +145,7 @@ def create_app() -> FastAPI:
     app.include_router(metrics_router)
     app.include_router(email_router)
     app.include_router(leads_router)
+    app.include_router(stripe_router)
 
     # Back-compat alias: preserve body via 307 redirect
     @app.api_route("/api/v1/ocr-ai/scan", methods=["POST", "OPTIONS"], include_in_schema=False)

@@ -1,6 +1,0 @@
-mypy==1.10.0
-pydantic>=2.5.0
-types-requests
-types-redis
-types-setuptools
-

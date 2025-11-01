@@ -60,22 +60,66 @@ export default function PremiumPricing(): JSX.Element {
 
   const handlePlanSelect = async (planName: string) => {
     try {
-      const response = await fetch('/api/pilot-signup', {
+      // Get email from user (you can add a form or prompt)
+      const email = prompt('Syötä sähköpostiosoitteesi jatkaaksesi maksamaan:')
+
+      if (!email || !email.includes('@')) {
+        alert('Kelvollinen sähköpostiosoite vaaditaan')
+        return
+      }
+
+      // Create Stripe checkout session
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          email: '', 
-          source: 'premium_pricing',
+        body: JSON.stringify({
           plan: planName,
-          billing: billingCycle
+          billingCycle: billingCycle,
+          email: email
         })
       })
-      
+
       if (response.ok) {
-        window.location.href = '/kiitos'
+        const { url } = await response.json()
+        if (url) {
+          window.location.href = url
+        } else {
+          // Fallback to pilot signup if Stripe not configured
+          const pilotResponse = await fetch('/api/pilot-signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email,
+              source: 'premium_pricing',
+              plan: planName,
+              billing: billingCycle
+            })
+          })
+
+          if (pilotResponse.ok) {
+            window.location.href = '/kiitos'
+          }
+        }
+      } else {
+        // Fallback to pilot signup
+        const pilotResponse = await fetch('/api/pilot-signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            source: 'premium_pricing',
+            plan: planName,
+            billing: billingCycle
+          })
+        })
+
+        if (pilotResponse.ok) {
+          window.location.href = '/kiitos'
+        }
       }
     } catch (error) {
-      console.error('Signup error:', error)
+      console.error('Checkout error:', error)
+      alert('Tapahtui virhe. Yritä uudelleen.')
     }
   }
 
@@ -100,7 +144,7 @@ export default function PremiumPricing(): JSX.Element {
               <span className="toggle-slider"></span>
             </button>
             <span className={billingCycle === 'yearly' ? 'active' : ''}>
-              Vuosi 
+              Vuosi
               <span className="discount-badge">-20% säästö</span>
             </span>
           </div>
@@ -112,7 +156,7 @@ export default function PremiumPricing(): JSX.Element {
               {plan.popular && (
                 <div className="popular-badge">Suosituin</div>
               )}
-              
+
               <div className="plan-header">
                 <h3 className="plan-name">{plan.name}</h3>
                 <p className="plan-description">{plan.description}</p>
@@ -163,7 +207,7 @@ export default function PremiumPricing(): JSX.Element {
             <div className="guarantee-text">
               <h3>30 päivän rahat takaisin -takuu</h3>
               <p>
-                Jos et ole tyytyväinen, palautamme rahasi kokonaan. 
+                Jos et ole tyytyväinen, palautamme rahasi kokonaan.
                 Ei kysymyksiä, ei ongelmia.
               </p>
             </div>
@@ -173,7 +217,7 @@ export default function PremiumPricing(): JSX.Element {
         {/* FAQ Link */}
         <div className="pricing-faq">
           <p>
-            Epävarma mikä paketti sopii parhaiten? 
+            Epävarma mikä paketti sopii parhaiten?
             <a href="#faq" className="faq-link">Lue usein kysytyt kysymykset</a>
           </p>
         </div>

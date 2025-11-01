@@ -156,11 +156,48 @@ export default function DashboardPage() {
     return channel;
   };
 
+  const exportToCSV = () => {
+    if (receipts.length === 0) {
+      showToast('Ei kuitteja viedäväksi', 'error');
+      return;
+    }
+
+    const headers = ['Päivämäärä', 'Kauppa', 'Summa', 'ALV', 'Kategoria'];
+    const rows = receipts.map(r => [
+      r.created_at ? new Date(r.created_at).toLocaleDateString('fi-FI') : '',
+      r.merchant_name || '',
+      (r.total_amount || 0).toFixed(2),
+      (r.vat_amount || 0).toFixed(2),
+      r.category || '',
+    ]);
+
+    const csv = [headers, ...rows].map(row => row.join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `converto-kuitti-export-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    showToast('CSV-export aloitettu', 'success');
+  };
+
+  const exportToPDF = async () => {
+    if (receipts.length === 0) {
+      showToast('Ei kuitteja viedäväksi', 'error');
+      return;
+    }
+
+    // In production, call backend API to generate PDF
+    showToast('PDF-export tulossa pian', 'info');
+  };
+
   if (loading) {
     return (
       <OSLayout>
         <div className="flex items-center justify-center h-96">
-          <div className="text-lg text-gray-600 dark:text-gray-400">Ladataan dashboardia...</div>
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
+            <div className="text-lg text-gray-600 dark:text-gray-400">Ladataan dashboardia...</div>
+          </div>
         </div>
       </OSLayout>
     );

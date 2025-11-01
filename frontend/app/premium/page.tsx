@@ -20,6 +20,7 @@ import PremiumFAQ from './_components/PremiumFAQ'
 import PremiumCTA from './_components/PremiumCTA'
 import WowPlan from './_components/WowPlan'
 import WowCTA from './_components/WowCTA'
+import ChatBot from '../../components/ChatBot'
 
 export default function PremiumPage(): JSX.Element {
   useEffect(() => {
@@ -55,11 +56,12 @@ export default function PremiumPage(): JSX.Element {
       <WowPlan />
       <WowCTA />
       <PremiumCTA />
-      
+      <ChatBot />
+
       {/* Sticky CTA */}
       <div className="sticky-cta">
-        <a 
-          href="#pilot" 
+        <a
+          href="#pilot"
           className="btn btn-primary btn-lg"
           onClick={() => analytics.trackCTAClick('sticky', 'bottom')}
         >

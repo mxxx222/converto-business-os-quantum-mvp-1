@@ -24,7 +24,7 @@ check_var() {
     local name=$1
     local value=$2
     local required=${3:-false}
-    
+
     if [ -z "$value" ]; then
         if [ "$required" = true ]; then
             echo -e "${RED}❌ $name: MISSING (required)${NC}"
@@ -74,4 +74,3 @@ else
     echo "3. See SETUP_NOW.md for detailed instructions"
     exit 1
 fi
-

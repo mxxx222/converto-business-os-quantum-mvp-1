@@ -189,7 +189,7 @@ Converto Business OS on nyt **100% valmis tuotantoon**. Kaikki kriittiset kompon
 
 ## 🚀 **Ready for Production!**
 
-**Next Step:** 
+**Next Step:**
 👉 **[SETUP_NOW.md](SETUP_NOW.md)** - Follow the 12-minute setup guide
 
 **When done:**
@@ -201,4 +201,3 @@ Converto Business OS on nyt **100% valmis tuotantoon**. Kaikki kriittiset kompon
 ---
 
 © 2025 Converto Business OS - **Built with ❤️ in Finland 🇫🇮**
-

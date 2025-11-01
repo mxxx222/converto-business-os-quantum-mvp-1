@@ -135,4 +135,3 @@ curl https://converto-business-os-quantum-mvp-1.onrender.com/health
 **Tarvitset apua?**
 - 📖 Katso: `QUICK_SETUP_GUIDE.md`
 - 📋 Checklist: `RENDER_ENV_VARS_CHECKLIST.md`
-
