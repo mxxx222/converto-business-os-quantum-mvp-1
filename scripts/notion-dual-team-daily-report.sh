@@ -14,7 +14,7 @@ CONVERTO_API_USAGE=$(echo "$(( RANDOM % 8000 + 15000 ))")  # High usage for busi
 CONVERTO_ERROR_RATE=$(echo "scale=4; $(echo "$(( RANDOM % 100 )) / 1000")" | bc)
 CONVERTO_PERFORMANCE=$(echo "scale=2; $(echo "$(( RANDOM % 50 + 950 )) / 10")" | bc)
 
-# Viking Labs metrics  
+# Viking Labs metrics
 VIKING_SIGNUPS=$(curl -s "https://api.plausible.io/api/v1/stats/aggregate?metrics=visitors&period=today&site_id=vikinglabs.com" | jq -r '.results.visitors.value' 2>/dev/null || echo "34")
 VIKING_REVENUE=$(curl -s "https://api.stripe.com/v1/charges" 2>/dev/null | jq -r '.[0].amount | /100' || echo "2900")
 VIKING_API_USAGE=$(echo "$(( RANDOM % 5000 + 10000 ))")  # Tech team usage

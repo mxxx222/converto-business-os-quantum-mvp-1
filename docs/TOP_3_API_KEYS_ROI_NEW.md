@@ -1,6 +1,6 @@
 # 🎯 TOP 3 API KEYS - Maksimaalinen ROI (UUSI)
 
-**Päivämäärä:** 2025-01-11  
+**Päivämäärä:** 2025-01-11
 **Tavoite:** Maksimoida ROI API-integraatioilla joita EI vielä täysin hyödynnetty
 
 **HUOM:** Stripe ja Notion jätetty pois (jo huomioitu)
@@ -61,7 +61,7 @@
 - User feedback widget
 - Source maps (better stack traces)
 
-**Aika:** 2-3h  
+**Aika:** 2-3h
 **Kustannus:** €0-100/kk (Free tier → Team)
 
 ---
@@ -102,7 +102,7 @@
 - Pub/Sub messaging (real-time updates)
 - Advanced caching (queries, API responses)
 
-**Aika:** 3-4h  
+**Aika:** 3-4h
 **Kustannus:** €0-50/kk (Redis Cloud free tier → Basic)
 
 ---
@@ -140,7 +140,7 @@
 - Database Functions (complex queries)
 - Realtime optimizations (better channels)
 
-**Aika:** 4-5h  
+**Aika:** 4-5h
 **Kustannus:** €0-100/kk (Pro plan features)
 
 ---
@@ -153,8 +153,8 @@
 | **Redis** | €0-50/kk | €1,300-2,100/kk | **13-21x** | 🟡 HIGH |
 | **Supabase Advanced** | €0-100/kk | €700-1,200/kk | **7-12x** | 🟢 MEDIUM |
 
-**Kokonaisarvo:** €3,400-5,500/kk  
-**Kokonaiskustannus:** €0-250/kk  
+**Kokonaisarvo:** €3,400-5,500/kk
+**Kokonaiskustannus:** €0-250/kk
 **KokonaisROI:** 14-22x
 
 ---
@@ -231,8 +231,8 @@
 2. **Redis API** (3-4h) - Performance + scalability
 3. **Supabase Advanced** (4-5h) - Serverless functions
 
-**Arvioitu kokonaisaika:** 9-12h  
-**Arvioitu kokonaisROI:** 14-22x (€3,400-5,500/€0-250)  
+**Arvioitu kokonaisaika:** 9-12h
+**Arvioitu kokonaisROI:** 14-22x (€3,400-5,500/€0-250)
 **Payback:** 1 päivä
 
 ---
@@ -241,4 +241,3 @@
 - Sentry Docs: https://docs.sentry.io
 - Redis Docs: https://redis.io/docs
 - Supabase Edge Functions: https://supabase.com/docs/guides/functions
-

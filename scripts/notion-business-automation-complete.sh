@@ -260,11 +260,11 @@ declare -a AI_TASKS=(
 # Add random AI tasks
 for i in {1..3}; do
     TASK=${AI_TASKS[$RANDOM % ${#AI_TASKS[@]}]}
-    
+
     TASK_TITLE=$(echo "$TASK" | jq -r '.title')
     TASK_PRIORITY=$(echo "$TASK" | jq -r '.priority')
     TASK_ROI=$(echo "$TASK" | jq -r '.roi')
-    
+
     curl -s -X POST \
       -H "Authorization: Bearer $NOTION_API_KEY" \
       -H "Content-Type: application/json" \
@@ -280,7 +280,7 @@ for i in {1..3}; do
         }
       }" \
       "https://api.notion.com/v1/pages" > /dev/null
-    
+
     echo "✅ Created task: $TASK_TITLE"
 done
 
@@ -363,5 +363,5 @@ echo "💰 Expected return: 1,458-2,500% on €96/month investment"
 echo ""
 echo "📊 Monitor your automation results in Notion databases:"
 echo "   📈 Reports: https://notion.so/$REPORTS_DB"
-echo "   📋 Tasks: https://notion.so/$TASKS_DB" 
+echo "   📋 Tasks: https://notion.so/$TASKS_DB"
 echo "   👥 Customers: https://notion.so/$CUSTOMERS_DB"

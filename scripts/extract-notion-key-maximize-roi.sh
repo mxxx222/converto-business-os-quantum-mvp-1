@@ -101,7 +101,7 @@ REPORTS_DB=$(curl -s -X POST \
 
 echo "✅ Reports Database: $REPORTS_DB"
 
-# 2. Business Tasks Database  
+# 2. Business Tasks Database
 echo "📋 Creating AI-Powered Tasks Database..."
 TASKS_DB=$(curl -s -X POST \
     -H "Authorization: Bearer $NOTION_API_KEY" \
@@ -311,12 +311,12 @@ declare -a AI_TASKS=(
 # Add AI-generated tasks
 for i in {1..5}; do
     TASK=${AI_TASKS[$RANDOM % ${#AI_TASKS[@]}]}
-    
+
     TASK_TITLE=$(echo "$TASK" | jq -r '.title')
     TASK_PRIORITY=$(echo "$TASK" | jq -r '.priority')
     TASK_ROI=$(echo "$TASK" | jq -r '.roi')
     TASK_VALUE=$(echo "$TASK" | jq -r '.value')
-    
+
     curl -s -X POST \
       -H "Authorization: Bearer $NOTION_API_KEY" \
       -H "Content-Type: application/json" \
@@ -333,7 +333,7 @@ for i in {1..5}; do
         }
       }" \
       "https://api.notion.com/v1/pages" > /dev/null
-    
+
     echo "✅ Task: $TASK_TITLE (€$TASK_VALUE value)"
 done
 
@@ -361,14 +361,14 @@ declare -a CUSTOMERS=(
 # Add customers to tracking
 for i in {0..2}; do
     CUSTOMER=${CUSTOMERS[$i]}
-    
+
     CUST_NAME=$(echo "$CUSTOMER" | jq -r '.name')
     CUST_EMAIL=$(echo "$CUSTOMER" | jq -r '.email')
     CUST_STATUS=$(echo "$CUSTOMER" | jq -r '.status')
     CUST_LTV=$(echo "$CUSTOMER" | jq -r '.ltv')
     CUST_MRR=$(echo "$CUSTOMER" | jq -r '.mrr')
     CUST_CHURN=$(echo "$CUSTOMER" | jq -r '.churn')
-    
+
     curl -s -X POST \
       -H "Authorization: Bearer $NOTION_API_KEY" \
       -H "Content-Type: application/json" \
@@ -386,7 +386,7 @@ for i in {0..2}; do
         }
       }" \
       "https://api.notion.com/v1/pages" > /dev/null
-    
+
     echo "✅ Customer: $CUST_NAME (LTV: €$CUST_LTV, MRR: €$CUST_MRR)"
 done
 
@@ -472,7 +472,7 @@ while true; do
     echo "======================================"
     echo "Time: $(date)"
     echo ""
-    
+
     # Run ROI calculation
     ./scripts/notion-roi-calculator.sh
     echo ""

@@ -37,7 +37,7 @@ curl -s -X POST \
 
 echo "✅ Cross-team analytics updated!"
 echo "📊 Converto: $CONVERTO_VALUE"
-echo "⚡ Viking Labs: $VIKING_VALUE" 
+echo "⚡ Viking Labs: $VIKING_VALUE"
 echo "🔗 Synergy Factor: $SYNERGY_FACTOR% (ROI Multiplier: ${ROI_MULTIPLIER}x)"
 echo ""
 echo "🎯 Cross-team coordination generating $(echo "scale=2; ($SYNERGY_FACTOR - 100)" | bc)% additional value!"

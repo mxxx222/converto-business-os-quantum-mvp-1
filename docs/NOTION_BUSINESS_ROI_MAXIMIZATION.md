@@ -59,14 +59,14 @@ class NotionDocumentationAutomation {
       deployments: await getDeployments(),
       errors: await getErrorRate()
     };
-    
+
     return await this.notionClient.createPage({
       parent_id: process.env.NOTION_REPORTS_DATABASE_ID,
       title: `Daily Report - ${new Date().toDateString()}`,
       properties: metrics
     });
   }
-  
+
   async logDeploymentStatus(deployment: Deployment): Promise<void> {
     await this.notionClient.createPage({
       parent_id: process.env.NOTION_DEPLOYMENTS_DATABASE_ID,
@@ -88,7 +88,7 @@ class NotionTaskOrchestrator:
     async def create_ai_generated_tasks(self):
         """Generate tasks from AI insights"""
         tasks = await self.generate_tasks_from_insights()
-        
+
         for task in tasks:
             await self.notion_client.create_page({
                 'parent_id': 'tasks_database',

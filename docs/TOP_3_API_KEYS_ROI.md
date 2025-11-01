@@ -1,6 +1,6 @@
 # 🎯 TOP 3 API KEYS - Maksimaalinen ROI
 
-**Päivämäärä:** 2025-01-11  
+**Päivämäärä:** 2025-01-11
 **Tavoite:** Maksimoida ROI seuraavilla API-integraatioilla
 
 ---
@@ -54,7 +54,7 @@
 - Invoice generation
 - Customer portal
 
-**Aika:** 4-6h  
+**Aika:** 4-6h
 **Kustannus:** €0-10/kk (Stripe fees: 1.4% + €0.25/transaction)
 
 ---
@@ -92,7 +92,7 @@
 - Customer onboarding docs
 - Code review automation
 
-**Aika:** 3-4h  
+**Aika:** 3-4h
 **Kustannus:** €96/kk (already paid!)
 
 ---
@@ -130,7 +130,7 @@
 - Customer feedback → Linear task
 - AI-powered prioritization
 
-**Aika:** 2-3h  
+**Aika:** 2-3h
 **Kustannus:** €0-10/kk (Free tier → Starter)
 
 ---
@@ -143,8 +143,8 @@
 | **Notion** | €96/kk | €1,200-2,100/kk | **12-22x** | 🟡 HIGH |
 | **Linear** | €0-10/kk | €700-1,200/kk | **7-12x** | 🟢 MEDIUM |
 
-**Kokonaisarvo:** €4,000-5,400/kk  
-**Kokonaiskustannus:** €106-116/kk  
+**Kokonaisarvo:** €4,000-5,400/kk
+**Kokonaiskustannus:** €106-116/kk
 **KokonaisROI:** 35-50x
 
 ---
@@ -220,8 +220,8 @@
 2. **Notion API** (3-4h) - Automation
 3. **Linear API** (2-3h) - Development efficiency
 
-**Arvioitu kokonaisaika:** 9-13h  
-**Arvioitu kokonaisROI:** 35-50x (€4,000-5,400/€106-116)  
+**Arvioitu kokonaisaika:** 9-13h
+**Arvioitu kokonaisROI:** 35-50x (€4,000-5,400/€106-116)
 **Payback:** 1 päivä
 
 ---
@@ -230,4 +230,3 @@
 - Stripe Docs: https://stripe.com/docs/api
 - Notion API: https://developers.notion.com
 - Linear API: https://developers.linear.app
-

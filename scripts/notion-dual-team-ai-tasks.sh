@@ -19,14 +19,14 @@ declare -a DUAL_TASKS=(
 # Add AI-generated tasks
 for i in {1..7}; do
     TASK=${DUAL_TASKS[$RANDOM % ${#DUAL_TASKS[@]}]}
-    
+
     TASK_TITLE=$(echo "$TASK" | jq -r '.title')
     TASK_TEAM=$(echo "$TASK" | jq -r '.team')
     TASK_PRIORITY=$(echo "$TASK" | jq -r '.priority')
     TASK_ROI=$(echo "$TASK" | jq -r '.roi')
     TASK_VALUE=$(echo "$TASK" | jq -r '.value')
     TASK_SYNERGY=$(echo "$TASK" | jq -r '.synergy')
-    
+
     curl -s -X POST \
       -H "Authorization: Bearer $API_KEY" \
       -H "Content-Type: application/json" \
@@ -45,7 +45,7 @@ for i in {1..7}; do
         }
       }" \
       "https://api.notion.com/v1/pages" > /dev/null
-    
+
     SYNERGY_FLAG=$(if [ "$TASK_SYNERGY" = "true" ]; then echo "🔗"; else echo "⚡"; fi)
     echo "$SYNERGY_FLAG Task: $TASK_TITLE (€$TASK_VALUE value) - $TASK_TEAM"
 done
