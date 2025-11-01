@@ -1,7 +1,7 @@
 # 📊 OpenAI Business API - ROI-Analyysi ja Maksimointisuositukset
 
-**Päivämäärä:** 2025-01-11  
-**Tila:** Peruskäyttö (gpt-4o-mini, Vision, Embeddings)  
+**Päivämäärä:** 2025-01-11
+**Tila:** Peruskäyttö (gpt-4o-mini, Vision, Embeddings)
 **Arvioitu kustannus:** $50-200/kk (riippuen käytöstä)
 
 ---
@@ -52,7 +52,7 @@
 
 ### **1. Batch API** ⚠️ **PRIORITY 1**
 
-**Status:** ❌ Ei käytössä  
+**Status:** ❌ Ei käytössä
 **ROI:** ⭐⭐⭐⭐⭐ (Kriittinen)
 
 **Nykyinen:**
@@ -86,14 +86,14 @@ batch_requests = [create_vision_request(r) for r in receipts]
 batch_response = await openai.batch.create(batch_requests)
 ```
 
-**Aika:** 2-3h  
+**Aika:** 2-3h
 **ROI:** ⭐⭐⭐⭐⭐
 
 ---
 
 ### **2. Streaming Responses** ⚠️ **PRIORITY 2**
 
-**Status:** ❌ Ei käytössä  
+**Status:** ❌ Ei käytössä
 **ROI:** ⭐⭐⭐⭐
 
 **Nykyinen:**
@@ -132,14 +132,14 @@ for await (const chunk of stream) {
 }
 ```
 
-**Aika:** 1-2h  
+**Aika:** 1-2h
 **ROI:** ⭐⭐⭐⭐
 
 ---
 
 ### **3. Response Caching** ⚠️ **PRIORITY 3**
 
-**Status:** ❌ Ei käytössä  
+**Status:** ❌ Ei käytössä
 **ROI:** ⭐⭐⭐⭐⭐
 
 **Hyödyt:**
@@ -172,14 +172,14 @@ response = await openai.chat.completions.create(...)
 redis.setex(cache_key, 3600, response)  # 1h cache
 ```
 
-**Aika:** 2-3h  
+**Aika:** 2-3h
 **ROI:** ⭐⭐⭐⭐⭐
 
 ---
 
 ### **4. Assistants API** ⚠️ **PRIORITY 4**
 
-**Status:** ❌ Ei käytössä  
+**Status:** ❌ Ei käytössä
 **ROI:** ⭐⭐⭐⭐
 
 **Hyödyt:**
@@ -221,14 +221,14 @@ message = await openai.beta.threads.messages.create(
 )
 ```
 
-**Aika:** 3-4h  
+**Aika:** 3-4h
 **ROI:** ⭐⭐⭐⭐
 
 ---
 
 ### **5. Fine-tuning** ⚠️ **PRIORITY 5**
 
-**Status:** ❌ Ei käytössä  
+**Status:** ❌ Ei käytössä
 **ROI:** ⭐⭐⭐
 
 **Hyödyt:**
@@ -248,14 +248,14 @@ message = await openai.beta.threads.messages.create(
 
 **ROI:** 5x (kun skaalautuu)
 
-**Aika:** 8-12h (data prep + training)  
+**Aika:** 8-12h (data prep + training)
 **ROI:** ⭐⭐⭐
 
 ---
 
 ### **6. Token Optimization** ⚠️ **PRIORITY 6**
 
-**Status:** ⚠️ Osittain käytössä  
+**Status:** ⚠️ Osittain käytössä
 **ROI:** ⭐⭐⭐⭐
 
 **Nykyinen:**
@@ -281,14 +281,14 @@ message = await openai.beta.threads.messages.create(
 
 **ROI:** 8x (säästää $15-60/kk)
 
-**Aika:** 2-3h  
+**Aika:** 2-3h
 **ROI:** ⭐⭐⭐⭐
 
 ---
 
 ### **7. Business API Features** ⚠️ **PRIORITY 7**
 
-**Status:** ❌ Ei käytössä  
+**Status:** ❌ Ei käytössä
 **ROI:** ⭐⭐⭐
 
 **Hyödyt:**
@@ -299,7 +299,7 @@ message = await openai.beta.threads.messages.create(
 
 **ROI:** 3x (parempi reliability + compliance)
 
-**Aika:** 1h (setup)  
+**Aika:** 1h (setup)
 **ROI:** ⭐⭐⭐
 
 ---
@@ -423,8 +423,8 @@ message = await openai.beta.threads.messages.create(
 2. **Implementoi Batch API** (2-3h)
 3. **Optimoi Tokenien käyttö** (2-3h)
 
-**Arvioitu kokonaisaika:** 6-9h  
-**Arvioitu ROI:** 30-65x ($500-1000/$15-60)  
+**Arvioitu kokonaisaika:** 6-9h
+**Arvioitu ROI:** 30-65x ($500-1000/$15-60)
 **Payback:** 1 päivä
 
 ---
@@ -434,4 +434,3 @@ message = await openai.beta.threads.messages.create(
 - Batch API: https://platform.openai.com/docs/guides/batch
 - Assistants API: https://platform.openai.com/docs/assistants
 - Fine-tuning: https://platform.openai.com/docs/guides/fine-tuning
-

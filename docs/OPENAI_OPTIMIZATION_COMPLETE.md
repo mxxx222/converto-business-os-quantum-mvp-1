@@ -1,6 +1,6 @@
 # ✅ OpenAI Business API - Optimointi Valmis
 
-**Päivämäärä:** 2025-01-11  
+**Päivämäärä:** 2025-01-11
 **Status:** Code valmis, vaatii Redis setup
 
 ---
@@ -137,10 +137,9 @@ curl -X POST http://localhost:3000/api/chat/stream \
 3. **Deploy to production** (10 min)
 4. **Monitor cache hit rate** (ongoing)
 
-**Total time:** 20 min  
+**Total time:** 20 min
 **Total ROI:** 30-65x
 
 ---
 
 **Valmis!** OpenAI Business API optimointi on nyt implementoitu. 🎉
-

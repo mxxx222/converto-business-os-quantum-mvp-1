@@ -6,7 +6,7 @@ import hashlib
 import json
 import logging
 import os
-from typing import Any, Optional
+from typing import Any
 
 logger = logging.getLogger("converto.ai.cache")
 
@@ -14,7 +14,7 @@ logger = logging.getLogger("converto.ai.cache")
 class OpenAICache:
     """Cache layer for OpenAI API responses."""
 
-    def __init__(self, redis_client: Optional[Any] = None, ttl: int = 3600):
+    def __init__(self, redis_client: Any | None = None, ttl: int = 3600):
         """Initialize cache.
 
         Args:
@@ -29,8 +29,8 @@ class OpenAICache:
         self,
         model: str,
         messages: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> str:
         """Generate cache key from request parameters."""
         # Create deterministic hash from request
@@ -48,23 +48,23 @@ class OpenAICache:
         self,
         model: str,
         messages: list[dict[str, Any]],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
-    ) -> Optional[dict[str, Any]]:
+        temperature: float | None = None,
+        max_tokens: int | None = None,
+    ) -> dict[str, Any] | None:
         """Get cached response.
 
         Returns:
             Cached response dict or None if not found
         """
-        if not self.enabled:
+        if not self.enabled or not self.redis:
             return None
-
         try:
             cache_key = self._generate_cache_key(model, messages, temperature, max_tokens)
             cached = self.redis.get(cache_key)
             if cached:
                 logger.info(f"Cache HIT: {cache_key[:32]}...")
-                return json.loads(cached)
+                result: dict[str, Any] = json.loads(cached)
+                return result
             logger.debug(f"Cache MISS: {cache_key[:32]}...")
             return None
         except Exception as e:
@@ -76,15 +76,15 @@ class OpenAICache:
         model: str,
         messages: list[dict[str, Any]],
         response: dict[str, Any],
-        temperature: Optional[float] = None,
-        max_tokens: Optional[int] = None,
+        temperature: float | None = None,
+        max_tokens: int | None = None,
     ) -> bool:
         """Cache response.
 
         Returns:
             True if cached successfully, False otherwise
         """
-        if not self.enabled:
+        if not self.enabled or not self.redis:
             return False
 
         try:
@@ -106,7 +106,7 @@ class OpenAICache:
         Returns:
             Number of keys deleted
         """
-        if not self.enabled:
+        if not self.enabled or not self.redis:
             return 0
 
         try:
@@ -114,7 +114,7 @@ class OpenAICache:
             if keys:
                 deleted = self.redis.delete(*keys)
                 logger.info(f"Invalidated {deleted} cache entries matching {pattern}")
-                return deleted
+                return int(deleted) if deleted else 0
             return 0
         except Exception as e:
             logger.warning(f"Cache invalidation failed: {e}")
@@ -122,7 +122,7 @@ class OpenAICache:
 
 
 # Global cache instance (lazy initialization)
-_cache_instance: Optional[OpenAICache] = None
+_cache_instance: OpenAICache | None = None
 
 
 def get_cache() -> OpenAICache:
@@ -132,6 +132,7 @@ def get_cache() -> OpenAICache:
         # Try to initialize Redis if available
         try:
             import redis
+
             redis_client = redis.Redis(
                 host=os.getenv("REDIS_HOST", "localhost"),
                 port=int(os.getenv("REDIS_PORT", "6379")),
@@ -150,4 +151,3 @@ def get_cache() -> OpenAICache:
             logger.warning(f"Redis not available, cache disabled: {e}")
             _cache_instance = OpenAICache(redis_client=None)
     return _cache_instance
-

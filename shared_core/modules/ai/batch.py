@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import Any, Optional
+from typing import Any
 
 from openai import OpenAI
 
@@ -15,7 +15,7 @@ logger = logging.getLogger("converto.ai.batch")
 class OpenAIBatchProcessor:
     """Process OpenAI API requests in batches."""
 
-    def __init__(self, client: Optional[OpenAI] = None):
+    def __init__(self, client: OpenAI | None = None):
         """Initialize batch processor.
 
         Args:
@@ -44,17 +44,19 @@ class OpenAIBatchProcessor:
         # Create batch request file
         batch_requests = []
         for req in requests:
-            batch_requests.append({
-                "custom_id": f"request-{len(batch_requests)}",
-                "method": "POST",
-                "url": "/v1/chat/completions",
-                "body": {
-                    "model": model,
-                    "messages": req.get("messages", []),
-                    "temperature": req.get("temperature", 0.7),
-                    "max_tokens": req.get("max_tokens", 1000),
-                },
-            })
+            batch_requests.append(
+                {
+                    "custom_id": f"request-{len(batch_requests)}",
+                    "method": "POST",
+                    "url": "/v1/chat/completions",
+                    "body": {
+                        "model": model,
+                        "messages": req.get("messages", []),
+                        "temperature": req.get("temperature", 0.7),
+                        "max_tokens": req.get("max_tokens", 1000),
+                    },
+                }
+            )
 
         # Submit batch
         try:
@@ -75,6 +77,7 @@ class OpenAIBatchProcessor:
             # Wait for completion (poll)
             while batch.status in ["validating", "in_progress"]:
                 import asyncio
+
                 await asyncio.sleep(5)
                 batch = self.client.batches.retrieve(batch.id)
 
@@ -124,15 +127,17 @@ class OpenAIBatchProcessor:
         # Create batch request file
         batch_requests = []
         for i, text in enumerate(texts):
-            batch_requests.append({
-                "custom_id": f"embedding-{i}",
-                "method": "POST",
-                "url": "/v1/embeddings",
-                "body": {
-                    "model": model,
-                    "input": text,
-                },
-            })
+            batch_requests.append(
+                {
+                    "custom_id": f"embedding-{i}",
+                    "method": "POST",
+                    "url": "/v1/embeddings",
+                    "body": {
+                        "model": model,
+                        "input": text,
+                    },
+                }
+            )
 
         # Submit batch (similar to chat batch)
         try:
@@ -151,6 +156,7 @@ class OpenAIBatchProcessor:
             # Wait and retrieve (same as chat batch)
             while batch.status in ["validating", "in_progress"]:
                 import asyncio
+
                 await asyncio.sleep(5)
                 batch = self.client.batches.retrieve(batch.id)
 
@@ -194,10 +200,12 @@ class OpenAIBatchProcessor:
                     temperature=req.get("temperature", 0.7),
                     max_tokens=req.get("max_tokens", 1000),
                 )
-                responses.append({
-                    "choices": [{"message": {"content": response.choices[0].message.content}}],
-                    "usage": response.usage.dict() if response.usage else None,
-                })
+                responses.append(
+                    {
+                        "choices": [{"message": {"content": response.choices[0].message.content}}],
+                        "usage": response.usage.dict() if response.usage else None,
+                    }
+                )
             except Exception as e:
                 logger.error(f"Individual request failed: {e}")
                 responses.append({"error": str(e)})
@@ -221,4 +229,3 @@ class OpenAIBatchProcessor:
                 logger.error(f"Individual embedding failed: {e}")
                 embeddings.append([])
         return embeddings
-
