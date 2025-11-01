@@ -14,8 +14,11 @@ class Settings(BaseSettings):
     environment: str = "development"
     log_level: str = "info"
 
-    # Database
-    database_url: str = "postgresql://demo:demo@demo.supabase.co:5432/demo"
+    # Database (Production Supabase)
+    database_url: str = os.getenv("DATABASE_URL", os.getenv("SUPABASE_DATABASE_URL", ""))
+    
+    # Production Database Connection (if using Supabase)
+    supabase_database_url: str = os.getenv("SUPABASE_DATABASE_URL", "")
 
     # CORS
     cors_origins_str: str = os.getenv(
@@ -24,14 +27,17 @@ class Settings(BaseSettings):
     )
     allowed_origin_regex: str = r".*"
 
-    # Supabase
-    supabase_url: str = ""
+    # Supabase (Production Configuration)
+    supabase_url: str = os.getenv("SUPABASE_URL", "")
+    supabase_anon_key: str = os.getenv("SUPABASE_ANON_KEY", "")
     supabase_service_role_key: str = os.getenv("SUPABASE_SERVICE_ROLE_KEY", "")
-    supabase_auth_enabled: bool = os.getenv("SUPABASE_AUTH_ENABLED", "false").lower() in (
+    supabase_jwt_secret: str = os.getenv("SUPABASE_JWT_SECRET", "")
+    supabase_auth_enabled: bool = os.getenv("SUPABASE_AUTH_ENABLED", "true").lower() in (
         "true",
         "1",
         "yes",
     )
+    supabase_project_id: str = os.getenv("SUPABASE_PROJECT_ID", "")
 
     # Sentry
     sentry_dsn: str = ""
@@ -49,15 +55,23 @@ class Settings(BaseSettings):
         "1",
         "yes",
     )
-    
+
     # Cloudflare Bypass Token - Maximum ROI
     cloudflare_bypass_token: str = os.getenv("CLOUDFLARE_BYPASS_TOKEN", "")
     cloudflare_enabled: bool = bool(os.getenv("CLOUDFLARE_BYPASS_TOKEN", ""))
-    
+
     # ROI Optimization Settings
     max_image_batch: int = int(os.getenv("MAX_IMAGE_BATCH", "12"))  # Higher than Teams limit
-    priority_processing: bool = os.getenv("PRIORITY_PROCESSING", "true").lower() in ("true", "1", "yes")
-    batch_optimization: bool = os.getenv("BATCH_OPTIMIZATION", "true").lower() in ("true", "1", "yes")
+    priority_processing: bool = os.getenv("PRIORITY_PROCESSING", "true").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
+    batch_optimization: bool = os.getenv("BATCH_OPTIMIZATION", "true").lower() in (
+        "true",
+        "1",
+        "yes",
+    )
 
     class Config:
         """Pydantic config."""
