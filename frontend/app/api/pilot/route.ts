@@ -3,6 +3,19 @@ import { Resend } from "resend"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// Track Plausible goal server-side
+async function trackPlausibleGoal(goal: string, props?: Record<string, any>) {
+  try {
+    await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'https://converto.fi'}/api/analytics/plausible`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: goal, props }),
+    });
+  } catch (error) {
+    console.warn('Failed to track Plausible goal:', error);
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const { name, email, company } = await req.json()
@@ -85,12 +98,19 @@ export async function POST(req: Request) {
       ),
     ])
 
-    return NextResponse.json({ 
-      ok: true, 
-      message: "Ilmoittautuminen lähetetty + sequence scheduled",
-      team_email_id: teamEmail.data?.id,
-      user_email_id: userEmail.data?.id,
-    })
+            // OPTIMIZED: Track Plausible goal (Pilot Signup)
+            await trackPlausibleGoal('Pilot Signup', {
+              company,
+              email,
+              source: 'pilot_signup_form',
+            });
+
+            return NextResponse.json({ 
+              ok: true, 
+              message: "Ilmoittautuminen lähetetty + sequence scheduled",
+              team_email_id: teamEmail.data?.id,
+              user_email_id: userEmail.data?.id,
+            })
   } catch (error) {
     console.error("Pilot signup error:", error)
     return NextResponse.json(

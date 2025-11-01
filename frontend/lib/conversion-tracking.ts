@@ -41,12 +41,22 @@ class ConversionTracker {
       });
     }
 
-    // Plausible
+    // Plausible (OPTIMIZED: Use goals with revenue tracking)
     if (typeof window !== 'undefined' && window.plausible) {
-      window.plausible(`Conversion: ${event.stage}`, {
+      const goalName = event.stage === 'payment' ? 'Payment' : 
+                      event.stage === 'signup' ? 'Pilot Signup' :
+                      `Conversion: ${event.stage}`;
+      
+      window.plausible(goalName, {
         props: {
           source: event.source,
           ...event.metadata,
+          // Add revenue if payment
+          ...(event.stage === 'payment' && event.metadata?.amount && {
+            revenue: event.metadata.amount,
+            value: event.metadata.amount,
+            currency: event.metadata.currency || 'EUR',
+          }),
         },
       });
     }

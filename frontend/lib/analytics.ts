@@ -62,10 +62,27 @@ export class Analytics {
   }
 
   private sendToClient(event: AnalyticsEvent): void {
-    // Plausible Analytics
+    // Plausible Analytics (OPTIMIZED: Enhanced tracking)
     if (typeof window !== 'undefined' && (window as any).plausible) {
-      (window as any).plausible(event.event, {
-        props: event.properties,
+      // Map common events to Plausible goals
+      const goalMap: Record<string, string> = {
+        'view_premium': 'Page View',
+        'cta_primary_click': 'CTA Click',
+        'pricing_select': 'Pricing Select',
+        'form_submit': 'Form Submit',
+        'book_demo': 'Demo Booking',
+        'start_trial': 'Trial Start',
+        'thankyou_view': 'Thank You View',
+      };
+
+      const goalName = goalMap[event.event] || event.event;
+      
+      (window as any).plausible(goalName, {
+        props: {
+          ...event.properties,
+          // Add UTM parameters if available
+          ...this.getUTMParams(),
+        },
       });
     }
 

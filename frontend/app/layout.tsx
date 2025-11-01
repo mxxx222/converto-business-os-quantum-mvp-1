@@ -86,13 +86,39 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="//resend.com" />
         <link rel="dns-prefetch" href="//plausible.io" />
 
-        {/* Privacy-friendly analytics by Plausible */}
-        <script async src="https://plausible.io/js/pa-LIVALOWbQ1Cpkjh1mkLq1.js"></script>
+        {/* Privacy-friendly analytics by Plausible - OPTIMIZED */}
+        <script async src="https://plausible.io/js/pa-LIVALOWbQ1Cpkjh1mkLq1.js" data-domain="converto.fi"></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
               plausible.init()
+              
+              // OPTIMIZED: Track outbound links automatically
+              document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && link.href && !link.href.startsWith(window.location.origin)) {
+                  plausible('Outbound Link Click', {
+                    props: {
+                      url: link.href,
+                      text: link.textContent?.substring(0, 50),
+                    }
+                  });
+                }
+              });
+              
+              // OPTIMIZED: Track file downloads
+              document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && link.download) {
+                  plausible('File Download', {
+                    props: {
+                      filename: link.download,
+                      url: link.href,
+                    }
+                  });
+                }
+              });
             `,
           }}
         />
